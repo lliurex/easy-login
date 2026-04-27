@@ -1,0 +1,38 @@
+{
+    "SETUP": {
+        "type": "python",
+        "path": "EasyLogin.py",
+        "class": "EasyLogin"
+    },
+    "METHODS": {
+
+    	"validate_id_user":{
+		"allowed_groups":[
+			"sudo",
+			"admins",
+			"teacher"
+		]
+	},
+        "store_id_user": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "remove_entry": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "get_next_uid": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        }
+    }
+}
