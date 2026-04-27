@@ -23,7 +23,7 @@ class EasyLogin:
         self.db_path = Path("/var/lib/easylogin/shadow.db")
 
     def load_config(self) -> None:
-        self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initaial_uid": 70000 }
+        self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000 }
 
     def validate_id_user(self, username, password) -> n4d.responses:
         user = self.load_user(username.split("@")[0])
@@ -46,8 +46,6 @@ class EasyLogin:
                 "uid": 70000,
                 "group": "students"
                 }
-        user["login"] = user["login"] + info["login"]
-        user["home"] = user["home"] + info["login"]
         
         if "name" in info:
             user["name"] = info["name"]
@@ -87,10 +85,7 @@ class EasyLogin:
         except Exception:
             users_db = {}
         try:
-            login = username
-            patch_info = str(info['info'])
-            info["info"] = patch_info 
-            users_db[login] = info
+            users_db[username] = info
             with self.db_path.open("bw") as fd:
                 fd.write(bson.encode(users_db))
             return True
@@ -115,7 +110,7 @@ class EasyLogin:
             return None
         if self.db_path.stat().st_size == 0:
             return None
-        with self.db_path("br") as fd:
+        with self.db_path.open("br") as fd:
             cache = bson.decode(fd.read())
         if username in cache:
             return cache[username]
@@ -129,7 +124,8 @@ class EasyLogin:
         except Exception:
             users_db = {}
         if len(users_db) == 0:
-            return self.config["initaial_uid"]
+            return self.config["initial_uid"]
+
         max_uid = max([user["info"]["uid"] for user in users_db.values()])
         return max_uid + 1
 
