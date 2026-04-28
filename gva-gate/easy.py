@@ -7,11 +7,7 @@ class EasyLogin:
         pass
 
     def auth_easy(self, username, password):
-        n4d_local = Client("https://localhost:9779")
-        try:
-            server = n4d_local.get_variable('SRV_IP')
-        except Exception:
-            return None, "temporary_unavailable"
+        server = "server"
         if server is not None:
             n4d_remote = Client("https://"+server+":9779")
             try:
