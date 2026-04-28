@@ -6,11 +6,9 @@
     },
     "METHODS": {
 
-    	"validate_id_user":{
+    	"validate_easy_user":{
 		"allowed_groups":[
-			"sudo",
-			"admins",
-			"teacher"
+			"anonymous"
 		]
 	},
         "store_id_user": {

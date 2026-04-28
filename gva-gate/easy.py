@@ -15,7 +15,7 @@ class Adi:
         if server is not None:
             n4d_remote = Client("https://"+server+":9779")
             try:
-                result = n4d_remote.EasyLogin.validate_user(username, password)
+                result = n4d_remote.EasyLogin.validate_easy_user(username, password)
             except CallFailedError as e:
                 if e.code == -1: 
                     return None, "invalid_user"
@@ -33,5 +33,5 @@ class Adi:
         user.shell = result['shell']
         user.uid = result['uid']
         user.groups.append(Group(result['group'],70000))
-        user.populate()
+        user.populate_user()
         return user, None
