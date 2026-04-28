@@ -12,7 +12,6 @@ class EasyLogin:
     USER_NOT_IN_CACHE = -10
     USER_CACHE_EXPIRED = -11
     WRONG_SAVE = -30
-    SERVER_UNREACHABLE = -50
 
     def __init__(self) -> None:
         self.load_default_paths()
@@ -44,7 +43,7 @@ class EasyLogin:
                 "home":"/home/",
                 "shell":"/bin/bash",
                 "uid": 70000,
-                "group": "students"
+                "group": "alumnos"
                 }
         
         if "name" in info:
