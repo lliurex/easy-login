@@ -1,6 +1,6 @@
 from n4d.client import Client
 from n4d.client import CallFailedError
-from llxfederation import User, Group
+from llxfederation.user import User, Group
 
 class EasyLogin:
     def __init__(self):
