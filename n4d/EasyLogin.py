@@ -5,6 +5,9 @@ from yaml import safe_load
 import n4d.responses
 from time import time
 from random import randrange
+from n4d.server.core import Core
+
+
 
 class EasyLogin:
     USER_NOT_FOUND = -1
@@ -16,6 +19,7 @@ class EasyLogin:
     def __init__(self) -> None:
         self.load_default_paths()
         self.load_config()
+        self.core = Core.get_core()
 
     def load_default_paths(self):
         self.config_path = Path("/etc/easylogin/config.yaml")
@@ -23,6 +27,26 @@ class EasyLogin:
 
     def load_config(self) -> None:
         self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000 }
+
+    def set_status_service(self, status):
+        self.core.set_variable("EASYLOGIN_STATUS", status)
+        return n4d.responses.build_successful_call_response(True)
+
+    def get_status_service(self):
+        status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
+        return n4d.responses.build_successful_call_response(status)
+
+    def get_user_list(self):
+        self.exists_or_build_db()
+        try:
+            with self.db_path.open("br") as fd:
+                users_db = bson.decode(fd.read())
+            return n4d.responses.build_successful_call_response(list(users_db.keys()))
+        except Exception:
+            return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_IN_CACHE)
+
+    def get_valid_username(self):
+        pass
 
     def validate_easy_user(self, username, password) -> n4d.responses:
         user = self.load_user(username.split("@")[0])
@@ -105,10 +129,7 @@ class EasyLogin:
             return False
 
     def load_user(self, username):
-        if not self.db_path.exists():
-            return None
-        if self.db_path.stat().st_size == 0:
-            return None
+        self.exists_or_build_db()
         with self.db_path.open("br") as fd:
             cache = bson.decode(fd.read())
         if username in cache:
