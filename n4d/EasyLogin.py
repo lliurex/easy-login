@@ -41,7 +41,7 @@ class EasyLogin:
         try:
             with self.db_path.open("br") as fd:
                 users_db = bson.decode(fd.read())
-            return n4d.responses.build_successful_call_response(list(users_db.keys()))
+            return n4d.responses.build_successful_call_response({k:v["info"] for k,v in users_db.items()})
         except Exception:
             return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_IN_CACHE)
 
