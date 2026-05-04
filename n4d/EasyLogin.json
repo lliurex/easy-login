@@ -5,7 +5,26 @@
         "class": "EasyLogin"
     },
     "METHODS": {
-
+	"set_status_service": {
+	    "allowed_groups": [
+		"sudo",
+		"admins",
+		"teachers"
+	    ]
+	},
+	"get_status_service": {
+	    "allowed_groups": [
+		"anonymous",
+		"*"
+	    ]
+	},
+	"get_user_list": {
+	    "allowed_groups": [
+		"sudo",
+		"admins",
+		"teachers"
+	    ]
+	},
     	"validate_easy_user":{
 		"allowed_groups":[
 			"anonymous"
