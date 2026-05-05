@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QUrl
+from PySide6.QtGui import QIcon
+from PySide6.QtQml import QQmlApplicationEngine
+
+import sys
+import Core
+
+c=Core.Core.get_core()
+
+app = QApplication()
+app.setDesktopFileName("easy-login")
+engine = QQmlApplicationEngine()
+engine.clearComponentCache()
+context=engine.rootContext()
+mainStackBridge=c.mainStack
+usersOptionsStackBridge=c.usersOptionsStack
+userStackBridge=c.userStack
+context.setContextProperty("mainStackBridge", mainStackBridge)
+context.setContextProperty("usersOptionsStackBridge", usersOptionsStackBridge)
+context.setContextProperty("userStackBridge", userStackBridge)
+
+url = QUrl("/usr/share/easy-login/gui/rsrc/easy-login.qml")
+
+engine.load(url)
+if not engine.rootObjects():
+	sys.exit(-1)
+
+engine.quit.connect(QApplication.quit)
+ret=app.exec()
+del engine
+del app
+sys.exit(ret)
+

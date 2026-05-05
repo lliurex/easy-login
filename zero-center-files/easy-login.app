@@ -1,0 +1,17 @@
+Name=easy-login
+Name[es]=Easy-Login
+Name[qcv]=Easy-Login
+Name[ca_ES@valencia]=Easy-Login
+Name[ca@valencia]=Easy-Login
+Name[ca_ES.UTF-8@valencia]=Easy-Login
+Comment=It allows you to manage access to the equipment using Easy-Login
+Comment[es]=Permite gestionar el acceso a los equipos mediante Easy-Login
+Comment[qcv]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Comment[ca_ES.UTF-8@valencia]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Comment[ca_ES@valencia]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Comment[ca@valencia]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Icon=easy-login
+Category=Configuration
+ScriptPath=easy-login.zmd
+Groups=sudo;admins;teachers
+Service=False

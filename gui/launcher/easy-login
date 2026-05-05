@@ -1,0 +1,91 @@
+#! /usr/bin/python3
+from PySide6.QtWidgets import QApplication
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QUrl, QObject, Slot, Signal,Property
+import os
+import subprocess
+import sys
+import shutil
+
+class Tunnel(QObject):
+	
+	def __init__(self):
+
+		QObject.__init__(self)
+		self.clearCache()
+
+	#def __init	
+
+	def clearCache(self):
+
+		clear=False
+		user=os.environ["USER"]
+		versionFile="/home/%s/.config/easy-login.conf"%user
+		cachePath="/home/%s/.cache/easy-login"%user
+		installedVersion=self.getPackageVersion()
+
+		if not os.path.exists(versionFile):
+			with open(versionFile,'w') as fd:
+				fd.write(installedVersion)
+				fd.close()
+
+			clear=True
+
+		else:
+			with open(versionFile,'r') as fd:
+				fileVersion=fd.readline()
+				fd.close()
+
+			if fileVersion!=installedVersion:
+				with open(versionFile,'w') as fd:
+					fd.write(installedVersion)
+					fd.close()
+				clear=True
+		
+		if clear:
+			if os.path.exists(cachePath):
+				shutil.rmtree(cachePath)
+
+	#def clearCache
+
+	def getPackageVersion(self):
+
+		command = "LANG=C LANGUAGE=en apt-cache policy easy-login"
+		p = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE)
+		installed = None
+		for line in iter(p.stdout.readline,b""):
+			if type(line) is bytes:
+				line=line.decode()
+
+			stripedline = line.strip()
+			if stripedline.startswith("Installed"):
+				installed = stripedline.replace("Installed: ","")
+
+		return installed
+
+	#def getPackageVersion
+
+	@Slot(str)
+	def onTicket(self, ticket):
+		
+		ticket=ticket.replace(' ','##U+0020##')
+		os.system("/usr/share/easy-login/gui/easy-login-gui %s &"%ticket)
+		app.quit()
+
+	#def onTicket
+	
+
+#class Tunnel
+
+app = QApplication([])
+app.setDesktopFileName("easy-login")
+tunnel = Tunnel()
+view = QQuickView()
+view.rootContext().setContextProperty("tunnel", tunnel)
+url = QUrl("/usr/share/easy-login/gui/rsrc/login.qml")
+view.setSource(url)
+view.show()
+ret=app.exec()
+del view
+del app
+sys.exit(ret)
