@@ -18,6 +18,13 @@
 		"*"
 	    ]
 	},
+	"get_valid_username": {
+	    "allowed_groups": [
+		"sudo",
+		"admins",
+		"teachers"
+	    ]
+	},
 	"get_user_list": {
 	    "allowed_groups": [
 		"sudo",
