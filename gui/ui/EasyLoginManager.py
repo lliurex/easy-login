@@ -295,11 +295,11 @@ class EasyLoginManager(object):
 
 	#def getFormattedLogin
 
-	def generatePdf(self):
+	def generatePdf(self,exportPath):
 
-		pdfName="/home/lliurex/Easy-Login_report.pdf"
+		pdfFile=exportPath
 		doc = SimpleDocTemplate(
-			pdfName,
+			pdfFile,
 			pagesize=A4,
 			rightMargin=40,
 			leftMargin=40,
@@ -364,6 +364,7 @@ class EasyLoginManager(object):
 
 		try:
 			doc.build(story)
+			subprocess.run(["xdg-open",pdfFile])
 			return True
 		except Exception as e:
 			print(e)

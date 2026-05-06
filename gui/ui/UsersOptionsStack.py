@@ -13,9 +13,11 @@ import UsersModel
 CHANGE_SERVICE_WAITING=10
 REMOVING_USER=11
 REMOVING_ALL_USERS=12
+GENERATING_PDF_WAITING=13
 
 CHANGE_SERVICE_SUCCESSFULLY=11
 CHANGE_SERVICE_ERROR=-10
+GENERATING_PDF_ERROR=-11
 
 
 class EnableLogin(QThread):
@@ -57,6 +59,24 @@ class RemoveUser(QThread):
 
 #class RemoveUser
 
+class GeneratePdf(QThread):
+
+	def __init__(self,*args):
+
+		QThread.__init__(self)
+		self.pdfPath=args[0]
+		self.ret=False
+
+	#def __init__
+
+	def run(self,*args):
+
+		time.sleep(0.5)
+		self.ret=Bridge.easyLoginManager.generatePdf(self.pdfPath)
+
+	#def run
+
+#class GeneratePdf
 
 class Bridge(QObject):
 
@@ -195,19 +215,21 @@ class Bridge(QObject):
 	def enableEasyLogin(self,value):
 
 		self.core.mainStack.closePopUp=[False,CHANGE_SERVICE_WAITING]
+		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
-		self.enableLogin=EnableLogin(value)
-		self.enableLogin.start()
-		self.enableLogin.finished.connect(self._enableLoginRet)
+		self.enableLoginT=EnableLogin(value)
+		self.enableLoginT.start()
+		self.enableLoginT.finished.connect(self._enableLoginRet)
 
 	#def enableEasyLogin
 
 	def _enableLoginRet(self):
 
 		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.closeGui=False
 		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
 		
-		if self.enableLogin.ret:
+		if self.enableLoginT.ret:
 			self.showMainMessage=[True,CHANGE_SERVICE_SUCCESSFULLY,"Ok"]
 		else:
 			self.showMainMessage=[True,CHANGE_SERVICE_ERROR,"Error"]
@@ -226,14 +248,28 @@ class Bridge(QObject):
 
 		self.showRemoveUserDialog=[True,self.removeAllUsers]
 
-	#def removeBell
+	#def removeUser
 
-	@Slot()
-	def generatePdf(self):
+	@Slot(str)
+	def generateList(self,exportPath):
 
-		Bridge.easyLoginManager.generatePdf()
+		self.core.mainStack.closePopUp=[False,GENERATING_PDF_WAITING]
+		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+		self.generatePdfT=GeneratePdf(exportPath)
+		self.generatePdfT.start()
+		self.generatePdfT.finished.connect(self._generatePdfRet)
 
-	#def generatePdf
+	#def generateList
+
+	def _generatePdfRet(self):
+
+		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.closeGui=True
+
+		if not self.generatePdfT.ret:
+			self.showMainMessage=[True,GENERATING_PDF_ERROR,"Error"]
+	
+	#def _generatePdfRet
 
 	@Slot(str)
 	def manageRemoveUserDialog(self,response):
@@ -252,27 +288,27 @@ class Bridge(QObject):
 		else:
 			self.core.mainStack.closePopUp=[False,REMOVING_USER]
 
-		self.removeUserProcess=RemoveUser(self.removeAllUsers,self.userToRemove)
-		self.removeUserProcess.start()
-		self.removeUserProcess.finished.connect(self._removeUserProcessRet)
+		self.removeUserT=RemoveUser(self.removeAllUsers,self.userToRemove)
+		self.removeUserT.start()
+		self.removeUserT.finished.connect(self._removeUserRet)
 
 	#def _launchRemoveBellProcess
 
-	def _removeUserProcessRet(self):
+	def _removeUserRet(self):
 
 		self._updateUsersModel()
 
-		if self.removeUserProcess.ret[0]:
-			self.showMainMessage=[True,self.removeUserProcess.ret[1],"Ok"]
+		if self.removeUserT.ret[0]:
+			self.showMainMessage=[True,self.removeUserT.ret[1],"Ok"]
 		else:
-			self.showMainMessage=[True,self.removeUserProcess.ret[1],"Error"]
+			self.showMainMessage=[True,self.removeUserT.ret[1],"Error"]
 
 		self._manageOptions()
 		self.filterStatusValue="all"
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
 
-	#def _removeUserProcessRet
+	#def _removeUserRet
 
 	on_easyLoginEnabled=Signal()
 	easyLoginEnabled=Property(bool,_getEasyLoginEnabled,_setEasyLoginEnabled, notify=on_easyLoginEnabled)

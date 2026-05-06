@@ -70,6 +70,9 @@ Popup {
             case 12:
                 var msg=i18nd("easy-login","Removing all users. Wait a moment...")
                 break;
+            case 13:
+                var msg=i18nd("easy-login","Generating PDF list. Wait a moment...")
+                break;
             case 24:
                 var msg=i18nd("easy-login", "Generating new password. Wait a moment...")
                 break;

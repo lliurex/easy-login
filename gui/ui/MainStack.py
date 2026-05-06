@@ -46,21 +46,21 @@ class Bridge(QObject):
 
 		self.currentStack=0
 		self.closeGui=False
-		self.gatherInfo=GatherInfo()
-		self.gatherInfo.start()
-		self.gatherInfo.finished.connect(self._loadConfig)
+		self.gatherInfoT=GatherInfo()
+		self.gatherInfoT.start()
+		self.gatherInfoT.finished.connect(self._loadConfig)
 	
 	#def initBridge
 	
 	def _loadConfig(self):
 
 		self.closeGui=True
-		if self.gatherInfo.ret[0]:
+		if self.gatherInfoT.ret[0]:
 			self.core.usersOptionsStack.loadConfig()
 			self._systemLocale=Bridge.easyLoginManager.systemLocale
 			self.currentStack=1
 		else:
-			self.showLoadErrorMessage=[True,self.gatherInfo.ret[1]]
+			self.showLoadErrorMessage=[True,self.gatherInfoT.ret[1]]
 	
 	#def _loadConfig
 
@@ -164,9 +164,9 @@ class Bridge(QObject):
 	def openHelp(self):
 		
 		if 'valencia' in self._systemLocale:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Bell-Scheduler.'
+			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/'
 		else:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Bell-Scheduler'
+			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/'
 		
 		self.openHelpT=threading.Thread(target=self._openHelp)
 		self.openHelpT.daemon=True

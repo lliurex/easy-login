@@ -107,7 +107,7 @@ Rectangle{
                 MenuItem{
                     icon.name:"document-print.svg"
                     text:i18nd("easy-login","Generate PDF list")
-                    onClicked:usersOptionsStackBridge.generatePdf()
+                    onClicked:pdfFileDialog.open()
                 }
                 MenuItem{
                     icon.name:"delete.svg"
@@ -161,6 +161,22 @@ Rectangle{
         }
     }
 
+    FileDialog{
+        id:pdfFileDialog
+        title:i18nd("easy-login","Please choose a file to save pdf list")
+        fileMode:FileDialog.SaveFile       
+        currentFolder:StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
+        nameFilters:["PDF files (*pdf)"]
+        onAccepted:(selectedPath)=>{
+            console.log(pdfFileDialog.selectedFile.toString())
+            var selectedPath=""
+            selectedPath=pdfFileDialog.selectedFile.toString()
+            selectedPath=selectedPath.replace(/^(file:\/{2})/,"")
+            usersOptionsStackBridge.generateList(selectedPath)
+        }
+      
+    }
+
     function getTextMessage(msgCode){
         switch (msgCode){
             case -2:
@@ -171,6 +187,9 @@ Rectangle{
                 break;
             case -10:
                 var msg=i18nd("easy-login","The state change has failed")
+                break;
+            case 11:
+                var msg=i18nd("easy-login","Unable to generate PDF list")
                 break;
             case 0:
                 var msg=i18nd("easy-login","User added successfully")
