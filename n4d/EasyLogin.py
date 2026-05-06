@@ -14,6 +14,7 @@ class EasyLogin:
     PASSWORD_INVALID = -2
     USER_NOT_IN_CACHE = -10
     USER_CACHE_EXPIRED = -11
+    GENERIC_ERROR = -20
     WRONG_SAVE = -30
 
     def __init__(self) -> None:
@@ -127,9 +128,10 @@ class EasyLogin:
                 del cache[username]
             with self.db_path.open("bw") as fd:
                 fd.write(bson.encode(cache))
-            return True
+            return n4d.responses.build_successful_call_response(True)
         except Exception:
-            return False
+            return n4d.build_failed_call_response(EasyLogin.GENERIC_ERROR)
+
 
     def load_user(self, username):
         self.exists_or_build_db()
