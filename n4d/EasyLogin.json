@@ -1,62 +1,69 @@
 {
-    "SETUP": {
-        "type": "python",
-        "path": "EasyLogin.py",
-        "class": "EasyLogin"
+  "SETUP": {
+    "type": "python",
+    "path": "EasyLogin.py",
+    "class": "EasyLogin"
+  },
+  "METHODS": {
+    "set_status_service": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
     },
-    "METHODS": {
-	"set_status_service": {
-	    "allowed_groups": [
-		"sudo",
-		"admins",
-		"teachers"
-	    ]
-	},
-	"get_status_service": {
-	    "allowed_groups": [
-		"anonymous",
-		"*"
-	    ]
-	},
-	"get_valid_username": {
-	    "allowed_groups": [
-		"sudo",
-		"admins",
-		"teachers"
-	    ]
-	},
-	"get_user_list": {
-	    "allowed_groups": [
-		"sudo",
-		"admins",
-		"teachers"
-	    ]
-	},
-    	"validate_easy_user":{
-		"allowed_groups":[
-			"anonymous"
-		]
-	},
-        "store_id_user": {
-            "allowed_groups": [
-                "sudo",
-                "admins",
-		"teachers"
-            ]
-        },
-        "remove_entry": {
-            "allowed_groups": [
-                "sudo",
-                "admins",
-		"teachers"
-            ]
-        },
-        "get_next_uid": {
-            "allowed_groups": [
-                "sudo",
-                "admins",
-		"teachers"
-            ]
-        }
+    "get_status_service": {
+      "allowed_groups": [
+        "anonymous",
+        "*"
+      ]
+    },
+    "get_valid_username": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+    "get_user_list": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+    "validate_easy_user": {
+      "allowed_groups": [
+        "anonymous"
+      ]
+    },
+    "store_id_user": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+    "remove_entry": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+    "get_next_uid": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+    "wipe_db": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
     }
+  }
 }
