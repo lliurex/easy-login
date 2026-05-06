@@ -29,15 +29,15 @@ class EasyLogin:
     def load_config(self) -> None:
         self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000 }
 
-    def set_status_service(self, status):
+    def set_status_service(self, status) -> bool:
         self.core.set_variable("EASYLOGIN_STATUS", status)
         return n4d.responses.build_successful_call_response(True)
 
-    def get_status_service(self):
+    def get_status_service(self) -> bool:
         status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
         return n4d.responses.build_successful_call_response(status)
 
-    def get_user_list(self):
+    def get_user_list(self) -> dict:
         self.exists_or_build_db()
         try:
             with self.db_path.open("br") as fd:
@@ -62,7 +62,7 @@ class EasyLogin:
             return n4d.responses.build_successful_call_response(user["info"])
         return n4d.responses.build_failed_call_response(EasyLogin.PASSWORD_INVALID)
 
-    def store_id_user(self, username, info):
+    def store_id_user(self, username, info) -> n4d.responses:
        
         user = {
                 "login":".easy",
@@ -104,7 +104,7 @@ class EasyLogin:
         return n4d.responses.build_failed_call_response(EasyLogin.WRONG_SAVE)
 
 
-    def save_info(self, username, info):
+    def save_info(self, username, info) -> bool:
         self.exists_or_build_db()
         try:
             with self.db_path.open("br") as fd:
@@ -119,7 +119,7 @@ class EasyLogin:
         except Exception:
             return False
 
-    def remove_entry(self, username):
+    def remove_entry(self, username) -> n4d.responses:
         self.exists_or_build_db()
         try:
             with self.db_path.open("br") as fd:
@@ -130,10 +130,10 @@ class EasyLogin:
                 fd.write(bson.encode(cache))
             return n4d.responses.build_successful_call_response(True)
         except Exception:
-            return n4d.build_failed_call_response(EasyLogin.GENERIC_ERROR)
+            return n4d.responses.build_failed_call_response(EasyLogin.GENERIC_ERROR)
 
 
-    def load_user(self, username):
+    def load_user(self, username) -> dict:
         self.exists_or_build_db()
         with self.db_path.open("br") as fd:
             cache = bson.decode(fd.read())
@@ -141,7 +141,7 @@ class EasyLogin:
             return cache[username]
         return None
 
-    def get_next_uid(self):
+    def get_next_uid(self) -> int:
         self.exists_or_build_db()
         try:
             with self.db_path.open("br") as fd:
@@ -154,7 +154,7 @@ class EasyLogin:
         max_uid = max([user["info"]["uid"] for user in users_db.values()])
         return max_uid + 1
 
-    def exists_or_build_db(self):
+    def exists_or_build_db(self) -> bool:
         if not self.db_path.parent.exists():
             self.db_path.parent.mkdir(parents=True,
                                          exist_ok=True,
@@ -164,7 +164,7 @@ class EasyLogin:
             self._wipe_db()
         return True
 
-    def wipe_db(self):
+    def wipe_db(self) -> n4d.responses:
         self.exists_or_build_db()
         self._wipe_db()
         return n4d.responses.build_successful_call_response(True)
