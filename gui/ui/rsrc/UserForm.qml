@@ -56,12 +56,16 @@ Rectangle{
             }
             TextField{
                 id:nameEntry
+                focus:true
+                activeFocusOnTab: true 
                 text:userStackBridge.name
                 horizontalAlignment:TextInput.AlignLeft
                 implicitWidth:400
+               
                 onTextChanged:{
                     userStackBridge.updateNameValue(nameEntry.text)
                 }
+               
             }
 
             Text{
@@ -90,7 +94,7 @@ Rectangle{
                 TextField{
                     id:loginEntry
                     text:userStackBridge.login
-                    enabled: userStackBridge.enableLoginEdition
+                    readOnly: !userStackBridge.enableLoginEdition
                     horizontalAlignment:TextInput.AlignLeft
                     implicitWidth:400
                     onTextChanged:{
@@ -108,6 +112,18 @@ Rectangle{
                     ToolTip.text:i18nd("easy-login","Click to edit login")
                     onClicked:userStackBridge.forceLoginEdition()
     
+                }
+                Button {
+                    id:restoreLoginBtn
+                    display:AbstractButton.IconOnly
+                    icon.name:"edit-reset.svg"
+                    enabled:userStackBridge.enableLoginEdition
+                    Layout.preferredHeight: 35
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 3000
+                    ToolTip.visible: hovered
+                    ToolTip.text:i18nd("easy-login","Click to restore login")
+                    onClicked:userStackBridge.restoreDefaultLogin()
                 }
 
             }
@@ -195,12 +211,12 @@ Rectangle{
                 Button {
                     id:refreshPwdBtn
                     display:AbstractButton.IconOnly
-                    icon.name:"document-edit.svg"
+                    icon.name:"view-refresh.svg"
                     Layout.preferredHeight: 35
                     ToolTip.delay: 1000
                     ToolTip.timeout: 3000
                     ToolTip.visible: hovered
-                    ToolTip.text:i18nd("easy-login","Click to refresh password")
+                    ToolTip.text:i18nd("easy-login","Click to get a new password")
                     onClicked:userStackBridge.generateUsername()
     
                 }

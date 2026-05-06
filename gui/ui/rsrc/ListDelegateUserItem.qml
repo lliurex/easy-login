@@ -80,10 +80,10 @@ ItemDelegate {
                 spacing: 5
                 Layout.alignment: Qt.AlignVCenter
 
-                Image { source: pwdImg1; sourceSize: "24x24" }
-                Image { source: pwdImg2; sourceSize: "24x24" }
-                Image { source: pwdImg3; sourceSize: "24x24" }
-                Image { source: pwdImg4; sourceSize: "24x24" }
+                Image { source: pwdImg1; sourceSize: "32x32" }
+                Image { source: pwdImg2; sourceSize: "32x32" }
+                Image { source: pwdImg3; sourceSize: "32x32" }
+                Image { source: pwdImg4; sourceSize: "32x32" }
             }
 
             Button {
@@ -111,7 +111,7 @@ ItemDelegate {
                     MenuItem {
                         text: i18nd("easy-login","Edit user")
                         icon.name: "document-edit.svg"
-                        onClicked: userStackBridge.loadUser(username)
+                        onClicked: userStackBridge.loadUser([username,[pwdImg1,pwdImg2,pwdImg3,pwdImg4]])
                     }
                     MenuItem {
                         text: i18nd("easy-login","Delete this user")

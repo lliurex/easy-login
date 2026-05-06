@@ -105,6 +105,11 @@ Rectangle{
                 x: globalActionsBtn.width/2
 
                 MenuItem{
+                    icon.name:"document-print.svg"
+                    text:i18nd("easy-login","Generate PDF list")
+                    onClicked:usersOptionsStackBridge.generatePdf()
+                }
+                MenuItem{
                     icon.name:"delete.svg"
                     text:i18nd("easy-login","Delete all users")
                     onClicked:usersOptionsStackBridge.removeUser([true])
@@ -161,11 +166,17 @@ Rectangle{
             case -2:
                 var msg=i18nd("easy-logn","Unable to add user")
                 break
+            case -7:
+                var msg=i18nd("easy-login","Unable to remove user")
+                break;
             case -10:
                 var msg=i18nd("easy-login","The state change has failed")
                 break;
             case 0:
                 var msg=i18nd("easy-login","User added successfully")
+                break;
+            case 2:
+                var msg=i18nd("easy-login","User removed successfully")
                 break;
             case 11:
                 var msg=i18nd("easy-login","The state change has been performed successfully")

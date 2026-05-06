@@ -8,6 +8,10 @@ import gettext
 import random
 import unicodedata
 import re
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 
 gettext.textdomain("easy-login")
 _ = gettext.gettext
@@ -22,6 +26,8 @@ class EasyLoginManager(object):
 	NAME_EMPTY_ERROR=-4
 	SURNAME_EMPTY_ERROR=-5
 	LOGIN_EMPTY_ERROR=-6
+	REMOVE_USER_ERROR=-7
+	REMOVE_ALL_USERS_ERROR=-8
 
 	ADD_USER_SUCCESSFULLY=0
 	EDIT_USER_SUCCESSFULLY=1
@@ -37,7 +43,8 @@ class EasyLoginManager(object):
 		self.usersConfigData=[]
 		self.easyLoginEnabled=False
 		self.pwdImgFolder="/usr/share/easy-login/themes/animals"
-		self.missingImgPath="file:///usr/share/easy-login/gui/rsc/missingImg.png"
+		self.missingImgPath="file:///usr/share/easy-login/gui/rsrc/missingImg.png"
+		self.pdfName="Easy-Login_Report.pdf"
 		self._getSystemLocale()
 		self.initValues()
 
@@ -89,15 +96,23 @@ class EasyLoginManager(object):
 			getStatus=self.client.EasyLogin.get_status_service()
 			if getStatus!="None":
 				self.easyLoginEnabled=getStatus
-	
-			self.usersConfig=self.client.EasyLogin.get_user_list()
+			return self._getUsersInfo()
+		except Exception as e:
+			return [False,EasyLoginManager.LOAD_USERS_ERROR]
+		
+	#def readConf
+
+	def _getUsersInfo(self):
+
+		try:
+			tmpConfig=self.client.EasyLogin.get_user_list()
+			self.usersConfig=dict(sorted(tmpConfig.items(), key=lambda item:item[1]['login']))
 			self._getUsersData()
 			return [True,""]
 		except Exception as e:
-			print(str(e))
 			return [False,EasyLoginManager.LOAD_USERS_ERROR]
-		
-	#def readConf	
+
+	#def _getUsersInfo	
 
 	def _getUsersData(self):
 
@@ -125,7 +140,9 @@ class EasyLoginManager(object):
 
 			if not os.path.exists(tmpPath):
 				tmpPath=self.missingImgPath
-			tmpImgData[f"pwdImg{i}"]=f"file://{tmpPath}"
+			else:
+				tmpPath=f"file://{tmpPath}"
+			tmpImgData[f"pwdImg{i}"]=tmpPath
 			i+=1
 
 		return tmpImgData
@@ -145,27 +162,36 @@ class EasyLoginManager(object):
 
 		tmpUsername=random.randint(0,8888)
 		username=f"{tmpUsername:04}"
-
-		self.currentUserConfig["username"]=username
 		tmpImgPath=self._getImgFromUsername(username)
-		self.currentUserConfig["pwdImgPaths"][0]=tmpImgPath.get("pwdImg1",self.missingImgPath)
-		self.currentUserConfig["pwdImgPaths"][1]=tmpImgPath.get("pwdImg2",self.missingImgPath)
-		self.currentUserConfig["pwdImgPaths"][2]=tmpImgPath.get("pwdImg3",self.missingImgPath)
-		self.currentUserConfig["pwdImgPaths"][3]=tmpImgPath.get("pwdImg4",self.missingImgPath)
-
-		return True
+		
+		return [True,username,tmpImgPath]
 
 	#def generateUsername
 
-	def loadUserConfig(self,userToLoad):
+	def loadUserConfig(self,newUser,infoToLoad):
 
-		self.currentUserConfig=self.usersConfig.get(userToLoad,{})
-		if len(self.currentUserConfig)>0:
-			self.currentUserConfig["username"]=userToLoad
-			self.currentUserConfig.update(self._getImgFromUsername(userToLoad))
-			return True
+		if newUser:
+			getUsername=self.generateUsername()
+			if getUsername[0]:
+				self.currentUserConfig["username"]=getUsername[1]
+				self.currentUserConfig["pwdImgPaths"][0]=getUsername[2].get("pwdImg1",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][1]=getUsername[2].get("pwdImg2",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][2]=getUsername[2].get("pwdImg3",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][3]=getUsername[2].get("pwdImg4",self.missingImgPath)
+				return True
+			else:
+				return False
+		else:
+			username=infoToLoad[0]
+			self.currentUserConfig=self.usersConfig.get(username,{})
 
-		return False
+			if len(self.currentUserConfig)>0:
+				self.currentUserConfig["username"]=username
+				self.currentUserConfig["pwdImgPaths"]=[]
+				self.currentUserConfig["pwdImgPaths"]=infoToLoad[1]
+				return True
+		
+			return False
 
 	#def loadUserConfig
 
@@ -218,9 +244,11 @@ class EasyLoginManager(object):
 		try:
 			ret=self.client.EasyLogin.store_id_user(username,info)
 			if ret:
-				self.usersConfig=self.client.EasyLogin.get_user_list()
-				self._getUsersData()
-			return [True,EasyLoginManager.ADD_USER_SUCCESSFULLY]
+				retInfo=self._getUsersInfo()
+				if retInfo[0]:
+					return [True,EasyLoginManager.ADD_USER_SUCCESSFULLY]
+				else:
+					return retInfo
 		except Exception as e:
 			print(str(e))
 			return [False,EasyLoginManager.ADD_USER_ERROR]
@@ -229,7 +257,29 @@ class EasyLoginManager(object):
 
 	def removeUser(self,allUsers,userToRemove):
 
-		pass
+		if allUsers:
+			try:
+				ret=self.client.EasyLogin.wipe_db()
+			except n4d.client.CallFailedError as e:
+				print(str(e))
+				return [False,EasyLoginManager.REMOVE_ALL_USERS_ERROR]
+		else:
+			try:
+				ret=self.client.EasyLogin.remove_entry(userToRemove)
+			except n4d.client.CallFailedError as e:
+				print(str(e))
+				return [False,EasyLoginManager.REMOVE_USER_ERROR]
+		
+		retInfo=self._getUsersInfo()
+		
+		if retInfo[0]:
+			if allUsers:
+				return [True.EasyLoginManager.REMOVE_ALL_USERS_SUCCESSFULLY]
+			else:
+				return [True,EasyLoginManager.REMOVE_USER_SUCCESSFULLY]
+
+		return retInfo
+
 
 	#def removeUser
 
@@ -244,5 +294,81 @@ class EasyLoginManager(object):
 		return normalizedLogin
 
 	#def getFormattedLogin
+
+	def generatePdf(self):
+
+		pdfName="/home/lliurex/Easy-Login_report.pdf"
+		doc = SimpleDocTemplate(
+			pdfName,
+			pagesize=A4,
+			rightMargin=40,
+			leftMargin=40,
+			topMargin=40,
+			bottomMargin=40
+		)
+
+		styles = getSampleStyleSheet()
+		cell_style=styles["Normal"]
+		cell_style.aligment=0
+
+		story = []
+
+		pdfTitle = Paragraph("EASY-LOGIN", styles['Title'])
+		story.append(pdfTitle)
+		story.append(Spacer(1, 20))
+
+		pdfData=[[_("NAME"),_("LOGIN"),_("PASSWORD")]]
+
+		for item in self.usersConfigData:
+			tmpName=Paragraph(f"{item.get("name")} {item.get("surname")}",cell_style)
+			tmpLogin=Paragraph(f"{item.get("login")}",cell_style)
+			imgPaths=[]
+			imgPaths.append(f"{item.get("pwdImg1").replace("file://","")}")
+			imgPaths.append(f"{item.get("pwdImg2").replace("file://","")}")
+			imgPaths.append(f"{item.get("pwdImg3").replace("file://","")}")
+			imgPaths.append(f"{item.get("pwdImg4").replace("file://","")}")
+
+			imgObjects=[]
+			for img in imgPaths:
+				if os.path.exists(img):
+					imgObjects.append(Image(img,width=32,height=32))
+				else:
+					imgObjects.append("N/A")
+
+			imgTable = Table([imgObjects], colWidths=[35]*len(imgObjects)) 
+			imgTable.setStyle(TableStyle([
+				('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+				('ALIGN', (0,0), (-1,-1), 'CENTER'),
+			]))
+			pdfData.append([tmpName,tmpLogin,imgTable])
+
+		tmpTable = Table(pdfData, colWidths=[150,150,180], repeatRows=1)
+		pdfStyle = TableStyle([
+			('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2C3E50')),
+			('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+			('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+			('FONTSIZE', (0, 0), (-1, 0), 12),
+			
+			('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+			('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+			('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+			('FONTSIZE', (0, 1), (-1, -1), 10),
+			
+			('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+			('TOPPADDING', (0, 0), (-1, -1), 10),
+			
+		])
+		
+		tmpTable.setStyle(pdfStyle)
+		story.append(tmpTable)
+
+		try:
+			doc.build(story)
+			return True
+		except Exception as e:
+			print(e)
+			return False
+
+	#def generatePdf
 
 #class EasyLoginManager 		

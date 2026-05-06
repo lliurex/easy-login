@@ -45,7 +45,7 @@ ApplicationWindow {
             Layout.alignment:Qt.AlignTop
 
             Rectangle{
-                color: "#0049ab"
+                color: "#000000"
                 Layout.minimumWidth:mainLayout.width
                 Layout.preferredWidth:mainLayout.width
                 Layout.fillWidth:true

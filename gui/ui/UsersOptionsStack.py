@@ -42,7 +42,7 @@ class RemoveUser(QThread):
 	def __init__(self,*args):
 
 		QThread.__init__(self)
-		self.allUses=args[0]
+		self.allUsers=args[0]
 		self.userToRemove=args[1]
 		self.ret=[]
 
@@ -228,6 +228,13 @@ class Bridge(QObject):
 
 	#def removeBell
 
+	@Slot()
+	def generatePdf(self):
+
+		Bridge.easyLoginManager.generatePdf()
+
+	#def generatePdf
+
 	@Slot(str)
 	def manageRemoveUserDialog(self,response):
 
@@ -240,10 +247,10 @@ class Bridge(QObject):
 	def _launchRemoveUserProcess(self):
 
 		self.core.mainStack.closeGui=False
-		if self.removeUserBells:
-			self.core.mainStack.closePopUp=[False,REMOVING_ALL_BELLS]
+		if self.removeAllUsers:
+			self.core.mainStack.closePopUp=[False,REMOVING_ALL_USERS]
 		else:
-			self.core.mainStack.closePopUp=[False,REMOVING_BELL]
+			self.core.mainStack.closePopUp=[False,REMOVING_USER]
 
 		self.removeUserProcess=RemoveUser(self.removeAllUsers,self.userToRemove)
 		self.removeUserProcess.start()
@@ -253,8 +260,9 @@ class Bridge(QObject):
 
 	def _removeUserProcessRet(self):
 
+		self._updateUsersModel()
+
 		if self.removeUserProcess.ret[0]:
-			self._updateUsesModel()
 			self.showMainMessage=[True,self.removeUserProcess.ret[1],"Ok"]
 		else:
 			self.showMainMessage=[True,self.removeUserProcess.ret[1],"Error"]

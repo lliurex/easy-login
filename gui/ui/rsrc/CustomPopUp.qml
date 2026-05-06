@@ -52,7 +52,7 @@ Popup {
             case 1:
                 var msg=i18nd("easy-login","Loading configuration. Wait a moment...");
                 break;
-            case 2:
+            case 21:
                 var msg=i18nd("easy-login","Loading user info. Wait a moment...");
                 break;
             case 22:
@@ -69,6 +69,9 @@ Popup {
                 break;
             case 12:
                 var msg=i18nd("easy-login","Removing all users. Wait a moment...")
+                break;
+            case 24:
+                var msg=i18nd("easy-login", "Generating new password. Wait a moment...")
                 break;
             default:
                 var msg=""
