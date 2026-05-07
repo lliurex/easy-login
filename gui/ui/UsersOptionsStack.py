@@ -191,7 +191,7 @@ class Bridge(QObject):
 		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
 
 		self.core.mainStack.closePopUp=[True,""]
-		self.core.mainStack.closeGui=False
+		self.core.mainStack.closeGui=True
 		self.showMainMessage=[True,self.enableLoginT.ret.get("code"),self.enableLoginT.ret.get("type")]
 
 	#def _enableLoginRet

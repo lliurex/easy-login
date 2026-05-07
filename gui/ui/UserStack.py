@@ -347,7 +347,7 @@ class Bridge(QObject):
 			self.core.usersOptionsStack.showMainMessage=[True,self.editUserT.ret.get("code"),self.editUserT.ret.get("type")]
 
 		self.core.mainStack.closePopUp=[True,""]
-		self.core.mainStack.closeGui=False
+		self.core.mainStack.closeGui=True
 
 	#def _loadUserRet
 
