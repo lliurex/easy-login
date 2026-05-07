@@ -20,18 +20,24 @@ _ = gettext.gettext
 class EasyLoginManager(object):
 
 	
-	LOAD_USERS_ERROR=-1
-	ADD_USER_ERROR=-2
-	EDIT_USER_ERROR=-3
+	LOAD_CONFIG_ERROR=-1
+	ADD_NEW_USER_ERROR=-2
+	SAVE_USER_ERROR=-3
 	NAME_EMPTY_ERROR=-4
 	SURNAME_EMPTY_ERROR=-5
 	LOGIN_EMPTY_ERROR=-6
 	REMOVE_USER_ERROR=-7
 	REMOVE_ALL_USERS_ERROR=-8
+	CHANGE_SERVICE_ERROR=-9
+	GENERATING_PDF_ERROR=-10
+	LOAD_USER_ERROR=-11
+	GENERATING_NEW_PWD_ERROR=-12
 
 	ADD_USER_SUCCESSFULLY=0
-	EDIT_USER_SUCCESSFULLY=1
 	REMOVE_USER_SUCCESSFULLY=2
+	CHANGE_SERVICE_SUCCESSFULLY=3
+	REMOVE_ALL_USERS_SUCCESSFULLY=4
+
 	
 	def __init__(self):
 
@@ -61,7 +67,7 @@ class EasyLoginManager(object):
 	def _debug(self,function,msg):
 
 		if self.dbg==1:
-			print("[EASYLOGIN]: "+ str(function) + str(msg))
+			print(f"[EASYLOGIN]: {function} - {msg}")
 
 	#def _debug	
 
@@ -98,7 +104,8 @@ class EasyLoginManager(object):
 				self.easyLoginEnabled=getStatus
 			return self._getUsersInfo()
 		except Exception as e:
-			return [False,EasyLoginManager.LOAD_USERS_ERROR]
+			self._debug("loadConfig",f"Error loading config: {e}")
+			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":"Error"}
 		
 	#def readConf
 
@@ -108,9 +115,11 @@ class EasyLoginManager(object):
 			tmpConfig=self.client.EasyLogin.get_user_list()
 			self.usersConfig=dict(sorted(tmpConfig.items(), key=lambda item:item[1]['login']))
 			self._getUsersData()
-			return [True,""]
+			return {"status":True,"code":"","type":"Ok"}
+
 		except Exception as e:
-			return [False,EasyLoginManager.LOAD_USERS_ERROR]
+			self._debug("_getUsersInfo",f"Error getting users info: {e}")
+			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":"Error"}
 
 	#def _getUsersInfo	
 
@@ -160,11 +169,10 @@ class EasyLoginManager(object):
 
 	def generateUsername(self):
 
-		tmpUsername=random.randint(0,8888)
-		username=f"{tmpUsername:04}"
+		username="".join(str(random.randint(0,8)) for _ in range(0,4))
 		tmpImgPath=self._getImgFromUsername(username)
 		
-		return [True,username,tmpImgPath]
+		return {"status":True,"code":"","type":"Ok","data":{"username":username,"imgPaths":tmpImgPath}}
 
 	#def generateUsername
 
@@ -172,15 +180,15 @@ class EasyLoginManager(object):
 
 		if newUser:
 			getUsername=self.generateUsername()
-			if getUsername[0]:
-				self.currentUserConfig["username"]=getUsername[1]
-				self.currentUserConfig["pwdImgPaths"][0]=getUsername[2].get("pwdImg1",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][1]=getUsername[2].get("pwdImg2",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][2]=getUsername[2].get("pwdImg3",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][3]=getUsername[2].get("pwdImg4",self.missingImgPath)
-				return True
+			if getUsername.get("status"):
+				self.currentUserConfig["username"]=getUsername.get("data").get("username")
+				self.currentUserConfig["pwdImgPaths"][0]=getUsername.get("data").get("imgPaths").get("pwdImg1",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][1]=getUsername.get("data").get("imgPaths").get("pwdImg2",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][2]=getUsername.get("data").get("imgPaths").get("pwdImg3",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"][3]=getUsername.get("data").get("imgPaths").get("pwdImg4",self.missingImgPath)
+				return {"status":True,"code":"","type":"Ok"}
 			else:
-				return False
+				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":"Error"}
 		else:
 			username=infoToLoad[0]
 			self.currentUserConfig=self.usersConfig.get(username,{})
@@ -189,9 +197,9 @@ class EasyLoginManager(object):
 				self.currentUserConfig["username"]=username
 				self.currentUserConfig["pwdImgPaths"]=[]
 				self.currentUserConfig["pwdImgPaths"]=infoToLoad[1]
-				return True
+				return {"status":True,"code":"","type":"Ok"}
 		
-			return False
+			return {"status":False,"code":EasyLoginManager.LOAD_USER_ERROR,"type":"Error"}
 
 	#def loadUserConfig
 
@@ -206,10 +214,10 @@ class EasyLoginManager(object):
 			else:
 				self.easyLoginEnabled:False
 			
-			return True
+			return {"status":True,"code":EasyLoginManager.CHANGE_SERVICE_SUCCESSFULLY,"type":"Ok"}
 		except Exception as e:
-			print(str(e))
-			return False
+			self._debug("enableEasyLogin",f"Error changing status: {e}")
+			return {"status":False,"code":EasyLoginManager.CHANGE_SERVICE_ERROR,"type":"Error"}
 
 	#def enableEasyLogin
 
@@ -220,16 +228,16 @@ class EasyLoginManager(object):
 		login=dataToCheck.get("login","")
 
 		if name!="" and surname!="" and login !="":
-			return [True,""]
+			return {"status":True,"code":"","type":"Ok"}
 
 		if name=="":
-			return [False,EasyLoginManager.NAME_EMPTY_ERROR]
+			return {"status":False,"code":EasyLoginManager.NAME_EMPTY_ERROR,"type":"Error"}
 		
 		if surname=="":
-			return [False,EasyLoginManager.SURNAME_EMPTY_ERROR]
+			return {"status":False,"code":EasyLoginManager.SURNAME_EMPTY_ERROR,"type":"Error"}
 
 		if login=="":
-			return [False,EasyLoginManager.LOGIN_EMPTY_ERROR]
+			return {"status":False,"code":EasyLoginManager.LOGIN_EMPTY_ERROR,"type":"Error"}
 
 	#def checkData
 
@@ -245,39 +253,38 @@ class EasyLoginManager(object):
 			ret=self.client.EasyLogin.store_id_user(username,info)
 			if ret:
 				retInfo=self._getUsersInfo()
-				if retInfo[0]:
-					return [True,EasyLoginManager.ADD_USER_SUCCESSFULLY]
+				if retInfo.get("status"):
+					return {"status":True,"code":EasyLoginManager.ADD_USER_SUCCESSFULLY,"type":"Ok"}
 				else:
 					return retInfo
 		except Exception as e:
-			print(str(e))
-			return [False,EasyLoginManager.ADD_USER_ERROR]
+			self._debug("saveData",f"Error saving data: {e}")
+			return {"status":False,"code":EasyLoginManager.SAVE_USER_ERROR,"type":"Error"}
 
 	#def saveData
 
 	def removeUser(self,allUsers,userToRemove):
 
 		if allUsers:
+			msgOk=EasyLoginManager.REMOVE_ALL_USERS_SUCCESSFULLY
 			try:
 				ret=self.client.EasyLogin.wipe_db()
 			except n4d.client.CallFailedError as e:
-				print(str(e))
-				return [False,EasyLoginManager.REMOVE_ALL_USERS_ERROR]
+				self._debug("removeUser",f"Error removing all users: {e}")
+				return {"status":False,"code":EasyLoginManager.REMOVE_ALL_USERS_ERROR,"type":"Error"}
 		else:
+			msgOk=EasyLoginManager.REMOVE_USER_SUCCESSFULLY
 			try:
 				ret=self.client.EasyLogin.remove_entry(userToRemove)
 			except n4d.client.CallFailedError as e:
-				print(str(e))
-				return [False,EasyLoginManager.REMOVE_USER_ERROR]
+				self._debug("removeUser",f"Error removing user: {e}")
+				return {"status":False,"code":EasyLoginManager.REMOVE_USER_ERROR,"type":"Error"}
 		
 		retInfo=self._getUsersInfo()
 		
-		if retInfo[0]:
-			if allUsers:
-				return [True.EasyLoginManager.REMOVE_ALL_USERS_SUCCESSFULLY]
-			else:
-				return [True,EasyLoginManager.REMOVE_USER_SUCCESSFULLY]
-
+		if retInfo.get("status"):
+			return {"status":True,"code":msgOk,"type":"Ok"}
+	
 		return retInfo
 
 
@@ -317,11 +324,11 @@ class EasyLoginManager(object):
 		story.append(pdfTitle)
 		story.append(Spacer(1, 20))
 
-		pdfData=[[_("NAME"),_("LOGIN"),_("PASSWORD")]]
+		pdfData=[[_("LOGIN"),_("STUDENT"),_("PASSWORD")]]
 
 		for item in self.usersConfigData:
-			tmpName=Paragraph(f"{item.get("name")} {item.get("surname")}",cell_style)
 			tmpLogin=Paragraph(f"{item.get("login")}",cell_style)
+			tmpName=Paragraph(f"{item.get("name")} {item.get("surname")}",cell_style)
 			imgPaths=[]
 			imgPaths.append(f"{item.get("pwdImg1").replace("file://","")}")
 			imgPaths.append(f"{item.get("pwdImg2").replace("file://","")}")
@@ -340,9 +347,9 @@ class EasyLoginManager(object):
 				('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
 				('ALIGN', (0,0), (-1,-1), 'CENTER'),
 			]))
-			pdfData.append([tmpName,tmpLogin,imgTable])
+			pdfData.append([tmpLogin,tmpName,imgTable])
 
-		tmpTable = Table(pdfData, colWidths=[150,150,180], repeatRows=1)
+		tmpTable = Table(pdfData, colWidths=[170,150,160], repeatRows=1)
 		pdfStyle = TableStyle([
 			('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2C3E50')),
 			('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -353,7 +360,7 @@ class EasyLoginManager(object):
 			('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 			('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
 			('FONTSIZE', (0, 1), (-1, -1), 10),
-			
+			('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#ced3d7')]),		
 			('BOTTOMPADDING', (0, 0), (-1, -1), 10),
 			('TOPPADDING', (0, 0), (-1, -1), 10),
 			
@@ -365,10 +372,10 @@ class EasyLoginManager(object):
 		try:
 			doc.build(story)
 			subprocess.run(["xdg-open",pdfFile])
-			return True
+			return {"status":True,"code":"","type":"Ok"}
 		except Exception as e:
-			print(e)
-			return False
+			self._debug("generatePdf",f"Error generating pdf: {e}")
+			return {"status":False,"code":EasyLoginManager.GENERATING_PDF_ERROR,"type":"Error"}
 
 	#def generatePdf
 

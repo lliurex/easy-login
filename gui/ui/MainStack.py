@@ -13,6 +13,7 @@ class GatherInfo(QThread):
 	def __init__(self,*args):
 		
 		QThread.__init__(self)
+		self.ret={}
 
 	#def _init__
 
@@ -55,12 +56,12 @@ class Bridge(QObject):
 	def _loadConfig(self):
 
 		self.closeGui=True
-		if self.gatherInfoT.ret[0]:
+		if self.gatherInfoT.ret.get("status"):
 			self.core.usersOptionsStack.loadConfig()
 			self._systemLocale=Bridge.easyLoginManager.systemLocale
 			self.currentStack=1
 		else:
-			self.showLoadErrorMessage=[True,self.gatherInfoT.ret[1]]
+			self.showLoadErrorMessage=[True,self.gatherInfoT.ret.get("code")]
 	
 	#def _loadConfig
 

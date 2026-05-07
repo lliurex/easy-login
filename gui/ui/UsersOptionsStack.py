@@ -10,15 +10,10 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 import UsersModel
 
-CHANGE_SERVICE_WAITING=10
-REMOVING_USER=11
-REMOVING_ALL_USERS=12
-GENERATING_PDF_WAITING=13
-
-CHANGE_SERVICE_SUCCESSFULLY=11
-CHANGE_SERVICE_ERROR=-10
-GENERATING_PDF_ERROR=-11
-
+CHANGE_SERVICE_WAITING=20
+REMOVING_USER=21
+REMOVING_ALL_USERS=22
+GENERATING_PDF_WAITING=23
 
 class EnableLogin(QThread):
 
@@ -26,7 +21,7 @@ class EnableLogin(QThread):
 
 		QThread.__init__(self)
 		self.enableLogin=args[0]
-		self.ret=False
+		self.ret={}
 
 	#def __init__
 
@@ -46,7 +41,7 @@ class RemoveUser(QThread):
 		QThread.__init__(self)
 		self.allUsers=args[0]
 		self.userToRemove=args[1]
-		self.ret=[]
+		self.ret={}
 
 	#def __init__
 
@@ -65,7 +60,7 @@ class GeneratePdf(QThread):
 
 		QThread.__init__(self)
 		self.pdfPath=args[0]
-		self.ret=False
+		self.ret={}
 
 	#def __init__
 
@@ -90,7 +85,6 @@ class Bridge(QObject):
 		self._showMainMessage=[False,"","Ok"]
 		self._showRemoveUserDialog=[False,False]
 		self._enableGlobalOptions=False
-		self._filterStatusValue="all"
 
 	#def _init__
 	
@@ -170,20 +164,6 @@ class Bridge(QObject):
 
 	#def _setEnableGlobalOptions
 
-	def _getFilterStatusValue(self):
-
-		return self._filterStatusValue
-
-	#def _getFilterStatusValue
-
-	def _setFilterStatusValue(self,filterStatusValue):
-
-		if self._filterStatusValue!=filterStatusValue:
-			self._filterStatusValue=filterStatusValue
-			self.on_filterStatusValue.emit()
-
-	#def _setFilterStatusValue
-
 	def _updateUsersModel(self):
 
 		ret=self._usersModel.clear()
@@ -193,23 +173,6 @@ class Bridge(QObject):
 				self._usersModel.appendRow(item["username"],item["login"],item["name"],item["surname"],item["pwdImg1"],item["pwdImg2"],item["pwdImg3"],item["pwdImg4"],item["metaInfo"])
 	
 	#def _updateUsersModel
-
-	def _updateUsersModelInfo(self,param):
-
-		updatedInfo=Bridge.easyLoginManager.usersConfigData
-		if len(updatedInfo)>0:
-			for i in range(len(updatedInfo)):
-				index=self._usersModel.index(i)
-				self._usersModel.setData(index,param,updatedInfo[i][param])
-
-	#def _updateBellsModelInfo
-
-	@Slot(str)
-	def manageStatusFilter(self,value):
-
-		self.filterStatusValue=value
-
-	#def manageStatusFilter
 
 	@Slot(bool)
 	def enableEasyLogin(self,value):
@@ -225,14 +188,11 @@ class Bridge(QObject):
 
 	def _enableLoginRet(self):
 
+		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
+
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=False
-		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
-		
-		if self.enableLoginT.ret:
-			self.showMainMessage=[True,CHANGE_SERVICE_SUCCESSFULLY,"Ok"]
-		else:
-			self.showMainMessage=[True,CHANGE_SERVICE_ERROR,"Error"]
+		self.showMainMessage=[True,self.enableLoginT.ret.get("code"),self.enableLoginT.ret.get("type")]
 
 	#def _enableLoginRet
 
@@ -241,6 +201,7 @@ class Bridge(QObject):
 
 		self.showMainMessage=[False,"","Ok"]
 		self.removeAllUsers=data[0]
+		
 		if self.removeAllUsers:
 			self.userToRemove=None
 		else:
@@ -254,6 +215,7 @@ class Bridge(QObject):
 	def generateList(self,exportPath):
 
 		self.core.mainStack.closePopUp=[False,GENERATING_PDF_WAITING]
+		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.generatePdfT=GeneratePdf(exportPath)
 		self.generatePdfT.start()
@@ -266,8 +228,8 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
 
-		if not self.generatePdfT.ret:
-			self.showMainMessage=[True,GENERATING_PDF_ERROR,"Error"]
+		if not self.generatePdfT.ret.get("status"):
+			self.showMainMessage=[True,self.generatePdfT.ret.get("code"),self.generatePdfT.ret.get("type")]
 	
 	#def _generatePdfRet
 
@@ -297,16 +259,10 @@ class Bridge(QObject):
 	def _removeUserRet(self):
 
 		self._updateUsersModel()
-
-		if self.removeUserT.ret[0]:
-			self.showMainMessage=[True,self.removeUserT.ret[1],"Ok"]
-		else:
-			self.showMainMessage=[True,self.removeUserT.ret[1],"Error"]
-
 		self._manageOptions()
-		self.filterStatusValue="all"
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
+		self.showMainMessage=[True,self.removeUserT.ret.get("code"),self.removeUserT.ret.get("type")]
 
 	#def _removeUserRet
 
@@ -321,9 +277,6 @@ class Bridge(QObject):
 
 	on_enableGlobalOptions=Signal()
 	enableGlobalOptions=Property(bool,_getEnableGlobalOptions,_setEnableGlobalOptions,notify=on_enableGlobalOptions)
-
-	on_filterStatusValue=Signal()
-	filterStatusValue=Property(str,_getFilterStatusValue,_setFilterStatusValue,notify=on_filterStatusValue)
 
 	usersModel=Property(QObject,_getUsersModel,constant=True)
 

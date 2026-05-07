@@ -168,7 +168,6 @@ Rectangle{
         currentFolder:StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
         nameFilters:["PDF files (*pdf)"]
         onAccepted:(selectedPath)=>{
-            console.log(pdfFileDialog.selectedFile.toString())
             var selectedPath=""
             selectedPath=pdfFileDialog.selectedFile.toString()
             selectedPath=selectedPath.replace(/^(file:\/{2})/,"")
@@ -182,23 +181,35 @@ Rectangle{
             case -2:
                 var msg=i18nd("easy-logn","Unable to add user")
                 break
+            case -3:
+                var msg=i18nd("easy-login","Unable to save the changes")
+                break;
             case -7:
                 var msg=i18nd("easy-login","Unable to remove user")
                 break;
-            case -10:
+            case -8:
+                var msg=i18nd("easy-login","Unable to remove all users")
+                break;
+            case -9:
                 var msg=i18nd("easy-login","The state change has failed")
                 break;
-            case 11:
+            case -10:
                 var msg=i18nd("easy-login","Unable to generate PDF list")
                 break;
+            case -11:
+                var msg=i18nd("easy-login","Unable to load user info")
+                break;
             case 0:
-                var msg=i18nd("easy-login","User added successfully")
+                var msg=i18nd("easy-login","Changes saved successfully")
                 break;
             case 2:
                 var msg=i18nd("easy-login","User removed successfully")
                 break;
-            case 11:
+            case 3:
                 var msg=i18nd("easy-login","The state change has been performed successfully")
+                break;
+            case 4:
+                var msg=i18nd("easy-login","Users removed successfully")
                 break;
             default:
                 var msg=""

@@ -49,31 +49,31 @@ Popup {
 
     function getTextMessage(){
         switch (mainStackBridge.closePopUp[1]){
-            case 1:
-                var msg=i18nd("easy-login","Loading configuration. Wait a moment...");
-                break;
-            case 21:
-                var msg=i18nd("easy-login","Loading user info. Wait a moment...");
-                break;
-            case 22:
-                var msg=i18nd("easy-login","Validating the data . Wait a moment...")
-                break;
-            case 23:
-                var msg=i18nd("easy-login","Saving the data. Wait a moment...")
-                break;
-            case 10:
+            case 20:
                 var msg=i18nd("easy-login","Changing status. Wait a moment...")
                 break;
-            case 11:
+            case 21:
                 var msg=i18nd("easy-login","Removing the user. Wait a moment...")
                 break;
-            case 12:
+            case 22:
                 var msg=i18nd("easy-login","Removing all users. Wait a moment...")
                 break;
-            case 13:
+            case 23:
                 var msg=i18nd("easy-login","Generating PDF list. Wait a moment...")
                 break;
             case 24:
+                var msg=i18nd("easy-login","Loading configuration. Wait a moment...")
+                break;
+            case 25:
+                var msg=i18nd("easy-login","Loading user information. Wait a moment...")
+                break;
+            case 26:
+                var msg=i18nd("easy-login","Checking data. Wait a moment...")
+                break;
+            case 27:
+                var msg=i18nd("easy-login","Saving data. Wait a moment...")
+                break;
+            case 28:
                 var msg=i18nd("easy-login", "Generating new password. Wait a moment...")
                 break;
             default:

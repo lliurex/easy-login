@@ -105,6 +105,7 @@ Rectangle{
                     id:editLoginBtn
                     display:AbstractButton.IconOnly
                     icon.name:"document-edit.svg"
+                    enabled:!userStackBridge.enableLoginEdition
                     Layout.preferredHeight: 35
                     ToolTip.delay: 1000
                     ToolTip.timeout: 3000

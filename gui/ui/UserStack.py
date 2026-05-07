@@ -8,14 +8,11 @@ import copy
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-NAME_EMPTY_ERROR=-20
-SURNAME_EMPTY_ERROR=-21
-LOGIN_EMPTY_ERROR=-22
-NEW_USER_CONFIG=20
-LOAD_USER_CONFIG=21
-CHECK_DATA=22
-SAVE_DATA=23
-NEW_PASSWORD=24
+NEW_USER_CONFIG=24
+LOAD_USER_CONFIG=25
+CHECK_DATA=26
+SAVE_DATA=27
+NEW_PASSWORD=28
 
 class LoadUser(QThread):
 
@@ -24,7 +21,7 @@ class LoadUser(QThread):
 		QThread.__init__(self)
 		self.newUser=args[0]
 		self.userInfo=args[1]
-		self.ret=False
+		self.ret={}
 
 	#def __init__
 
@@ -44,7 +41,7 @@ class CheckData(QThread):
 
 		QThread.__init__(self)
 		self.dataToCheck=args[0]
-		self.ret=[]
+		self.ret={}
 
 	#def __init__
 
@@ -62,7 +59,7 @@ class GetNewPassword(QThread):
 	def __init__(self,*args):
 
 		QThread.__init__(self)
-		self.ret=False
+		self.ret={}
 
 	#def __init__
 
@@ -81,7 +78,7 @@ class SaveData(QThread):
 
 		QThread.__init__(self)
 		self.dataToSave=args[0]
-		self.ret=[]
+		self.ret={}
 
 	#def __init__
 
@@ -275,6 +272,7 @@ class Bridge(QObject):
 
 		actionType="add"
 		self.core.mainStack.closePopUp=[False,NEW_USER_CONFIG]
+		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.newUserT=LoadUser(True,"")
 		self.newUserT.start()
@@ -284,11 +282,16 @@ class Bridge(QObject):
 
 	def _addNewUserRet(self):
 
-		self.currentUserConfig=copy.deepcopy(Bridge.easyLoginManager.currentUserConfig)
-		self._initializeVars()
+		if self.newUserT.ret.get("status"):
+			self.currentUserConfig=copy.deepcopy(Bridge.easyLoginManager.currentUserConfig)
+			self._initializeVars()
+			self.core.mainStack.currentStack=2
+			self.userCurrentOption=1
+		else:
+			self.core.usersOptionsStack.showMainMessage=[True,self.newUserT.ret.get("code"),self.newUserT.ret.get("type")]
+
 		self.core.mainStack.closePopUp=[True,""]
-		self.core.mainStack.currentStack=2
-		self.userCurrentOption=1
+		self.core.mainStack.closeGui=True
 
 	#def _addNewUserRet
 
@@ -302,6 +305,7 @@ class Bridge(QObject):
 		self.showUserFormMessage=[False,"","Ok"]
 		self.changesInUser=False
 		self.enableLoginEdition=False
+		self.previousLogin=self.login
 
 	#def _initializeVars
 
@@ -323,6 +327,7 @@ class Bridge(QObject):
 	def loadUser(self,userToLoad):
 
 		self.core.mainStack.closePopUp=[False,LOAD_USER_CONFIG]
+		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.actionType="edit"
 		self.editUserT=LoadUser(False,userToLoad)
@@ -333,15 +338,16 @@ class Bridge(QObject):
 
 	def _loadUserRet(self):
 
-		if self.editUserT.ret:
+		if self.editUserT.ret.get("status"):
 			self.currentUserConfig=copy.deepcopy(Bridge.easyLoginManager.currentUserConfig)
 			self._initializeVars()
-			self.core.mainStack.closePopUp=[True,""]
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
 		else:
-			self.core.mainStack.closePopUp=[True,""]
-			self.core.usersOptionsStack.showMainMessage=[True,"","Error"]
+			self.core.usersOptionsStack.showMainMessage=[True,self.editUserT.ret.get("code"),self.editUserT.ret.get("type")]
+
+		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.closeGui=False
 
 	#def _loadUserRet
 
@@ -351,8 +357,9 @@ class Bridge(QObject):
 		if value!=self.name:
 			self.name=value
 			self.currentUserConfig["name"]=self.name
+			self.previousLogin=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
 			if not self.enableLoginEdition:
-				self.login=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
+				self.login=self.previousLogin
 				self.currentUserConfig["login"]=self.login
 
 		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
@@ -368,8 +375,9 @@ class Bridge(QObject):
 		if value!=self.surname:
 			self.surname=value
 			self.currentUserConfig["surname"]=self.surname
+			self.previousLogin=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
 			if not self.enableLoginEdition:
-				self.login=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
+				self.login=self.previousLogin
 				self.currentUserConfig["login"]=self.login
 
 		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
@@ -390,7 +398,7 @@ class Bridge(QObject):
 	def restoreDefaultLogin(self):
 
 		self.enableLoginEdition=False
-		self.login=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
+		self.login=self.previousLogin
 		self.currentUserConfig["login"]=self.login
 
 		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
@@ -427,12 +435,12 @@ class Bridge(QObject):
 
 	def _getNewPasswordRet(self):
 
-		if self.getNewPasswordT.ret[0]:
-			self.currentUserConfig["username"]=self.getNewPasswordT.ret[1]
-			self.currentUserConfig["pwdImgPaths"][0]=self.getNewPasswordT.ret[2].get("pwdImg1")
-			self.currentUserConfig["pwdImgPaths"][1]=self.getNewPasswordT.ret[2].get("pwdImg2")
-			self.currentUserConfig["pwdImgPaths"][2]=self.getNewPasswordT.ret[2].get("pwdImg3")
-			self.currentUserConfig["pwdImgPaths"][3]=self.getNewPasswordT.ret[2].get("pwdImg4")
+		if self.getNewPasswordT.ret.get("status"):
+			self.currentUserConfig["username"]=self.getNewPasswordT.ret.get("data").get("username")
+			self.currentUserConfig["pwdImgPaths"][0]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg1")
+			self.currentUserConfig["pwdImgPaths"][1]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg2")
+			self.currentUserConfig["pwdImgPaths"][2]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg3")
+			self.currentUserConfig["pwdImgPaths"][3]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg4")
 			self.pwdImgPaths=list(self.currentUserConfig["pwdImgPaths"])
 			self.username=self.currentUserConfig["username"]
 
@@ -479,11 +487,11 @@ class Bridge(QObject):
 
 	def _checkDataRet(self):
 
-		if self.checkDataT.ret[0]:
+		if self.checkDataT.ret.get("status"):
 			self.saveDataChanges()
 		else:
 			self.core.mainStack.closePopUp=[True,""]
-			self.showUserFormMessage=[True,self.checkDataT.ret[1],"Error"]
+			self.showUserFormMessage=[True,self.checkDataT.ret.get("code"),self.checkDataT.ret.get("type")]
 
 	#def _checkDataRet
 
@@ -499,18 +507,14 @@ class Bridge(QObject):
 	def _saveDataRet(self):
 
 		self.core.usersOptionsStack._updateUsersModel()
-
-		if self.saveDataT.ret[0]:
-			self.core.usersOptionsStack.showMainMessage=[True,self.saveDataT.ret[1],"Ok"]
-		else:
-			self.core.usersOptionsStack.showMainMessage=[True,self.saveDataT.ret[1],"Error"]	
+		self.core.usersOptionsStack.showMainMessage=[True,self.saveDataT.ret.get("code"),self.saveDataT.ret.get("type")]
 
 		self.core.usersOptionsStack.enableGlobalOptions=Bridge.easyLoginManager.checkGlobalOptionStatus()
 		self.changesInUser=False
-		self.core.mainStack.closeGui=True
 		self.core.mainStack.moveToStack=1
 		self.core.mainStack.manageGoToStack()
 		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.closeGui=True
 
 	#def _saveDataRet
 
