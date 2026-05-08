@@ -2,87 +2,79 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-
-GridLayout{
+RowLayout {
     id: mainGrid
-    columns: 2
-    flow: GridLayout.LeftToRight
-    columnSpacing:10
+    spacing: 10
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
-    Rectangle{
-        width:120
-        Layout.fillHeight:true
-        border.color: "#d3d3d3"
+    Rectangle {
+        id: sideBar
+        width: 120
+        Layout.fillHeight: true
+        border.color: palette.mid
 
-        GridLayout{
-            id: menuGrid
-            rows:2 
-            flow: GridLayout.TopToBottom
-            rowSpacing:0
+        ColumnLayout {
+            id: menuLayout
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 0
 
             MenuOptionBtn {
-                id:listItem
-                optionText:i18nd("easy-login","Users")
-                optionIcon:"/usr/share/icons/breeze/actions/22/group.svg"
-               
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.moveToMainOptions(0)
-                    }
-                }
-                
+                id: listItem
+                Layout.fillWidth: true
+                optionText: i18nd("easy-login", "Users")
+                optionIcon: "group"
+                onMenuOptionClicked: mainStackBridge.moveToMainOptions(0)
             }
-            
+
             MenuOptionBtn {
-                id:helpItem
-                optionText:i18nd("easy-login","Help")
-                optionIcon:"/usr/share/icons/breeze/actions/22/help-contents.svg"
-                Connections{
-                    function onMenuOptionClicked(){
-                        mainStackBridge.openHelp();
-                    }
-                }
+                id: helpItem
+                Layout.fillWidth: true
+                optionText: i18nd("easy-login", "Help")
+                optionIcon: "help-contents"
+                onMenuOptionClicked: mainStackBridge.openHelp()
             }
         }
     }
 
     StackView {
         id: optionsView
-        property int currentIndex:mainStackBridge.mainCurrentOption
-        Layout.fillWidth:true
-        Layout.fillHeight:true
-        initialItem:usersView
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        onCurrentIndexChanged:{
-            switch(currentIndex){
-                case 0:
-                    optionsView.replace(usersView)
-                    break;
+        property int currentIndex: mainStackBridge.mainCurrentOption
+        initialItem: usersView
+
+        onCurrentIndexChanged: {
+            if (currentIndex === 0) {
+                optionsView.replace(usersView)
             }
         }
+
         replaceEnter: Transition {
-            PropertyAnimation {
+            NumberAnimation {
                 property: "opacity"
                 from: 0
-                to:1
+                to: 1
                 duration: 60
             }
         }
         replaceExit: Transition {
-            PropertyAnimation {
+            NumberAnimation {
                 property: "opacity"
                 from: 1
-                to:0
+                to: 0
                 duration: 60
             }
         }
-        Component{
-            id:usersView
-            UsersManager{
-                id:userManager
+
+        Component {
+            id: usersView
+            UsersManager {
+                id: userManager
             }
         }
-       
     }
 }
-

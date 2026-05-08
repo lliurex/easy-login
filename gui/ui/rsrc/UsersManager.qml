@@ -5,222 +5,176 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
-Rectangle{
-    id:rectLayout
-    color:"transparent"
-    Text{ 
-        text:i18nd("easy-login","Configuration")
+Rectangle {
+    id: rectLayout
+    color: "transparent"
+
+    Text {
+        id: titleText
+        text: i18nd("easy-login", "Configuration")
         font.pointSize: 16
+        anchors.top: parent.top
+        anchors.left: parent.left
     }
 
-    property var backupAction:undefined
+    ColumnLayout {
+        id: mainContent
+        anchors.top: titleText.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: btnBox.top
+        anchors.leftMargin: 20
+        anchors.rightMargin:20
+        anchors.topMargin:10
+        anchors.bottomMargin:25
+        spacing: 10
 
-    GridLayout{
-        id:generalUsersLayout
-        rows:3
-        flow: GridLayout.TopToBottom
-        rowSpacing:10
-        anchors.left:parent.left
-        width:parent.width-10
-        height:parent.height-120
-        enabled:true
         Kirigami.InlineMessage {
             id: messageLabel
-            visible:usersOptionsStackBridge.showMainMessage[0]
-            text:getTextMessage(usersOptionsStackBridge.showMainMessage[1])
-            type:getTypeMessage(usersOptionsStackBridge.showMainMessage[2])
-            Layout.minimumWidth:650
-            Layout.fillWidth:true
-            Layout.topMargin: 40
+            Layout.fillWidth: true
+            visible: usersOptionsStackBridge.showMainMessage[0]
+            text: getTextMessage(usersOptionsStackBridge.showMainMessage[1])
+            type: getTypeMessage(usersOptionsStackBridge.showMainMessage[2])
         }
 
         RowLayout {
-            id:enableLoginbox
-            Layout.topMargin: messageLabel.visible?0:40
+            id: enableLoginbox
+            Layout.fillWidth: true
+            
             Text {
-                id:enableLoginText
-                text:i18nd("easy-login","Activate Easy-Login:")
+                text: i18nd("easy-login", "Activate Easy-Login:")
                 font.pointSize: 10
-                Layout.alignment:Qt.AlignVCenter
-                Layout.leftMargin:5
+                Layout.alignment: Qt.AlignVCenter
             }
 
             Switch {
-                id:enableSwitch
+                id: enableSwitch
                 checked: usersOptionsStackBridge.easyLoginEnabled
-                Layout.alignment:Qt.AlignVCenter|Qt.AlignHLeft
-                Layout.rightMargin:5
-                indicator: Rectangle {
-                    implicitWidth: 40
-                    implicitHeight: 10
-                    x: enableSwitch.width - width - enableSwitch.rightPadding
-                    y: parent.height/2 - height/2 
-                    radius: 7
-                    color: enableSwitch.checked ? "#3daee9" : "#d3d3d3"
-                    Rectangle {
-                        x: enableSwitch.checked ? parent.width - width : 0
-                        width: 20
-                        height: 20
-                        y:parent.height/2-height/2
-                        radius: 10
-                        border.color: "#808080"
-                    }
-                }
+                Layout.alignment: Qt.AlignVCenter
                 onToggled: {
-                    usersOptionsStackBridge.enableEasyLogin(enableSwitch.checked)
+                    usersOptionsStackBridge.enableEasyLogin(checked)
                 }
             }
         }
-            
-        UsersList{
-            id:usersList
-            usersModel:usersOptionsStackBridge.usersModel
-            Layout.fillHeight:true
-            Layout.fillWidth:true
-            Layout.topMargin:0
+
+        UsersList {
+            id: usersList
+            usersModel: usersOptionsStackBridge.usersModel
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
-    
-    RowLayout{
-        id:btnBox
+
+    RowLayout {
+        id: btnBox
         anchors.bottom: parent.bottom
-        anchors.fill:parent.fill
-        anchors.bottomMargin:15
-        spacing:10
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 15
+        height: 50
+        spacing: 10
 
         Button {
-            id:globalActionsBtn
-            visible:true
-            display:AbstractButton.TextBesideIcon
-            icon.name:"run-build.svg"
-            text:i18nd("easy-login","Global Options")
-            enabled:usersOptionsStackBridge.enableGlobalOptions
-            Layout.preferredHeight:40
-            Layout.rightMargin:rectLayout.width-(newBtn.width+150)
-            onClicked:optionsMenu.open()
+            id: globalActionsBtn
+            display: AbstractButton.TextBesideIcon
+            icon.name: "run-build"
+            text: i18nd("easy-login", "Global Options")
+            enabled: usersOptionsStackBridge.enableGlobalOptions
+            onClicked: optionsMenu.open()
             
-            Menu{
-                id:optionsMenu
-                y: -globalActionsBtn.height*1.7
+            Menu {
+                id: optionsMenu
+                y: -height - 5
                 x: globalActionsBtn.width/2
-
-                MenuItem{
-                    icon.name:"document-print.svg"
-                    text:i18nd("easy-login","Generate PDF list")
-                    onClicked:pdfFileDialog.open()
+                MenuItem {
+                    icon.name: "document-print"
+                    text: i18nd("easy-login", "Generate PDF list")
+                    onClicked: pdfFileDialog.open()
                 }
-                MenuItem{
-                    icon.name:"delete.svg"
-                    text:i18nd("easy-login","Delete all users")
-                    onClicked:usersOptionsStackBridge.removeUser([true])
+                MenuItem {
+                    icon.name: "delete"
+                    text: i18nd("easy-login", "Delete all users")
+                    onClicked: usersOptionsStackBridge.removeUser([true])
                 }
-       
             }
-           
+        }
+
+        Item {
+            Layout.fillWidth: true
         }
 
         Button {
-            id:newBtn
-            visible:true
-            display:AbstractButton.TextBesideIcon
-            icon.name:"list-add.svg"
-            text:i18nd("easy-login","New user")
-            Layout.preferredHeight:40
-            onClicked:userStackBridge.addNewUser() 
+            id: newBtn
+            display: AbstractButton.TextBesideIcon
+            icon.name: "list-add"
+            text: i18nd("easy-login", "New user")
+            onClicked: userStackBridge.addNewUser() 
         }
     }
 
-    ChangesDialog{
-        id:removeUserDialog
-        dialogIcon:"/usr/share/icons/breeze/status/64/dialog-warning.svg"
-        dialogMsg:{
-            if (usersOptionsStackBridge.showRemoveUserDialog[1]){
-                i18nd("easy-login","All users will be deleted.\nDo yo want to continue?")
-            }else{
-                i18nd("easy-login","The user will be deleted.\nDo yo want to continue?")
-            }
-        }
-        dialogVisible:usersOptionsStackBridge.showRemoveUserDialog[0]
-        dialogWidth:300
-        btnAcceptVisible:false
-        btnAcceptText:""
-        btnDiscardText:i18nd("easy-loging","Accept")
-        btnDiscardIcon:"dialog-ok.svg"
-        btnDiscardVisible:true
-        btnCancelText:i18nd("easy-login","Cancel")
-        btnCancelIcon:"dialog-cancel.svg"
-        Connections{
-           target:removeUserDialog
-           function onDiscardDialogClicked(){
-                usersOptionsStackBridge.manageRemoveUserDialog('Accept')         
-           }
-           function onRejectDialogClicked(){
-                usersOptionsStackBridge.manageRemoveUserDialog('Cancel')       
-           }
-
+    ChangesDialog {
+        id: removeUserDialog
+        dialogIcon: "dialog-warning"
+        dialogMsg: usersOptionsStackBridge.showRemoveUserDialog[1] 
+                   ? i18nd("easy-login", "All users will be deleted.\nDo you want to continue?") 
+                   : i18nd("easy-login", "The user will be deleted.\nDo you want to continue?")
+        dialogVisible: usersOptionsStackBridge.showRemoveUserDialog[0]
+        dialogWidth: 400
+        btnAcceptVisible: false
+        btnDiscardText: i18nd("easy-login", "Accept")
+        btnDiscardIcon: "dialog-ok"
+        btnDiscardVisible: true
+        btnCancelText: i18nd("easy-login", "Cancel")
+        btnCancelIcon: "dialog-cancel"
+        
+        Connections {
+           target: removeUserDialog
+           function onDiscardDialogClicked() { usersOptionsStackBridge.manageRemoveUserDialog('Accept') }
+           function onRejectDialogClicked() { usersOptionsStackBridge.manageRemoveUserDialog('Cancel') }
         }
     }
 
-    FileDialog{
-        id:pdfFileDialog
-        title:i18nd("easy-login","Please choose a file to save pdf list")
-        fileMode:FileDialog.SaveFile       
-        currentFolder:StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-        nameFilters:["PDF files (*pdf)"]
-        onAccepted:(selectedPath)=>{
-            var selectedPath=""
-            selectedPath=pdfFileDialog.selectedFile.toString()
-            selectedPath=selectedPath.replace(/^(file:\/{2})/,"")
-            usersOptionsStackBridge.generateList(selectedPath)
+    FileDialog {
+        id: pdfFileDialog
+        title: i18nd("easy-login", "Please choose a file to save pdf list")
+        fileMode: FileDialog.SaveFile       
+        currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
+        nameFilters: ["PDF files (*.pdf)"]
+        onAccepted: {
+            let path = selectedFile.toString().replace(/^(file:\/{2})/, "")
+            usersOptionsStackBridge.generateList(path)
         }
-      
     }
 
-    function getTextMessage(msgCode){
-        switch (msgCode){
+    function getTextMessage(msgCode) {
+        switch (msgCode) {
             case -2:
-                var msg=i18nd("easy-logn","Unable to add user")
-                break
+                return i18nd("easy-login", "Unable to add user")
             case -3:
-                var msg=i18nd("easy-login","Unable to save the changes")
-                break;
+                return i18nd("easy-login", "Unable to save the changes")
             case -7:
-                var msg=i18nd("easy-login","Unable to remove user")
-                break;
+                return i18nd("easy-login", "Unable to remove user")
             case -8:
-                var msg=i18nd("easy-login","Unable to remove all users")
-                break;
-            case -9:
-                var msg=i18nd("easy-login","The state change has failed")
-                break;
+                return i18nd("easy-login", "Unable to remove all users")
             case -10:
-                var msg=i18nd("easy-login","Unable to generate PDF list")
-                break;
+                return i18nd("easy-login", "Unable to generate PDF list")
             case -11:
-                var msg=i18nd("easy-login","Unable to load user info")
-                break;
+                return i18nd("easy-login", "Unable to load user info")
             case 0:
-                var msg=i18nd("easy-login","Changes saved successfully")
-                break;
+                return i18nd("easy-login", "Changes saved successfully")
             case 2:
-                var msg=i18nd("easy-login","User removed successfully")
-                break;
+                return i18nd("easy-login", "User removed successfully")
             case 3:
-                var msg=i18nd("easy-login","The state change has been performed successfully")
-                break;
+                return i18nd("easy-login", "The state change has been performed successfully")
             case 4:
-                var msg=i18nd("easy-login","Users removed successfully")
-                break;
+                return i18nd("easy-login", "Users removed successfully")
             default:
-                var msg=""
-                break
+                return ""
         }
-        return msg
-    } 
+    }
 
-    function getTypeMessage(msgType){
-
-        switch (msgType){
+    function getTypeMessage(msgType) {
+        switch (msgType) {
             case "Information":
                 return Kirigami.MessageType.Information
             case "Ok":
@@ -229,7 +183,8 @@ Rectangle{
                 return Kirigami.MessageType.Error
             case "Warning":
                 return Kirigami.MessageType.Warning
+            default:
+                return Kirigami.MessageType.Information
         }
     }
-
-} 
+}

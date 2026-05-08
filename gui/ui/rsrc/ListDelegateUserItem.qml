@@ -80,10 +80,30 @@ ItemDelegate {
                 spacing: 5
                 Layout.alignment: Qt.AlignVCenter
 
-                Image { source: pwdImg1; sourceSize: "32x32" }
-                Image { source: pwdImg2; sourceSize: "32x32" }
-                Image { source: pwdImg3; sourceSize: "32x32" }
-                Image { source: pwdImg4; sourceSize: "32x32" }
+                Image {
+                    source: pwdImg1
+                    sourceSize: "32x32"
+                    mipmap: true
+                    smooth: true
+                }
+                Image {
+                    source: pwdImg2
+                    sourceSize: "32x32"
+                    mipmap: true
+                    smooth: true
+                }
+                Image {
+                    source: pwdImg3
+                    sourceSize: "32x32"
+                    mipmap: true
+                    smooth: true
+                }
+                Image {
+                    source: pwdImg4
+                    sourceSize: "32x32"
+                    mipmap: true
+                    smooth: true
+                }
             }
 
             Button {

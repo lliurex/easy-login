@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 11:31+0200\n"
+"POT-Creation-Date: 2026-05-08 10:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,234 +17,230 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:53
+#: ../gui/ui/rsrc/CustomPopUp.qml:49
 msgid "Changing status. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:56
+#: ../gui/ui/rsrc/CustomPopUp.qml:51
 msgid "Removing the user. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:59
+#: ../gui/ui/rsrc/CustomPopUp.qml:53
 msgid "Removing all users. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:62
+#: ../gui/ui/rsrc/CustomPopUp.qml:55
 msgid "Generating PDF list. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:65
+#: ../gui/ui/rsrc/CustomPopUp.qml:57
 msgid "Loading configuration. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:68
+#: ../gui/ui/rsrc/CustomPopUp.qml:59
 msgid "Loading user information. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:71
+#: ../gui/ui/rsrc/CustomPopUp.qml:61
 msgid "Checking data. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:74
+#: ../gui/ui/rsrc/CustomPopUp.qml:63
 msgid "Saving data. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/CustomPopUp.qml:77
+#: ../gui/ui/rsrc/CustomPopUp.qml:65
 msgid "Generating new password. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:101
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:121
 msgid "Click to manage this user"
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:112
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:132
 msgid "Edit user"
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:117
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:137
 msgid "Delete this user"
 msgstr ""
 
-#: ../gui/ui/rsrc/LoadWaiting.qml:40
+#: ../gui/ui/rsrc/LoadWaiting.qml:33
 msgid "Loading. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/LoadWaiting.qml:61
-msgid "Enable to load configuration"
+#: ../gui/ui/rsrc/LoadWaiting.qml:53
+msgid "Unable to load configuration"
 msgstr ""
 
-#: ../gui/ui/rsrc/MainOptions.qml:25
+#: ../gui/ui/rsrc/MainOptions.qml:27
 msgid "Users"
 msgstr ""
 
-#: ../gui/ui/rsrc/MainOptions.qml:38
+#: ../gui/ui/rsrc/MainOptions.qml:35
 msgid "Help"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:15
+#: ../gui/ui/rsrc/UserForm.qml:19
 msgid "New User"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:18
+#: ../gui/ui/rsrc/UserForm.qml:20
 msgid "Edit User"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:54
+#: ../gui/ui/rsrc/UserForm.qml:40
 msgid "Name:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:73
+#: ../gui/ui/rsrc/UserForm.qml:52
 msgid "Surname:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:88
+#: ../gui/ui/rsrc/UserForm.qml:63
 msgid "Login:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:113
+#: ../gui/ui/rsrc/UserForm.qml:79
 msgid "Click to edit login"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:126
+#: ../gui/ui/rsrc/UserForm.qml:85
 msgid "Click to restore login"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:133
+#: ../gui/ui/rsrc/UserForm.qml:90
 msgid "Password:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:220
+#: ../gui/ui/rsrc/UserForm.qml:117
 msgid "Click to get a new password"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:241 ../gui/ui/rsrc/UserForm.qml:272
+#: ../gui/ui/rsrc/UserForm.qml:129 ../gui/ui/rsrc/UserForm.qml:155
 msgid "Apply"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:255 ../gui/ui/rsrc/UserForm.qml:276
-#: ../gui/ui/rsrc/UsersManager.qml:150
+#: ../gui/ui/rsrc/UserForm.qml:138 ../gui/ui/rsrc/UserForm.qml:159
+#: ../gui/ui/rsrc/UsersManager.qml:127
 msgid "Cancel"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:269
+#: ../gui/ui/rsrc/UserForm.qml:152
 msgid ""
 "The are pending changes to save.\n"
 "Do you want save the changes or discard them?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:273
+#: ../gui/ui/rsrc/UserForm.qml:156
 msgid "Discard"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:298
+#: ../gui/ui/rsrc/UserForm.qml:181
 msgid "You must indicate a name for the user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:301
+#: ../gui/ui/rsrc/UserForm.qml:183
 msgid "You must indicate a surnanme for the user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:304
+#: ../gui/ui/rsrc/UserForm.qml:185
 msgid "You must indicate a login for the user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersList.qml:39
+#: ../gui/ui/rsrc/UsersList.qml:24
 msgid "Search..."
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersList.qml:99
-msgid "No user is configured"
+#: ../gui/ui/rsrc/UsersList.qml:81
+msgid "There are no users configured"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersList.qml:101
-msgid "No user found"
+#: ../gui/ui/rsrc/UsersList.qml:82
+msgid "No users where found"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:12
+#: ../gui/ui/rsrc/UsersManager.qml:14
 msgid "Configuration"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:42
+#: ../gui/ui/rsrc/UsersManager.qml:45
 msgid "Activate Easy-Login:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:96
+#: ../gui/ui/rsrc/UsersManager.qml:81
 msgid "Global Options"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:109
+#: ../gui/ui/rsrc/UsersManager.qml:91
 msgid "Generate PDF list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:114
+#: ../gui/ui/rsrc/UsersManager.qml:96
 msgid "Delete all users"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:127
+#: ../gui/ui/rsrc/UsersManager.qml:110
 msgid "New user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:138
+#: ../gui/ui/rsrc/UsersManager.qml:119
 msgid ""
 "All users will be deleted.\n"
-"Do yo want to continue?"
+"Do you want to continue?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:140
+#: ../gui/ui/rsrc/UsersManager.qml:120
 msgid ""
 "The user will be deleted.\n"
-"Do yo want to continue?"
+"Do you want to continue?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:147
+#: ../gui/ui/rsrc/UsersManager.qml:124
 msgid "Accept"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:166
+#: ../gui/ui/rsrc/UsersManager.qml:139
 msgid "Please choose a file to save pdf list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:183
+#: ../gui/ui/rsrc/UsersManager.qml:152
 msgid "Unable to add user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:186
+#: ../gui/ui/rsrc/UsersManager.qml:154
 msgid "Unable to save the changes"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:189
+#: ../gui/ui/rsrc/UsersManager.qml:156
 msgid "Unable to remove user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:192
+#: ../gui/ui/rsrc/UsersManager.qml:158
 msgid "Unable to remove all users"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:195
-msgid "The state change has failed"
-msgstr ""
-
-#: ../gui/ui/rsrc/UsersManager.qml:198
+#: ../gui/ui/rsrc/UsersManager.qml:160
 msgid "Unable to generate PDF list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:201
+#: ../gui/ui/rsrc/UsersManager.qml:162
 msgid "Unable to load user info"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:204
+#: ../gui/ui/rsrc/UsersManager.qml:164
 msgid "Changes saved successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:207
+#: ../gui/ui/rsrc/UsersManager.qml:166
 msgid "User removed successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:210
+#: ../gui/ui/rsrc/UsersManager.qml:168
 msgid "The state change has been performed successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:213
+#: ../gui/ui/rsrc/UsersManager.qml:170
 msgid "Users removed successfully"
 msgstr ""
 

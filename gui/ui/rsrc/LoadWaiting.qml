@@ -3,68 +3,56 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
-Rectangle{
+Rectangle {
+    id: loadRoot
     visible: true
-    color:"transparent"
+    color: "transparent"
 
-    GridLayout{
-        id: loadGrid
-        rows: 3
-        flow: GridLayout.TopToBottom
-        anchors.centerIn:parent
+    ColumnLayout {
+        id: mainLoaderLayout
+        anchors.centerIn: parent
+        width: parent.width * 0.9
+        spacing: 15
 
-        RowLayout{
-            Layout.fillWidth: true
-            Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.showLoadErrorMessage[0]
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            visible: !mainStackBridge.showLoadErrorMessage[0]
+            spacing: 10
 
-            Rectangle{
-                color:"transparent"
-                width:30
-                height:30
-                
-                AnimatedImage{
-                    source: "/usr/share/easy-login/gui/rsrc/loading.gif"
-                    transform: Scale {xScale:0.45;yScale:0.45}
-                }
+            AnimatedImage {
+                id: loadingGif
+                source: "/usr/share/easy-login/gui/rsrc/loading.gif"
+                Layout.preferredWidth: 32
+                Layout.preferredHeight: 32
+                Layout.alignment: Qt.AlignHCenter
+                fillMode: Image.PreserveAspectFit
             }
-        }
 
-        RowLayout{
-            Layout.fillWidth: true
-            Layout.alignment:Qt.AlignHCenter
-            visible:!mainStackBridge.showLoadErrorMessage[0]
-
-            Text{
-                id:loadtext
-                text:i18nd("easy-login", "Loading. Wait a moment...")
+            Text {
+                id: loadText
+                text: i18nd("easy-login", "Loading. Wait a moment...")
                 font.pointSize: 10
-                Layout.alignment:Qt.AlignHCenter
+                color: palette.windowText
+                Layout.alignment: Qt.AlignHCenter
             }
         }
+
         Kirigami.InlineMessage {
             id: errorLabel
-            visible:mainStackBridge.showLoadErrorMessage[0]
-            text:getMsgText(mainStackBridge.showLoadErrorMessage[1])
-            type:Kirigami.MessageType.Error;
-            Layout.minimumWidth:750
-            Layout.fillWidth:true
-            Layout.rightMargin:15
-            Layout.leftMargin:15
+            visible: mainStackBridge.showLoadErrorMessage[0]
+            text: getMsgText(mainStackBridge.showLoadErrorMessage[1])
+            type: Kirigami.MessageType.Error
+            Layout.fillWidth: true
+
         }
     }
 
-    function getMsgText(msgCode){
-
-        switch (msgCode){
+    function getMsgText(msgCode) {
+        switch (msgCode) {
             case -1:
-                var msg=i18nd("easy-login","Enable to load configuration")
-                break;
+                return i18nd("easy-login", "Unable to load configuration");
             default:
-                var msg=""
-                break;
+                return "";
         }
-        return msg
-
     }
 }

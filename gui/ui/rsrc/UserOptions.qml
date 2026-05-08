@@ -16,8 +16,8 @@ GridLayout{
         MenuOptionBtn {
             id:goBackBtn
             optionText:i18nd("easy-login","Users")
-            optionFontSize:14
-            optionIcon:"/usr/share/icons/breeze/actions/24/go-previous.svg"
+            optionIcon:"go-previous.svg"
+            optionPointSize:14
             Connections{
                 function onMenuOptionClicked(){
                     userStackBridge.goHome();
@@ -37,7 +37,7 @@ GridLayout{
                 MenuOptionBtn {
                     id:infoItem
                     optionText:i18nd("easy-login","User")
-                    optionIcon:"/usr/share/icons/breeze/actions/22/user.svg"
+                    optionIcon:"user.svg"
                  }
 
             }

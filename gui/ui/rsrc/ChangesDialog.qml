@@ -1,104 +1,99 @@
+import org.kde.kirigami as Kirigami
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-
 Popup {
     id: customDialog
-    property alias dialogIcon:dialogIcon.source
-    property alias dialogVisible:customDialog.visible
-    property alias dialogMsg:dialogText.text
-    property alias dialogWidth:container.implicitWidth
-    property alias btnAcceptVisible:dialogApplyBtn.visible
-    property alias btnAcceptText:dialogApplyBtn.text
-    property alias btnDiscardText:dialogDiscardBtn.text
-    property alias btnDiscardVisible:dialogDiscardBtn.visible
-    property alias btnDiscardIcon:dialogDiscardBtn.icon.name
-    property alias btnCancelText:dialogCancelBtn.text
-    property alias btnCancelIcon:dialogCancelBtn.icon.name
-    signal dialogApplyClicked
-    signal discardDialogClicked
-    signal rejectDialogClicked
+    
+    property bool dialogVisible: false
+    visible: dialogVisible
+    
+    property alias dialogIcon: iconInternal.source 
+    property alias dialogMsg: dialogText.text
+    property int dialogWidth:400
+    
+    property alias btnAcceptVisible: dialogApplyBtn.visible
+    property alias btnAcceptText: dialogApplyBtn.text
+    
+    property alias btnDiscardText: dialogDiscardBtn.text
+    property alias btnDiscardVisible: dialogDiscardBtn.visible
+    property alias btnDiscardIcon: dialogDiscardBtn.icon.name
+    
+    property alias btnCancelText: dialogCancelBtn.text
+    property alias btnCancelIcon: dialogCancelBtn.icon.name
 
-    visible:dialogVisible
-    modal:true
-    anchors.centerIn:Overlay.overlay
-    closePolicy:Popup.NoAutoClose
+    signal dialogApplyClicked()
+    signal discardDialogClicked()
+    signal rejectDialogClicked()
 
-    background:Rectangle{
-        color:"#ebeced"
-        border.color:"#b8b9ba"
-        border.width:1
-        radius:5.0
+    modal: true
+    anchors.centerIn: Overlay.overlay
+    closePolicy: Popup.NoAutoClose
+
+    background: Rectangle {
+        color: "#ebeced"
+        border.color: "#b8b9ba"
+        border.width: 1
+        radius: 5
     }
 
+    contentItem: Item {
+        implicitWidth: customDialog.dialogWidth
+        implicitHeight: 140
 
-    contentItem: Rectangle {
-        id:container
-        color: "#ebeced"
-        implicitWidth: dialogWidth
-        implicitHeight: 120
-        anchors.topMargin:5
-        anchors.leftMargin:5
+        RowLayout {
+            id: contentRow
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 10
+            spacing: 15
 
-        Image{
-            id:dialogIcon
-            source:dialogIcon
-
-        }
-        
-        Text {
-            id:dialogText
-            text:dialogMsg
-            font.pointSize: 10
-            anchors.left:dialogIcon.right
-            anchors.verticalCenter:dialogIcon.verticalCenter
-            anchors.leftMargin:10
-        
+            Kirigami.Icon {
+                id: iconInternal
+                Layout.preferredWidth: 64
+                Layout.preferredHeight: 64
+            }
+            
+            Text {
+                id: dialogText
+                font.pointSize: 10
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                verticalAlignment: Text.AlignVCenter
+                color: "#31363b"
+            }
         }
       
         RowLayout {
-            anchors.bottom:parent.bottom
-            anchors.right:parent.right
-            anchors.topMargin:15
-            spacing:10
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: 10
+            spacing: 10
 
             Button {
-                id:dialogApplyBtn
-                display:AbstractButton.TextBesideIcon
-                icon.name:"dialog-ok.svg"
+                id: dialogApplyBtn
+                icon.name: "dialog-ok"
                 text: btnAcceptText
-                visible:btnAcceptVisible
-                font.pointSize: 10
-                onClicked:{
-                    dialogApplyClicked() 
-                }
-
+                visible: btnAcceptVisible
+                onClicked: dialogApplyClicked() 
             }
 
             Button {
-                id:dialogDiscardBtn
-                display:AbstractButton.TextBesideIcon
-                icon.name:btnDiscardIcon
+                id: dialogDiscardBtn
+                icon.name: btnDiscardIcon
                 text: btnDiscardText
-                visible:btnDiscardVisible
-                font.pointSize: 10
-                onClicked:{
-                    discardDialogClicked()
-                }
+                visible: btnDiscardVisible
+                onClicked: discardDialogClicked()
             }
 
             Button {
-                id:dialogCancelBtn
-                display:AbstractButton.TextBesideIcon
-                icon.name:btnCancelIcon
+                id: dialogCancelBtn
+                icon.name: btnCancelIcon
                 text: btnCancelText
-                font.pointSize: 10
-                onClicked:{
-                    rejectDialogClicked()
-                }        
+                onClicked: rejectDialogClicked()
             }
- 
         }
     }
- }
+}
