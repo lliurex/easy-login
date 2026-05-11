@@ -23,8 +23,8 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: btnBox.top
-        anchors.leftMargin: 20
-        anchors.rightMargin:20
+        anchors.leftMargin: 5
+        anchors.rightMargin:15
         anchors.topMargin:10
         anchors.bottomMargin:25
         spacing: 10
@@ -70,7 +70,10 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: 15
+        anchors.leftMargin:5
+        anchors.rightMargin:15
+        anchors.topMargin: 15
+        anchors.bottomMargin:15
         height: 50
         spacing: 10
 

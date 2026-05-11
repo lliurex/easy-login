@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EASY-LOGIN 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 10:36+0200\n"
-"PO-Revision-Date: 2026-05-08 10:52+0200\n"
+"POT-Creation-Date: 2026-05-11 10:05+0200\n"
+"PO-Revision-Date: 2026-05-11 10:05+0200\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -54,15 +54,15 @@ msgstr "Guardando los datos. Espere un momemto..."
 msgid "Generating new password. Wait a moment..."
 msgstr "Generando una nueva contraseña. Espere un momento..."
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:121
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:109
 msgid "Click to manage this user"
 msgstr "Haga clic para gestionar el usuario"
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:132
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:120
 msgid "Edit user"
 msgstr "Editar usuario"
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:137
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:125
 msgid "Delete this user"
 msgstr "Borrar usuario"
 
@@ -74,7 +74,7 @@ msgstr "Cargando. Espere un momento..."
 msgid "Unable to load configuration"
 msgstr "No es posible cargar la configuración"
 
-#: ../gui/ui/rsrc/MainOptions.qml:27
+#: ../gui/ui/rsrc/MainOptions.qml:27 ../gui/ui/rsrc/UserOptions.qml:18
 msgid "Users"
 msgstr "Usuarios"
 
@@ -82,52 +82,52 @@ msgstr "Usuarios"
 msgid "Help"
 msgstr "Ayuda"
 
-#: ../gui/ui/rsrc/UserForm.qml:19
+#: ../gui/ui/rsrc/UserForm.qml:20
 msgid "New User"
 msgstr "Nuevo usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:20
+#: ../gui/ui/rsrc/UserForm.qml:22
 msgid "Edit User"
 msgstr "Editar usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:40
+#: ../gui/ui/rsrc/UserForm.qml:44
 msgid "Name:"
 msgstr "Nombre:"
 
-#: ../gui/ui/rsrc/UserForm.qml:52
+#: ../gui/ui/rsrc/UserForm.qml:56
 msgid "Surname:"
 msgstr "Apellidos:"
 
-#: ../gui/ui/rsrc/UserForm.qml:63
+#: ../gui/ui/rsrc/UserForm.qml:67
 msgid "Login:"
 msgstr "Usuario:"
 
-#: ../gui/ui/rsrc/UserForm.qml:79
+#: ../gui/ui/rsrc/UserForm.qml:83
 msgid "Click to edit login"
 msgstr "Haga clic para editar el usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:85
+#: ../gui/ui/rsrc/UserForm.qml:89
 msgid "Click to restore login"
 msgstr "Haga clic para restaurar el usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:90
+#: ../gui/ui/rsrc/UserForm.qml:94
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: ../gui/ui/rsrc/UserForm.qml:117
+#: ../gui/ui/rsrc/UserForm.qml:121
 msgid "Click to get a new password"
 msgstr "Haga clic para obtener una nueva contraseña"
 
-#: ../gui/ui/rsrc/UserForm.qml:129 ../gui/ui/rsrc/UserForm.qml:155
+#: ../gui/ui/rsrc/UserForm.qml:133 ../gui/ui/rsrc/UserForm.qml:159
 msgid "Apply"
 msgstr "Aplicar"
 
-#: ../gui/ui/rsrc/UserForm.qml:138 ../gui/ui/rsrc/UserForm.qml:159
-#: ../gui/ui/rsrc/UsersManager.qml:127
+#: ../gui/ui/rsrc/UserForm.qml:142 ../gui/ui/rsrc/UserForm.qml:163
+#: ../gui/ui/rsrc/UsersManager.qml:130
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../gui/ui/rsrc/UserForm.qml:152
+#: ../gui/ui/rsrc/UserForm.qml:156
 msgid ""
 "The are pending changes to save.\n"
 "Do you want save the changes or discard them?"
@@ -135,31 +135,35 @@ msgstr ""
 "Hay cambios pendientes de guardar.\n"
 "¿Desea guardar los cambios o descartarlos?"
 
-#: ../gui/ui/rsrc/UserForm.qml:156
+#: ../gui/ui/rsrc/UserForm.qml:160
 msgid "Discard"
 msgstr "Descartar"
 
-#: ../gui/ui/rsrc/UserForm.qml:181
+#: ../gui/ui/rsrc/UserForm.qml:185
 msgid "You must indicate a name for the user"
 msgstr "Debe indicar el nombre para el usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:183
+#: ../gui/ui/rsrc/UserForm.qml:187
 msgid "You must indicate a surnanme for the user"
 msgstr "Debe indicar los apellidos para el usuario"
 
-#: ../gui/ui/rsrc/UserForm.qml:185
+#: ../gui/ui/rsrc/UserForm.qml:189
 msgid "You must indicate a login for the user"
 msgstr "Debe indicar un usuario"
+
+#: ../gui/ui/rsrc/UserOptions.qml:39
+msgid "User"
+msgstr "Usuario"
 
 #: ../gui/ui/rsrc/UsersList.qml:24
 msgid "Search..."
 msgstr "Buscar..."
 
-#: ../gui/ui/rsrc/UsersList.qml:81
+#: ../gui/ui/rsrc/UsersList.qml:78
 msgid "There are no users configured"
 msgstr "No hay usuarios configurados"
 
-#: ../gui/ui/rsrc/UsersList.qml:82
+#: ../gui/ui/rsrc/UsersList.qml:79
 msgid "No users where found"
 msgstr "No se han encontrado usuarios"
 
@@ -171,23 +175,23 @@ msgstr "Configuración"
 msgid "Activate Easy-Login:"
 msgstr "Activar Easy-Login:"
 
-#: ../gui/ui/rsrc/UsersManager.qml:81
+#: ../gui/ui/rsrc/UsersManager.qml:84
 msgid "Global Options"
 msgstr "Opciones globales"
 
-#: ../gui/ui/rsrc/UsersManager.qml:91
+#: ../gui/ui/rsrc/UsersManager.qml:94
 msgid "Generate PDF list"
 msgstr "Generar listado PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:96
+#: ../gui/ui/rsrc/UsersManager.qml:99
 msgid "Delete all users"
 msgstr "Borrar todos los usuarios"
 
-#: ../gui/ui/rsrc/UsersManager.qml:110
+#: ../gui/ui/rsrc/UsersManager.qml:113
 msgid "New user"
 msgstr "Nuevo usuario"
 
-#: ../gui/ui/rsrc/UsersManager.qml:119
+#: ../gui/ui/rsrc/UsersManager.qml:122
 msgid ""
 "All users will be deleted.\n"
 "Do you want to continue?"
@@ -195,7 +199,7 @@ msgstr ""
 "Se van a borrar todos los usuarios\n"
 "¿Desea continuar?"
 
-#: ../gui/ui/rsrc/UsersManager.qml:120
+#: ../gui/ui/rsrc/UsersManager.qml:123
 msgid ""
 "The user will be deleted.\n"
 "Do you want to continue?"
@@ -203,62 +207,62 @@ msgstr ""
 "Se va a borrar el usuario.\n"
 "¿Desea continuar?"
 
-#: ../gui/ui/rsrc/UsersManager.qml:124
+#: ../gui/ui/rsrc/UsersManager.qml:127
 msgid "Accept"
 msgstr "Acpetar"
 
-#: ../gui/ui/rsrc/UsersManager.qml:139
+#: ../gui/ui/rsrc/UsersManager.qml:142
 msgid "Please choose a file to save pdf list"
 msgstr "Elija un archivo para guardar el fichero PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:152
+#: ../gui/ui/rsrc/UsersManager.qml:155
 msgid "Unable to add user"
 msgstr "No es posible añadir el usuario"
 
-#: ../gui/ui/rsrc/UsersManager.qml:154
+#: ../gui/ui/rsrc/UsersManager.qml:157
 msgid "Unable to save the changes"
 msgstr "No es posible guardar los cambios"
 
-#: ../gui/ui/rsrc/UsersManager.qml:156
+#: ../gui/ui/rsrc/UsersManager.qml:159
 msgid "Unable to remove user"
 msgstr "No es posible borrar el usuario"
 
-#: ../gui/ui/rsrc/UsersManager.qml:158
+#: ../gui/ui/rsrc/UsersManager.qml:161
 msgid "Unable to remove all users"
 msgstr "No es posible borrar todos los usuarios"
 
-#: ../gui/ui/rsrc/UsersManager.qml:160
+#: ../gui/ui/rsrc/UsersManager.qml:163
 msgid "Unable to generate PDF list"
 msgstr "No es posible generar el listado PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:162
+#: ../gui/ui/rsrc/UsersManager.qml:165
 msgid "Unable to load user info"
 msgstr "No es posible cargar la información del usuario"
 
-#: ../gui/ui/rsrc/UsersManager.qml:164
+#: ../gui/ui/rsrc/UsersManager.qml:167
 msgid "Changes saved successfully"
 msgstr "Los cambios se han guardado correctamente"
 
-#: ../gui/ui/rsrc/UsersManager.qml:166
+#: ../gui/ui/rsrc/UsersManager.qml:169
 msgid "User removed successfully"
 msgstr "El usuario se ha borrado correctamente"
 
-#: ../gui/ui/rsrc/UsersManager.qml:168
+#: ../gui/ui/rsrc/UsersManager.qml:171
 msgid "The state change has been performed successfully"
 msgstr "El cambio de estado se ha realizado correctamente"
 
-#: ../gui/ui/rsrc/UsersManager.qml:170
+#: ../gui/ui/rsrc/UsersManager.qml:173
 msgid "Users removed successfully"
 msgstr "Los usuarios se han borrado correctamente"
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "LOGIN"
 msgstr "USUARIO"
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "STUDENT"
 msgstr "ALUMNO/A"
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "PASSWORD"
 msgstr "CONTRASEÑA"

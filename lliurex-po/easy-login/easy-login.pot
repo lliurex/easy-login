@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 10:36+0200\n"
+"POT-Creation-Date: 2026-05-11 10:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Generating new password. Wait a moment..."
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:121
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:109
 msgid "Click to manage this user"
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:132
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:120
 msgid "Edit user"
 msgstr ""
 
-#: ../gui/ui/rsrc/ListDelegateUserItem.qml:137
+#: ../gui/ui/rsrc/ListDelegateUserItem.qml:125
 msgid "Delete this user"
 msgstr ""
 
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Unable to load configuration"
 msgstr ""
 
-#: ../gui/ui/rsrc/MainOptions.qml:27
+#: ../gui/ui/rsrc/MainOptions.qml:27 ../gui/ui/rsrc/UserOptions.qml:18
 msgid "Users"
 msgstr ""
 
@@ -81,82 +81,86 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:19
+#: ../gui/ui/rsrc/UserForm.qml:20
 msgid "New User"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:20
+#: ../gui/ui/rsrc/UserForm.qml:22
 msgid "Edit User"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:40
+#: ../gui/ui/rsrc/UserForm.qml:44
 msgid "Name:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:52
+#: ../gui/ui/rsrc/UserForm.qml:56
 msgid "Surname:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:63
+#: ../gui/ui/rsrc/UserForm.qml:67
 msgid "Login:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:79
+#: ../gui/ui/rsrc/UserForm.qml:83
 msgid "Click to edit login"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:85
+#: ../gui/ui/rsrc/UserForm.qml:89
 msgid "Click to restore login"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:90
+#: ../gui/ui/rsrc/UserForm.qml:94
 msgid "Password:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:117
+#: ../gui/ui/rsrc/UserForm.qml:121
 msgid "Click to get a new password"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:129 ../gui/ui/rsrc/UserForm.qml:155
+#: ../gui/ui/rsrc/UserForm.qml:133 ../gui/ui/rsrc/UserForm.qml:159
 msgid "Apply"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:138 ../gui/ui/rsrc/UserForm.qml:159
-#: ../gui/ui/rsrc/UsersManager.qml:127
+#: ../gui/ui/rsrc/UserForm.qml:142 ../gui/ui/rsrc/UserForm.qml:163
+#: ../gui/ui/rsrc/UsersManager.qml:130
 msgid "Cancel"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:152
+#: ../gui/ui/rsrc/UserForm.qml:156
 msgid ""
 "The are pending changes to save.\n"
 "Do you want save the changes or discard them?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:156
+#: ../gui/ui/rsrc/UserForm.qml:160
 msgid "Discard"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:181
+#: ../gui/ui/rsrc/UserForm.qml:185
 msgid "You must indicate a name for the user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:183
+#: ../gui/ui/rsrc/UserForm.qml:187
 msgid "You must indicate a surnanme for the user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UserForm.qml:185
+#: ../gui/ui/rsrc/UserForm.qml:189
 msgid "You must indicate a login for the user"
+msgstr ""
+
+#: ../gui/ui/rsrc/UserOptions.qml:39
+msgid "User"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersList.qml:24
 msgid "Search..."
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersList.qml:81
+#: ../gui/ui/rsrc/UsersList.qml:78
 msgid "There are no users configured"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersList.qml:82
+#: ../gui/ui/rsrc/UsersList.qml:79
 msgid "No users where found"
 msgstr ""
 
@@ -168,90 +172,90 @@ msgstr ""
 msgid "Activate Easy-Login:"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:81
+#: ../gui/ui/rsrc/UsersManager.qml:84
 msgid "Global Options"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:91
+#: ../gui/ui/rsrc/UsersManager.qml:94
 msgid "Generate PDF list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:96
+#: ../gui/ui/rsrc/UsersManager.qml:99
 msgid "Delete all users"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:110
+#: ../gui/ui/rsrc/UsersManager.qml:113
 msgid "New user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:119
+#: ../gui/ui/rsrc/UsersManager.qml:122
 msgid ""
 "All users will be deleted.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:120
+#: ../gui/ui/rsrc/UsersManager.qml:123
 msgid ""
 "The user will be deleted.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:124
+#: ../gui/ui/rsrc/UsersManager.qml:127
 msgid "Accept"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:139
+#: ../gui/ui/rsrc/UsersManager.qml:142
 msgid "Please choose a file to save pdf list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:152
+#: ../gui/ui/rsrc/UsersManager.qml:155
 msgid "Unable to add user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:154
+#: ../gui/ui/rsrc/UsersManager.qml:157
 msgid "Unable to save the changes"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:156
+#: ../gui/ui/rsrc/UsersManager.qml:159
 msgid "Unable to remove user"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:158
+#: ../gui/ui/rsrc/UsersManager.qml:161
 msgid "Unable to remove all users"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:160
+#: ../gui/ui/rsrc/UsersManager.qml:163
 msgid "Unable to generate PDF list"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:162
+#: ../gui/ui/rsrc/UsersManager.qml:165
 msgid "Unable to load user info"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:164
+#: ../gui/ui/rsrc/UsersManager.qml:167
 msgid "Changes saved successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:166
+#: ../gui/ui/rsrc/UsersManager.qml:169
 msgid "User removed successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:168
+#: ../gui/ui/rsrc/UsersManager.qml:171
 msgid "The state change has been performed successfully"
 msgstr ""
 
-#: ../gui/ui/rsrc/UsersManager.qml:170
+#: ../gui/ui/rsrc/UsersManager.qml:173
 msgid "Users removed successfully"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "LOGIN"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "STUDENT"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:327
+#: ../gui/ui/EasyLoginManager.py:324
 msgid "PASSWORD"
 msgstr ""

@@ -301,7 +301,7 @@ class Bridge(QObject):
 		self.login=Bridge.easyLoginManager.currentUserConfig["login"]
 		self.name=Bridge.easyLoginManager.currentUserConfig["name"]
 		self.surname=Bridge.easyLoginManager.currentUserConfig["surname"]
-		self.pwdImgPaths=list(Bridge.easyLoginManager.currentUserConfig["pwdImgPaths"])
+		self.pwdImgPaths=Bridge.easyLoginManager.currentUserConfig["pwdImgPaths"]
 		self.showUserFormMessage=[False,"","Ok"]
 		self.changesInUser=False
 		self.enableLoginEdition=False
@@ -436,13 +436,10 @@ class Bridge(QObject):
 	def _getNewPasswordRet(self):
 
 		if self.getNewPasswordT.ret.get("status"):
-			self.currentUserConfig["username"]=self.getNewPasswordT.ret.get("data").get("username")
-			self.currentUserConfig["pwdImgPaths"][0]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg1")
-			self.currentUserConfig["pwdImgPaths"][1]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg2")
-			self.currentUserConfig["pwdImgPaths"][2]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg3")
-			self.currentUserConfig["pwdImgPaths"][3]=self.getNewPasswordT.ret.get("data").get("imgPaths").get("pwdImg4")
-			self.pwdImgPaths=list(self.currentUserConfig["pwdImgPaths"])
+			self.pwdImgPaths=self.getNewPasswordT.ret.get("data").get("pwdImgPaths")
 			self.username=self.currentUserConfig["username"]
+			self.currentUserConfig["username"]=self.username
+			self.currentUserConfig["pwdImgPaths"]=self.pwdImgPaths
 
 		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
 			self.changesInUser=True
@@ -550,7 +547,7 @@ class Bridge(QObject):
 	enableLoginEdition=Property(bool,_getEnableLoginEdition,_setEnableLoginEdition, notify=on_enableLoginEdition)
 	
 	on_pwdImgPaths=Signal()
-	pwdImgPaths=Property('QVariantList',_getPwdImgPaths,_setPwdImgPaths, notify=on_pwdImgPaths)
+	pwdImgPaths=Property('QStringList',_getPwdImgPaths,_setPwdImgPaths, notify=on_pwdImgPaths)
 
 	on_showUserFormMessage=Signal()
 	showUserFormMessage=Property('QVariantList',_getShowUserFormMessage,_setShowUserFormMessage, notify=on_showUserFormMessage)

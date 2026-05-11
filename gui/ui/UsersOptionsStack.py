@@ -170,7 +170,7 @@ class Bridge(QObject):
 		userEntries=Bridge.easyLoginManager.usersConfigData
 		for item in userEntries:
 			if item["username"]!="":
-				self._usersModel.appendRow(item["username"],item["login"],item["name"],item["surname"],item["pwdImg1"],item["pwdImg2"],item["pwdImg3"],item["pwdImg4"],item["metaInfo"])
+				self._usersModel.appendRow(item["username"],item["login"],item["name"],item["surname"],item["pwdImgPaths"],item["metaInfo"])
 	
 	#def _updateUsersModel
 

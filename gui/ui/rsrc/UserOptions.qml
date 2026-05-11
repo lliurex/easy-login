@@ -25,7 +25,7 @@ GridLayout{
             }
         }  
         Rectangle{
-            width:120
+            width:125
             Layout.fillHeight:true
             border.color: "#d3d3d3"
             GridLayout{

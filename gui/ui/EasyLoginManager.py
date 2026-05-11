@@ -134,7 +134,7 @@ class EasyLoginManager(object):
 			tmpData["name"]=info["name"]
 			tmpData["surname"]=info["surname"]
 			tmpData["metaInfo"]=f"{tmpData["login"]} {tmpData["name"]} {tmpData["surname"]}"
-			tmpData.update(self._getImgFromUsername(username))
+			tmpData["pwdImgPaths"]=self._getImgFromUsername(username)
 			self.usersConfigData.append(tmpData)
 
 	#def _getUsersData
@@ -142,7 +142,7 @@ class EasyLoginManager(object):
 	def _getImgFromUsername(self,username):
 
 		tmpImgs=list(username)
-		tmpImgData={}
+		tmpImgData=[]
 		i=1
 		for item in tmpImgs:
 			tmpPath=os.path.join(self.pwdImgFolder,f"{item}.png")
@@ -151,7 +151,7 @@ class EasyLoginManager(object):
 				tmpPath=self.missingImgPath
 			else:
 				tmpPath=f"file://{tmpPath}"
-			tmpImgData[f"pwdImg{i}"]=tmpPath
+			tmpImgData.append(tmpPath)
 			i+=1
 
 		return tmpImgData
@@ -171,8 +171,8 @@ class EasyLoginManager(object):
 
 		username="".join(str(random.randint(0,8)) for _ in range(0,4))
 		tmpImgPath=self._getImgFromUsername(username)
-		
-		return {"status":True,"code":"","type":"Ok","data":{"username":username,"imgPaths":tmpImgPath}}
+	
+		return {"status":True,"code":"","type":"Ok","data":{"username":username,"pwdImgPaths":tmpImgPath}}
 
 	#def generateUsername
 
@@ -182,10 +182,7 @@ class EasyLoginManager(object):
 			getUsername=self.generateUsername()
 			if getUsername.get("status"):
 				self.currentUserConfig["username"]=getUsername.get("data").get("username")
-				self.currentUserConfig["pwdImgPaths"][0]=getUsername.get("data").get("imgPaths").get("pwdImg1",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][1]=getUsername.get("data").get("imgPaths").get("pwdImg2",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][2]=getUsername.get("data").get("imgPaths").get("pwdImg3",self.missingImgPath)
-				self.currentUserConfig["pwdImgPaths"][3]=getUsername.get("data").get("imgPaths").get("pwdImg4",self.missingImgPath)
+				self.currentUserConfig["pwdImgPaths"]=getUsername.get("data").get("pwdImgPaths")
 				return {"status":True,"code":"","type":"Ok"}
 			else:
 				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":"Error"}
@@ -329,14 +326,14 @@ class EasyLoginManager(object):
 		for item in self.usersConfigData:
 			tmpLogin=Paragraph(f"{item.get("login")}",cell_style)
 			tmpName=Paragraph(f"{item.get("name")} {item.get("surname")}",cell_style)
-			imgPaths=[]
-			imgPaths.append(f"{item.get("pwdImg1").replace("file://","")}")
-			imgPaths.append(f"{item.get("pwdImg2").replace("file://","")}")
-			imgPaths.append(f"{item.get("pwdImg3").replace("file://","")}")
-			imgPaths.append(f"{item.get("pwdImg4").replace("file://","")}")
+			pwdImgPaths=[]
+			pwdImgPaths.append(f"{item.get("pwdImgPaths")[0].replace("file://","")}")
+			pwdImgPaths.append(f"{item.get("pwdImgPaths")[1].replace("file://","")}")
+			pwdImgPaths.append(f"{item.get("pwdImgPaths")[2].replace("file://","")}")
+			pwdImgPaths.append(f"{item.get("pwdImgPaths")[3].replace("file://","")}")
 
 			imgObjects=[]
-			for img in imgPaths:
+			for img in pwdImgPaths:
 				if os.path.exists(img):
 					imgObjects.append(Image(img,width=32,height=32))
 				else:

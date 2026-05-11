@@ -9,10 +9,7 @@ ItemDelegate {
     property string login
     property string name
     property string surname
-    property string pwdImg1
-    property string pwdImg2
-    property string pwdImg3
-    property string pwdImg4
+    property list<string> pwdImgPaths
     property string metaInfo
 
     enabled: true
@@ -40,8 +37,8 @@ ItemDelegate {
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 15
-            anchors.rightMargin: 15
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
             spacing: 20
 
             Text {
@@ -50,7 +47,7 @@ ItemDelegate {
                 font.pointSize: 10
                 elide: Text.ElideMiddle
                 Layout.fillWidth: true
-                Layout.preferredWidth: 200
+                Layout.preferredWidth: 300
                 verticalAlignment: Text.AlignVCenter
             }
 
@@ -58,7 +55,7 @@ ItemDelegate {
                 id: userInfo
                 spacing: 2
                 Layout.fillWidth: true
-                Layout.preferredWidth: 200
+                Layout.preferredWidth: 300
                 Layout.alignment: Qt.AlignVCenter
 
                 Text {
@@ -79,30 +76,21 @@ ItemDelegate {
                 id: imagesRow
                 spacing: 5
                 Layout.alignment: Qt.AlignVCenter
-
-                Image {
-                    source: pwdImg1
-                    sourceSize: "32x32"
-                    mipmap: true
-                    smooth: true
-                }
-                Image {
-                    source: pwdImg2
-                    sourceSize: "32x32"
-                    mipmap: true
-                    smooth: true
-                }
-                Image {
-                    source: pwdImg3
-                    sourceSize: "32x32"
-                    mipmap: true
-                    smooth: true
-                }
-                Image {
-                    source: pwdImg4
-                    sourceSize: "32x32"
-                    mipmap: true
-                    smooth: true
+                Repeater {
+                    model: 4
+                    delegate: Rectangle {
+                        width: 32; height:32
+                        color: "transparent"
+                        Image {
+                            anchors.centerIn: parent
+                            sourceSize.width: 32
+                            sourceSize.height: 32
+                            mipmap: true
+                            smooth: true
+                            source: listUserItem.pwdImgPaths[index] || ""
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
                 }
             }
 
@@ -131,7 +119,7 @@ ItemDelegate {
                     MenuItem {
                         text: i18nd("easy-login","Edit user")
                         icon.name: "document-edit.svg"
-                        onClicked: userStackBridge.loadUser([username,[pwdImg1,pwdImg2,pwdImg3,pwdImg4]])
+                        onClicked: userStackBridge.loadUser([username,pwdImgPaths])
                     }
                     MenuItem {
                         text: i18nd("easy-login","Delete this user")

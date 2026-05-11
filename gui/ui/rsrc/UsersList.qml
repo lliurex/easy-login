@@ -53,10 +53,7 @@ Rectangle {
                             login: model.login
                             name: model.name
                             surname: model.surname
-                            pwdImg1: model.pwdImg1
-                            pwdImg2: model.pwdImg2
-                            pwdImg3: model.pwdImg3
-                            pwdImg4: model.pwdImg4
+                            pwdImgPaths: model.pwdImgPaths
                             metaInfo: model.metaInfo
                         }
                     }
@@ -80,6 +77,7 @@ Rectangle {
                         text: userSearchEntry.text.length === 0
                               ? i18nd("easy-login", "There are no users configured")
                               : i18nd("easy-login", "No users where found")
+                        icon.name:"group"
                     }
                 } 
             }
