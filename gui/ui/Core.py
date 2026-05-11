@@ -13,25 +13,23 @@ class Core:
 	DEBUG=False
 	
 	@classmethod
-	def get_core(self):
+	def get_core(cls):
 		
-		if Core.singleton==None:
-			Core.singleton=Core()
-			Core.singleton.init()
+		if cls.singleton==None:
+			cls.singleton=Core()
+			cls.singleton.init()
 
-		return Core.singleton
+		return cls.singleton
 		
 	
 	def __init__(self,args=None):
 
-	
 		self.dprint("Init...")
 		
 	#def __init__
 	
 	def init(self):
 
-	
 		self.easyLoginManager=EasyLoginManager.EasyLoginManager()
 		self.userStack=UserStack.Bridge()
 		self.usersOptionsStack=UsersOptionsStack.Bridge()

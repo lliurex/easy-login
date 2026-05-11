@@ -19,27 +19,24 @@ class Tunnel(QObject):
 	def clearCache(self):
 
 		clear=False
-		user=os.environ["USER"]
-		versionFile="/home/%s/.config/easy-login.conf"%user
-		cachePath="/home/%s/.cache/easy-login"%user
+		self.home=os.path.expanduser("~")
+		versionFile=os.path.join(self.home,".config/easy-login.conf")
+		cachePath=os.path.join(self.home,".cache/easy-login")
 		installedVersion=self.getPackageVersion()
 
 		if not os.path.exists(versionFile):
 			with open(versionFile,'w') as fd:
 				fd.write(installedVersion)
-				fd.close()
 
 			clear=True
 
 		else:
 			with open(versionFile,'r') as fd:
 				fileVersion=fd.readline()
-				fd.close()
 
 			if fileVersion!=installedVersion:
 				with open(versionFile,'w') as fd:
 					fd.write(installedVersion)
-					fd.close()
 				clear=True
 		
 		if clear:
@@ -50,40 +47,43 @@ class Tunnel(QObject):
 
 	def getPackageVersion(self):
 
-		command = "LANG=C LANGUAGE=en apt-cache policy easy-login"
-		p = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE)
-		installed = None
-		for line in iter(p.stdout.readline,b""):
-			if type(line) is bytes:
-				line=line.decode()
+		try:
+			command = "LANG=C LANGUAGE=en apt-cache policy easy-login"
+			output = subprocess.check_output(command, shell=True, text=True)
+			for line in output.splitlines():
+				if "Installed:" in line:
+					return line.replace("Installed:", "").strip()
+		except Exception as e:
+			print(f"Error getting versión: {e}")
 
-			stripedline = line.strip()
-			if stripedline.startswith("Installed"):
-				installed = stripedline.replace("Installed: ","")
-
-		return installed
-
+		return None
+		
 	#def getPackageVersion
 
 	@Slot(str)
 	def onTicket(self, ticket):
 		
-		ticket=ticket.replace(' ','##U+0020##')
-		os.system("/usr/share/easy-login/gui/easy-login-gui %s &"%ticket)
-		app.quit()
+		ticket_escaped=ticket.replace(' ','##U+0020##')
+		cmd = ["/usr/share/easy-login/gui/easy-login-gui", ticket_escaped]
+		subprocess.Popen(cmd)
+		QApplication.quit()
 
 	#def onTicket
 	
 
 #class Tunnel
 
-app = QApplication([])
+app = QApplication(sys.argv)
 app.setDesktopFileName("easy-login")
 tunnel = Tunnel()
 view = QQuickView()
 view.rootContext().setContextProperty("tunnel", tunnel)
-url = QUrl("/usr/share/easy-login/gui/rsrc/login.qml")
+url = QUrl.fromLocalFile("/usr/share/easy-login/gui/rsrc/login.qml")
 view.setSource(url)
+
+if view.status() == QQuickView.Error:
+	sys.exit(-1)
+
 view.show()
 ret=app.exec()
 del view

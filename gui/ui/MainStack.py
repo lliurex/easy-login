@@ -1,4 +1,5 @@
-from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,Qt,QModelIndex
+from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,Qt,QModelIndex,QUrl
+from PySide6.QtGui import QDesktopServices
 import os 
 import sys
 import threading
@@ -6,21 +7,24 @@ import time
 import copy
 
 import signal
+import Core
+
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class GatherInfo(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager):
 		
 		QThread.__init__(self)
+		self.easyManager=manager
 		self.ret={}
 
-	#def _init__
+	#def __init__
 
 	def run(self,*args):
 		
 		time.sleep(1)
-		self.ret=Bridge.easyLoginManager.loadConfig()
+		self.ret=self.easyManager.loadConfig()
 
 	#def run
 
@@ -32,22 +36,22 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 		self.core=Core.Core.get_core()
-		Bridge.easyLoginManager=self.core.easyLoginManager
+		self.easyManager=self.core.easyLoginManager
 		self._currentStack=0
 		self._mainCurrentOption=0
 		self._closePopUp=[True,""]
 		self.moveToStack=""
 		self._closeGui=True
 		self._showLoadErrorMessage=[False,""]
-		Bridge.easyLoginManager.createN4dClient(sys.argv[1])
+		self.easyManager.createN4dClient(sys.argv[1])
 
-	#def _init__
+	#def __init__
 
 	def initBridge(self):
 
 		self.currentStack=0
 		self.closeGui=False
-		self.gatherInfoT=GatherInfo()
+		self.gatherInfoT=GatherInfo(self.easyManager)
 		self.gatherInfoT.start()
 		self.gatherInfoT.finished.connect(self._loadConfig)
 	
@@ -58,7 +62,7 @@ class Bridge(QObject):
 		self.closeGui=True
 		if self.gatherInfoT.ret.get("status"):
 			self.core.usersOptionsStack.loadConfig()
-			self._systemLocale=Bridge.easyLoginManager.systemLocale
+			self._systemLocale=self.easyManager.systemLocale
 			self.currentStack=1
 		else:
 			self.showLoadErrorMessage=[True,self.gatherInfoT.ret.get("code")]
@@ -165,21 +169,13 @@ class Bridge(QObject):
 	def openHelp(self):
 		
 		if 'valencia' in self._systemLocale:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/'
+			helpUrl='https://wiki.edu.gva.es/lliurex/'
 		else:
-			self.helpCmd='xdg-open https://wiki.edu.gva.es/lliurex/'
-		
-		self.openHelpT=threading.Thread(target=self._openHelp)
-		self.openHelpT.daemon=True
-		self.openHelpT.start()
+			helpUrl='https://wiki.edu.gva.es/lliurex/'
+
+		QDesktopServices.openUrl(QUrl(helpUrl))
 
 	#def openHelp
-
-	def _openHelp(self):
-
-		os.system(self.helpCmd)
-
-	#def _openHelp
 
 	@Slot()
 	def closeEasyLogin(self):
@@ -209,6 +205,6 @@ class Bridge(QObject):
 
 #class Bridge
 
-import Core
+
 
 

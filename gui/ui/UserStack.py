@@ -5,6 +5,8 @@ import threading
 import time
 import copy
 
+import Core
+
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -16,20 +18,21 @@ NEW_PASSWORD=28
 
 class LoadUser(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,newUser,userInfo):
 
 		QThread.__init__(self)
-		self.newUser=args[0]
-		self.userInfo=args[1]
+		self.easyManager=manager
+		self.newUser=newUser
+		self.userInfo=userInfo
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self,):
 
 		time.sleep(0.5)
-		ret=Bridge.easyLoginManager.initValues()
-		self.ret=Bridge.easyLoginManager.loadUserConfig(self.newUser,self.userInfo)
+		ret=self.easyManager.initValues()
+		self.ret=self.easyManager.loadUserConfig(self.newUser,self.userInfo)
 
 	#def run
 
@@ -37,18 +40,19 @@ class LoadUser(QThread):
 
 class CheckData(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,dataToCheck):
 
 		QThread.__init__(self)
-		self.dataToCheck=args[0]
+		self.easyManager=manager
+		self.dataToCheck=dataToCheck
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.checkData(self.dataToCheck)
+		self.ret=self.easyManager.checkData(self.dataToCheck)
 		
 	#def run
 
@@ -56,17 +60,18 @@ class CheckData(QThread):
 
 class GetNewPassword(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager):
 
 		QThread.__init__(self)
+		self.easyManager=manager
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.generateUsername()
+		self.ret=self.easyManager.generateUsername()
 
 	#def run
 
@@ -74,18 +79,19 @@ class GetNewPassword(QThread):
 
 class SaveData(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,datoToSave):
 
 		QThread.__init__(self)
-		self.dataToSave=args[0]
+		self.easyManager=manager
+		self.dataToSave=datoToSave
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.saveData(self.dataToSave)
+		self.ret=self.easyManager.saveData(self.dataToSave)
 
 	#def run
 
@@ -98,12 +104,12 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 		self.core=Core.Core.get_core()
-		Bridge.easyLoginManager=self.core.easyLoginManager
-		self._username=Bridge.easyLoginManager.currentUserConfig["username"]
-		self._login=Bridge.easyLoginManager.currentUserConfig["login"]
-		self._name=Bridge.easyLoginManager.currentUserConfig["name"]
-		self._surname=Bridge.easyLoginManager.currentUserConfig["surname"]
-		self._pwdImgPaths=Bridge.easyLoginManager.currentUserConfig["pwdImgPaths"]
+		self.easyManager=self.core.easyLoginManager
+		self._username=self.easyManager.currentUserConfig["username"]
+		self._login=self.easyManager.currentUserConfig["login"]
+		self._name=self.easyManager.currentUserConfig["name"]
+		self._surname=self.easyManager.currentUserConfig["surname"]
+		self._pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
 		self._enableLoginEdition=False
 		self._userCurrentOption=0
 		self._showUserFormMessage=[False,"","Ok"]
@@ -274,7 +280,7 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[False,NEW_USER_CONFIG]
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
-		self.newUserT=LoadUser(True,"")
+		self.newUserT=LoadUser(self.easyManager,True,"")
 		self.newUserT.start()
 		self.newUserT.finished.connect(self._addNewUserRet)
 
@@ -283,7 +289,7 @@ class Bridge(QObject):
 	def _addNewUserRet(self):
 
 		if self.newUserT.ret.get("status"):
-			self.currentUserConfig=copy.deepcopy(Bridge.easyLoginManager.currentUserConfig)
+			self.currentUserConfig=copy.deepcopy(self.easyManager.currentUserConfig)
 			self._initializeVars()
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
@@ -297,11 +303,11 @@ class Bridge(QObject):
 
 	def _initializeVars(self):
 
-		self.username=Bridge.easyLoginManager.currentUserConfig["username"]
-		self.login=Bridge.easyLoginManager.currentUserConfig["login"]
-		self.name=Bridge.easyLoginManager.currentUserConfig["name"]
-		self.surname=Bridge.easyLoginManager.currentUserConfig["surname"]
-		self.pwdImgPaths=Bridge.easyLoginManager.currentUserConfig["pwdImgPaths"]
+		self.username=self.easyManager.currentUserConfig["username"]
+		self.login=self.easyManager.currentUserConfig["login"]
+		self.name=self.easyManager.currentUserConfig["name"]
+		self.surname=self.easyManager.currentUserConfig["surname"]
+		self.pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
 		self.showUserFormMessage=[False,"","Ok"]
 		self.changesInUser=False
 		self.enableLoginEdition=False
@@ -330,7 +336,7 @@ class Bridge(QObject):
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.actionType="edit"
-		self.editUserT=LoadUser(False,userToLoad)
+		self.editUserT=LoadUser(self.easyManager,False,userToLoad)
 		self.editUserT.start()
 		self.editUserT.finished.connect(self._loadUserRet)
 
@@ -339,7 +345,7 @@ class Bridge(QObject):
 	def _loadUserRet(self):
 
 		if self.editUserT.ret.get("status"):
-			self.currentUserConfig=copy.deepcopy(Bridge.easyLoginManager.currentUserConfig)
+			self.currentUserConfig=copy.deepcopy(self.easyManager.currentUserConfig)
 			self._initializeVars()
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
@@ -357,15 +363,12 @@ class Bridge(QObject):
 		if value!=self.name:
 			self.name=value
 			self.currentUserConfig["name"]=self.name
-			self.previousLogin=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
+			self.previousLogin=self.easyManager.getFormattedLogin(self.name,self.surname)
 			if not self.enableLoginEdition:
 				self.login=self.previousLogin
 				self.currentUserConfig["login"]=self.login
 
-		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
-			self.changesInUser=True
-		else:
-			self.changesInUser=False
+		self._checkIfChanged()
 
 	#def updateBellNameValue
 
@@ -375,15 +378,12 @@ class Bridge(QObject):
 		if value!=self.surname:
 			self.surname=value
 			self.currentUserConfig["surname"]=self.surname
-			self.previousLogin=Bridge.easyLoginManager.getFormattedLogin(self.name,self.surname)
+			self.previousLogin=self.easyManager.getFormattedLogin(self.name,self.surname)
 			if not self.enableLoginEdition:
 				self.login=self.previousLogin
 				self.currentUserConfig["login"]=self.login
 
-		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
-			self.changesInUser=True
-		else:
-			self.changesInUser=False
+		self._checkIfChanged()
 
 	#def updateSurnameValue
 
@@ -401,10 +401,7 @@ class Bridge(QObject):
 		self.login=self.previousLogin
 		self.currentUserConfig["login"]=self.login
 
-		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
-			self.changesInUser=True
-		else:
-			self.changesInUser=False
+		self._checkIfChanged()
 
 	#def restoreDefaultLogin
 
@@ -415,10 +412,7 @@ class Bridge(QObject):
 			self.login=value
 			self.currentUserConfig["login"]=self.login
 
-		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
-			self.changesInUser=True
-		else:
-			self.changesInUser=False
+		self._checkIfChanged
 
 	#def updateLoginValue
 
@@ -427,7 +421,7 @@ class Bridge(QObject):
 
 		self.core.mainStack.closePopUp=[False,NEW_PASSWORD]
 		self.core.mainStack.closeGui=False
-		self.getNewPasswordT=GetNewPassword()
+		self.getNewPasswordT=GetNewPassword(self.easyManager)
 		self.getNewPasswordT.start()
 		self.getNewPasswordT.finished.connect(self._getNewPasswordRet)
 
@@ -437,19 +431,25 @@ class Bridge(QObject):
 
 		if self.getNewPasswordT.ret.get("status"):
 			self.pwdImgPaths=self.getNewPasswordT.ret.get("data").get("pwdImgPaths")
-			self.username=self.currentUserConfig["username"]
+			self.username=self.getNewPasswordT.ret.get("data").get("username")
 			self.currentUserConfig["username"]=self.username
 			self.currentUserConfig["pwdImgPaths"]=self.pwdImgPaths
 
-		if self.currentUserConfig!=Bridge.easyLoginManager.currentUserConfig:
-			self.changesInUser=True
-		else:
-			self.changesInUser=False
+		self._checkIfChanged()
 
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
 
 	#def _getNewPasswordRet
+
+	def _checkIfChanged(self):
+
+		if self.currentUserConfig!=self.easyManager.currentUserConfig:
+			self.changesInUser=True
+		else:
+			self.changesInUser=False
+
+	#def _checkIfChanged
 
 	@Slot(str)
 	def manageChangesDialog(self,action):
@@ -476,7 +476,7 @@ class Bridge(QObject):
 
 		self.core.mainStack.closePopUp=[False,CHECK_DATA]
 		self.core.mainStack.closeGui=False
-		self.checkDataT=CheckData(self.currentUserConfig)
+		self.checkDataT=CheckData(self.easyManager,self.currentUserConfig)
 		self.checkDataT.start()
 		self.checkDataT.finished.connect(self._checkDataRet)
 
@@ -495,7 +495,7 @@ class Bridge(QObject):
 	def saveDataChanges(self):
 
 		self.core.mainStack.closePopUp=[False,SAVE_DATA]
-		self.saveDataT=SaveData(self.currentUserConfig)
+		self.saveDataT=SaveData(self.easyManager,self.currentUserConfig)
 		self.saveDataT.start()
 		self.saveDataT.finished.connect(self._saveDataRet)
 
@@ -506,7 +506,7 @@ class Bridge(QObject):
 		self.core.usersOptionsStack._updateUsersModel()
 		self.core.usersOptionsStack.showMainMessage=[True,self.saveDataT.ret.get("code"),self.saveDataT.ret.get("type")]
 
-		self.core.usersOptionsStack.enableGlobalOptions=Bridge.easyLoginManager.checkGlobalOptionStatus()
+		self.core.usersOptionsStack.enableGlobalOptions=self.easyManager.checkGlobalOptionStatus()
 		self.changesInUser=False
 		self.core.mainStack.moveToStack=1
 		self.core.mainStack.manageGoToStack()
@@ -547,7 +547,7 @@ class Bridge(QObject):
 	enableLoginEdition=Property(bool,_getEnableLoginEdition,_setEnableLoginEdition, notify=on_enableLoginEdition)
 	
 	on_pwdImgPaths=Signal()
-	pwdImgPaths=Property('QStringList',_getPwdImgPaths,_setPwdImgPaths, notify=on_pwdImgPaths)
+	pwdImgPaths=Property('QVariantList',_getPwdImgPaths,_setPwdImgPaths, notify=on_pwdImgPaths)
 
 	on_showUserFormMessage=Signal()
 	showUserFormMessage=Property('QVariantList',_getShowUserFormMessage,_setShowUserFormMessage, notify=on_showUserFormMessage)
@@ -565,7 +565,4 @@ class Bridge(QObject):
 	actionType=Property(str,_getActionType,_setActionType,notify=on_actionType)
 
 #class Bridge
-
-import Core
-
 

@@ -133,7 +133,7 @@ class EasyLoginManager(object):
 			tmpData["login"]=info["login"]
 			tmpData["name"]=info["name"]
 			tmpData["surname"]=info["surname"]
-			tmpData["metaInfo"]=f"{tmpData["login"]} {tmpData["name"]} {tmpData["surname"]}"
+			tmpData["metaInfo"]=f"{tmpData['login']} {tmpData['name']} {tmpData['surname']}"
 			tmpData["pwdImgPaths"]=self._getImgFromUsername(username)
 			self.usersConfigData.append(tmpData)
 
@@ -313,7 +313,7 @@ class EasyLoginManager(object):
 
 		styles = getSampleStyleSheet()
 		cell_style=styles["Normal"]
-		cell_style.aligment=0
+		cell_style.alignment=0
 
 		story = []
 
@@ -324,22 +324,22 @@ class EasyLoginManager(object):
 		pdfData=[[_("LOGIN"),_("STUDENT"),_("PASSWORD")]]
 
 		for item in self.usersConfigData:
-			tmpLogin=Paragraph(f"{item.get("login")}",cell_style)
-			tmpName=Paragraph(f"{item.get("name")} {item.get("surname")}",cell_style)
-			pwdImgPaths=[]
-			pwdImgPaths.append(f"{item.get("pwdImgPaths")[0].replace("file://","")}")
-			pwdImgPaths.append(f"{item.get("pwdImgPaths")[1].replace("file://","")}")
-			pwdImgPaths.append(f"{item.get("pwdImgPaths")[2].replace("file://","")}")
-			pwdImgPaths.append(f"{item.get("pwdImgPaths")[3].replace("file://","")}")
-
-			imgObjects=[]
-			for img in pwdImgPaths:
-				if os.path.exists(img):
-					imgObjects.append(Image(img,width=32,height=32))
+			tmpLogin=Paragraph(f"{item.get('login')}",cell_style)
+			tmpName=Paragraph(f"{item.get('name')} {item.get('surname')}",cell_style)
+			imgObjects = []
+			paths = item.get("pwdImgPaths", [])
+			for p in paths:
+				img_path = p.replace("file://", "")
+				if os.path.exists(img_path):
+					imgObjects.append(Image(img_path, width=32, height=32))
 				else:
 					imgObjects.append("N/A")
 
+			if not imgObjects:
+				imgObjects = ["N/A"]
+				
 			imgTable = Table([imgObjects], colWidths=[35]*len(imgObjects)) 
+			
 			imgTable.setStyle(TableStyle([
 				('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
 				('ALIGN', (0,0), (-1,-1), 'CENTER'),

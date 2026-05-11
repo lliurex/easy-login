@@ -10,7 +10,7 @@ import Core
 
 c=Core.Core.get_core()
 
-app = QApplication()
+app = QApplication(sys.argv)
 app.setDesktopFileName("easy-login")
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
@@ -22,13 +22,13 @@ context.setContextProperty("mainStackBridge", mainStackBridge)
 context.setContextProperty("usersOptionsStackBridge", usersOptionsStackBridge)
 context.setContextProperty("userStackBridge", userStackBridge)
 
-url = QUrl("/usr/share/easy-login/gui/rsrc/easy-login.qml")
+url = QUrl.fromLocalFile("/usr/share/easy-login/gui/rsrc/easy-login.qml")
 
 engine.load(url)
 if not engine.rootObjects():
 	sys.exit(-1)
 
-engine.quit.connect(QApplication.quit)
+engine.quit.connect(app.quit)
 ret=app.exec()
 del engine
 del app

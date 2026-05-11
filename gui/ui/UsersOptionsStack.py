@@ -5,10 +5,11 @@ import threading
 import time
 import copy
 
+import Core
+import UsersModel
+
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-import UsersModel
 
 CHANGE_SERVICE_WAITING=20
 REMOVING_USER=21
@@ -17,18 +18,19 @@ GENERATING_PDF_WAITING=23
 
 class EnableLogin(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,value):
 
 		QThread.__init__(self)
-		self.enableLogin=args[0]
+		self.easyManager=manager
+		self.enableLogin=value
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.enableEasyLogin(self.enableLogin)
+		self.ret=self.easyManager.enableEasyLogin(self.enableLogin)
 
 	#def run
 
@@ -36,19 +38,20 @@ class EnableLogin(QThread):
 
 class RemoveUser(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,allUsers,userToRemove):
 
 		QThread.__init__(self)
-		self.allUsers=args[0]
-		self.userToRemove=args[1]
+		self.easyManager=manager
+		self.allUsers=allUsers
+		self.userToRemove=userToRemove
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.removeUser(self.allUsers,self.userToRemove)
+		self.ret=self.easyManager.removeUser(self.allUsers,self.userToRemove)
 
 	#def run
 
@@ -56,18 +59,19 @@ class RemoveUser(QThread):
 
 class GeneratePdf(QThread):
 
-	def __init__(self,*args):
+	def __init__(self,manager,pdfPath):
 
 		QThread.__init__(self)
-		self.pdfPath=args[0]
+		self.easyManager=manager
+		self.pdfPath=pdfPath
 		self.ret={}
 
 	#def __init__
 
-	def run(self,*args):
+	def run(self,):
 
 		time.sleep(0.5)
-		self.ret=Bridge.easyLoginManager.generatePdf(self.pdfPath)
+		self.ret=self.easyManager.generatePdf(self.pdfPath)
 
 	#def run
 
@@ -79,18 +83,18 @@ class Bridge(QObject):
 
 		QObject.__init__(self)
 		self.core=Core.Core.get_core()
-		Bridge.easyLoginManager=self.core.easyLoginManager
+		self.easyManager=self.core.easyLoginManager
 		self._usersModel=UsersModel.UsersModel()
 		self._easyLoginEnabled=False
 		self._showMainMessage=[False,"","Ok"]
 		self._showRemoveUserDialog=[False,False]
 		self._enableGlobalOptions=False
 
-	#def _init__
+	#def __init__
 	
 	def loadConfig(self):
 
-		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
+		self.easyLoginEnabled=self.easyManager.easyLoginEnabled
 		self._updateUsersModel()
 		self._manageOptions()
 	
@@ -112,7 +116,7 @@ class Bridge(QObject):
 
 	def _manageOptions(self):
 
-		self.enableGlobalOptions=Bridge.easyLoginManager.checkGlobalOptionStatus()
+		self.enableGlobalOptions=self.easyManager.checkGlobalOptionStatus()
 
 	#def _manageOptions
 
@@ -167,7 +171,7 @@ class Bridge(QObject):
 	def _updateUsersModel(self):
 
 		ret=self._usersModel.clear()
-		userEntries=Bridge.easyLoginManager.usersConfigData
+		userEntries=self.easyManager.usersConfigData
 		for item in userEntries:
 			if item["username"]!="":
 				self._usersModel.appendRow(item["username"],item["login"],item["name"],item["surname"],item["pwdImgPaths"],item["metaInfo"])
@@ -180,7 +184,7 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[False,CHANGE_SERVICE_WAITING]
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
-		self.enableLoginT=EnableLogin(value)
+		self.enableLoginT=EnableLogin(self.easyManager,value)
 		self.enableLoginT.start()
 		self.enableLoginT.finished.connect(self._enableLoginRet)
 
@@ -188,7 +192,7 @@ class Bridge(QObject):
 
 	def _enableLoginRet(self):
 
-		self.easyLoginEnabled=Bridge.easyLoginManager.easyLoginEnabled
+		self.easyLoginEnabled=self.easyManager.easyLoginEnabled
 
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
@@ -217,7 +221,7 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[False,GENERATING_PDF_WAITING]
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
-		self.generatePdfT=GeneratePdf(exportPath)
+		self.generatePdfT=GeneratePdf(self.easyManager,exportPath)
 		self.generatePdfT.start()
 		self.generatePdfT.finished.connect(self._generatePdfRet)
 
@@ -250,7 +254,7 @@ class Bridge(QObject):
 		else:
 			self.core.mainStack.closePopUp=[False,REMOVING_USER]
 
-		self.removeUserT=RemoveUser(self.removeAllUsers,self.userToRemove)
+		self.removeUserT=RemoveUser(self.easyManager,self.removeAllUsers,self.userToRemove)
 		self.removeUserT.start()
 		self.removeUserT.finished.connect(self._removeUserRet)
 
@@ -281,7 +285,4 @@ class Bridge(QObject):
 	usersModel=Property(QObject,_getUsersModel,constant=True)
 
 #class Bridge
-
-import Core
-
 
