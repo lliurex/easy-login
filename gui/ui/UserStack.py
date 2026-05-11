@@ -18,13 +18,14 @@ NEW_PASSWORD=28
 
 class LoadUser(QThread):
 
+	userLoaded=Signal(dict)
+
 	def __init__(self,manager,newUser,userInfo):
 
-		QThread.__init__(self)
+		super().__init__()
 		self.easyManager=manager
 		self.newUser=newUser
 		self.userInfo=userInfo
-		self.ret={}
 
 	#def __init__
 
@@ -32,46 +33,51 @@ class LoadUser(QThread):
 
 		time.sleep(0.5)
 		ret=self.easyManager.initValues()
-		self.ret=self.easyManager.loadUserConfig(self.newUser,self.userInfo)
-
+		retLoaded=self.easyManager.loadUserConfig(self.newUser,self.userInfo)
+		self.userLoaded.emit(retLoaded)
+	
 	#def run
 
 #class LoadBell
 
 class CheckData(QThread):
 
+	dataChecked=Signal(dict)
+
 	def __init__(self,manager,dataToCheck):
 
-		QThread.__init__(self)
+		super().__init__()
 		self.easyManager=manager
 		self.dataToCheck=dataToCheck
-		self.ret={}
 
 	#def __init__
 
 	def run(self):
 
 		time.sleep(0.5)
-		self.ret=self.easyManager.checkData(self.dataToCheck)
-		
+		ret=self.easyManager.checkData(self.dataToCheck)
+		self.dataChecked.emit(ret)
+	
 	#def run
 
 #class CheckData
 
 class GetNewPassword(QThread):
 
+	newPasswordGetted=Signal(dict)
+
 	def __init__(self,manager):
 
-		QThread.__init__(self)
+		super().__init__()
 		self.easyManager=manager
-		self.ret={}
 
 	#def __init__
 
 	def run(self):
 
 		time.sleep(0.5)
-		self.ret=self.easyManager.generateUsername()
+		ret=self.easyManager.generateUsername()
+		self.newPasswordGetted.emit(ret)
 
 	#def run
 
@@ -79,19 +85,21 @@ class GetNewPassword(QThread):
 
 class SaveData(QThread):
 
+	dataSaved=Signal(dict)
+
 	def __init__(self,manager,datoToSave):
 
-		QThread.__init__(self)
+		super().__init__()
 		self.easyManager=manager
 		self.dataToSave=datoToSave
-		self.ret={}
 
 	#def __init__
 
 	def run(self):
 
 		time.sleep(0.5)
-		self.ret=self.easyManager.saveData(self.dataToSave)
+		ret=self.easyManager.saveData(self.dataToSave)
+		self.dataSaved.emit(ret)
 
 	#def run
 
@@ -99,10 +107,21 @@ class SaveData(QThread):
 
 class Bridge(QObject):
 
+	on_username=Signal()
+	on_name=Signal()
+	on_surname=Signal()
+	on_login=Signal()
+	on_enableLoginEdition=Signal()
+	on_pwdImgPaths=Signal()
+	on_showUserFormMessage=Signal()
+	on_userCurrentOption=Signal()
+	on_showChangesInUserDialog=Signal()
+	on_changesInUser=Signal()
+	on_actionType=Signal()
 	
 	def __init__(self):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
 		self.easyManager=self.core.easyLoginManager
 		self._username=self.easyManager.currentUserConfig["username"]
@@ -119,159 +138,181 @@ class Bridge(QObject):
 
 	#def _init__
 
-	def _getUsername(self):
+	@Property(str,notify=on_username)
+	def username(self):
 
 		return self._username
 
-	#def _getUsername
+	#def username
 
-	def _setUsername(self,username):
+	@username.setter
+	def username(self,username):
 
 		if self._username!=username:
 			self._username=username
 			self.on_username.emit()
 
-	#def _setUsername
+	#def username
 
-	def _getLogin(self):
-
-		return self._login
-
-	#def _getLogin
-
-	def _setLogin(self,login):
-
-		if self._login!=login:
-			self._login=login
-			self.on_login.emit()
-
-	#def _setLogin
-
-	def _getName(self):
+	@Property(str,notify=on_name)
+	def name(self):
 
 		return self._name
 
-	#def _getName
+	#def name
 
-	def _setName(self,name):
+	@name.setter
+	def name(self,name):
 
 		if self._name!=name:
 			self._name=name
 			self.on_name.emit()
 
-	#def _setName
+	#def name
 
-	def _getSurname(self):
+	@Property(str,notify=on_surname)
+	def surname(self):
 
 		return self._surname
 
-	#def _getSurname
+	#def surname
 
-	def _setSurname(self,surname):
+	@surname.setter
+	def surname(self,surname):
 
 		if self._surname!=surname:
 			self._surname=surname
 			self.on_surname.emit()
 
-	#def _setBellValidityValue
+	#def surname
 
-	def _getEnableLoginEdition(self):
+	@Property(str,notify=on_login)
+	def login(self):
+
+		return self._login
+
+	#def _login
+
+	@login.setter
+	def login(self,login):
+
+		if self._login!=login:
+			self._login=login
+			self.on_login.emit()
+
+	#def login
+
+	@Property(bool,notify=on_enableLoginEdition)
+	def enableLoginEdition(self):
 
 		return self._enableLoginEdition
 
-	#def _getEnableLoginEdition
+	#def enableLoginEdition
 
-	def _setEnableLoginEdition(self, enableLoginEdition):
+	@enableLoginEdition.setter
+	def enableLoginEdition(self, enableLoginEdition):
 
 		if self._enableLoginEdition!=enableLoginEdition:
 			self._enableLoginEdition=enableLoginEdition
 			self.on_enableLoginEdition.emit()
 
-	#def _setEnableLoginEdition
+	#def enableLoginEdition
 
-	def _getPwdImgPaths(self):
+	@Property('QVariantList',notify=on_pwdImgPaths)
+	def pwdImgPaths(self):
 
 		return self._pwdImgPaths
 
-	#def _getPwdImgPaths
+	#def pwdImgPaths
 
-	def _setPwdImgPaths(self,pwdImgPaths):
+	@pwdImgPaths.setter
+	def pwdImgPaths(self,pwdImgPaths):
 
 		if self._pwdImgPaths!=pwdImgPaths:
 			self._pwdImgPaths=pwdImgPaths
 			self.on_pwdImgPaths.emit()
 
-	#def _setPwdImgPaths
+	#def pwdImgPaths
 
-	def _getUserCurrentOption(self):
-
-		return self._userCurrentOption
-
-	#def _getUserCurrentOption	
-
-	def _setUserCurrentOption(self,userCurrentOption):
-		
-		if self._userCurrentOption!=userCurrentOption:
-			self._userCurrentOption=userCurrentOption
-			self.on_userCurrentOption.emit()
-
-	#def _setUserCurrentOption
-
-	def _getShowChangesInUserDialog(self):
-
-		return self._showChangesInUserDialog
-
-	#def _getShowChangesInUserDialog
-
-	def _setShowChangesInUserDialog(self,showChangesInUserDialog):
-
-		if self._showChangesInUserDialog!=showChangesInUserDialog:
-			self._showChangesInUserDialog=showChangesInUserDialog
-			self.on_showChangesInUserDialog.emit()
-
-	#def _setShowChangesInUserDialog
-
-	def _getChangesInUser(self):
-
-		return self._changesInUser
-
-	#def _getChangesInUser
-
-	def _setChangesInUser(self,changesInUser):
-
-		if self._changesInUser!=changesInUser:
-			self._changesInUser=changesInUser
-			self.on_changesInUser.emit()
-
-	#def _setChangesInUser
-
-	def _getShowUserFormMessage(self):
+	@Property('QVariantList',notify=on_showUserFormMessage)
+	def showUserFormMessage(self):
 
 		return self._showUserFormMessage
 
-	#def _getShowUserFormMessage
+	#def showUserFormMessage
 
-	def _setShowUserFormMessage(self,showUserFormMessage):
+	@showUserFormMessage.setter
+	def showUserFormMessage(self,showUserFormMessage):
 
 		if self._showUserFormMessage!=showUserFormMessage:
 			self._showUserFormMessage=showUserFormMessage
 			self.on_showUserFormMessage.emit()
 
-	#def _setShowUserFormMessage
+	#def showUserFormMessage
 
-	def _getActionType(self):
+	@Property(int,notify=on_userCurrentOption)
+	def userCurrentOption(self):
+
+		return self._userCurrentOption
+
+	#def userCurrentOption	
+
+	@userCurrentOption.setter
+	def userCurrentOption(self,userCurrentOption):
+		
+		if self._userCurrentOption!=userCurrentOption:
+			self._userCurrentOption=userCurrentOption
+			self.on_userCurrentOption.emit()
+
+	#def userCurrentOption
+
+	@Property(bool,notify=on_showChangesInUserDialog)
+	def showChangesInUserDialog(self):
+
+		return self._showChangesInUserDialog
+
+	#def _showChangesInUserDialog
+
+	@showChangesInUserDialog.setter
+	def showChangesInUserDialog(self,showChangesInUserDialog):
+
+		if self._showChangesInUserDialog!=showChangesInUserDialog:
+			self._showChangesInUserDialog=showChangesInUserDialog
+			self.on_showChangesInUserDialog.emit()
+
+	#def showChangesInUserDialog
+
+	@Property(bool,notify=on_changesInUser)
+	def changesInUser(self):
+
+		return self._changesInUser
+
+	#def _changesInUser
+
+	@changesInUser.setter
+	def changesInUser(self,changesInUser):
+
+		if self._changesInUser!=changesInUser:
+			self._changesInUser=changesInUser
+			self.on_changesInUser.emit()
+
+	#def changesInUser
+
+	@Property(str,notify=on_actionType)
+	def actionType(self):
 
 		return self._actionType
 
-	#def _getActionType
+	#def actionType
 
-	def _setActionType(self,actionType):
+	@actionType.setter
+	def actionType(self,actionType):
 
 		if self._actionType!=actionType:
 			self._actionType=actionType
 			self.on_actionType.emit()
 
-	#def _setActionType
+	#def actionType
 
 	@Slot()
 	def addNewUser(self):
@@ -281,20 +322,22 @@ class Bridge(QObject):
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.newUserT=LoadUser(self.easyManager,True,"")
+		self.newUserT.userLoaded.connect(self._addNewUserRet)
+		self.newUserT.finished.connect(self.newUserT.deleteLater)
 		self.newUserT.start()
-		self.newUserT.finished.connect(self._addNewUserRet)
 
 	#def addNewUser
 
-	def _addNewUserRet(self):
+	@Slot(dict)
+	def _addNewUserRet(self,ret):
 
-		if self.newUserT.ret.get("status"):
+		if ret.get("status"):
 			self.currentUserConfig=copy.deepcopy(self.easyManager.currentUserConfig)
 			self._initializeVars()
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
 		else:
-			self.core.usersOptionsStack.showMainMessage=[True,self.newUserT.ret.get("code"),self.newUserT.ret.get("type")]
+			self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
 
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
@@ -322,7 +365,7 @@ class Bridge(QObject):
 			self.core.mainStack.currentStack=1
 			self.core.mainStack.mainCurrentOption=0
 			self.userCurrentOption=0
-			self.core.mainStack.moveToStack=""
+			self.core.mainStack.moveToStack=0
 		else:
 			self.showChangesInUserDialog=True
 			self.core.mainStack.moveToStack=1
@@ -337,20 +380,22 @@ class Bridge(QObject):
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.actionType="edit"
 		self.editUserT=LoadUser(self.easyManager,False,userToLoad)
+		self.editUserT.userLoaded.connect(self._loadUserRet)
+		self.editUserT.finished.connect(self.editUserT.deleteLater)
 		self.editUserT.start()
-		self.editUserT.finished.connect(self._loadUserRet)
 
 	#def loadUser
 
-	def _loadUserRet(self):
+	@Slot(dict)
+	def _loadUserRet(self,ret):
 
-		if self.editUserT.ret.get("status"):
+		if ret.get("status"):
 			self.currentUserConfig=copy.deepcopy(self.easyManager.currentUserConfig)
 			self._initializeVars()
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
 		else:
-			self.core.usersOptionsStack.showMainMessage=[True,self.editUserT.ret.get("code"),self.editUserT.ret.get("type")]
+			self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
 
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
@@ -412,7 +457,7 @@ class Bridge(QObject):
 			self.login=value
 			self.currentUserConfig["login"]=self.login
 
-		self._checkIfChanged
+		self._checkIfChanged()
 
 	#def updateLoginValue
 
@@ -422,16 +467,18 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[False,NEW_PASSWORD]
 		self.core.mainStack.closeGui=False
 		self.getNewPasswordT=GetNewPassword(self.easyManager)
+		self.getNewPasswordT.newPasswordGetted.connect(self._getNewPasswordRet)
+		self.getNewPasswordT.finished.connect(self.getNewPasswordT.deleteLater)
 		self.getNewPasswordT.start()
-		self.getNewPasswordT.finished.connect(self._getNewPasswordRet)
 
 	#def generateUsername
 
-	def _getNewPasswordRet(self):
+	@Slot(dict)
+	def _getNewPasswordRet(self,ret):
 
-		if self.getNewPasswordT.ret.get("status"):
-			self.pwdImgPaths=self.getNewPasswordT.ret.get("data").get("pwdImgPaths")
-			self.username=self.getNewPasswordT.ret.get("data").get("username")
+		if ret.get("status"):
+			self.pwdImgPaths=ret.get("data").get("pwdImgPaths")
+			self.username=ret.get("data").get("username")
 			self.currentUserConfig["username"]=self.username
 			self.currentUserConfig["pwdImgPaths"]=self.pwdImgPaths
 
@@ -477,18 +524,20 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[False,CHECK_DATA]
 		self.core.mainStack.closeGui=False
 		self.checkDataT=CheckData(self.easyManager,self.currentUserConfig)
+		self.checkDataT.dataChecked.connect(self._checkDataRet)
+		self.checkDataT.finished.connect(self.checkDataT.deleteLater)
 		self.checkDataT.start()
-		self.checkDataT.finished.connect(self._checkDataRet)
 
 	#def _applyUserChanges
 
-	def _checkDataRet(self):
+	@Slot(dict)
+	def _checkDataRet(self,ret):
 
-		if self.checkDataT.ret.get("status"):
+		if ret.get("status"):
 			self.saveDataChanges()
 		else:
 			self.core.mainStack.closePopUp=[True,""]
-			self.showUserFormMessage=[True,self.checkDataT.ret.get("code"),self.checkDataT.ret.get("type")]
+			self.showUserFormMessage=[True,ret.get("code"),ret.get("type")]
 
 	#def _checkDataRet
 
@@ -496,15 +545,17 @@ class Bridge(QObject):
 
 		self.core.mainStack.closePopUp=[False,SAVE_DATA]
 		self.saveDataT=SaveData(self.easyManager,self.currentUserConfig)
+		self.saveDataT.dataSaved.connect(self._saveDataRet)
+		self.saveDataT.finished.connect(self.saveDataT.deleteLater)
 		self.saveDataT.start()
-		self.saveDataT.finished.connect(self._saveDataRet)
 
 	#def saveData
 
-	def _saveDataRet(self):
+	@Slot(dict)
+	def _saveDataRet(self,ret):
 
 		self.core.usersOptionsStack._updateUsersModel()
-		self.core.usersOptionsStack.showMainMessage=[True,self.saveDataT.ret.get("code"),self.saveDataT.ret.get("type")]
+		self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
 
 		self.core.usersOptionsStack.enableGlobalOptions=self.easyManager.checkGlobalOptionStatus()
 		self.changesInUser=False
@@ -530,39 +581,6 @@ class Bridge(QObject):
 		self.core.mainStack.manageGoToStack()
 
 	#def _cancelUserChanges
-
-	on_username=Signal()
-	username=Property(str,_getUsername,_setUsername, notify=on_username)
-
-	on_name=Signal()
-	name=Property(str,_getName,_setName, notify=on_name)
-
-	on_surname=Signal()
-	surname=Property(str,_getSurname,_setSurname,notify=on_surname)
-
-	on_login=Signal()
-	login=Property(str,_getLogin,_setLogin, notify=on_login)
-
-	on_enableLoginEdition=Signal()
-	enableLoginEdition=Property(bool,_getEnableLoginEdition,_setEnableLoginEdition, notify=on_enableLoginEdition)
-	
-	on_pwdImgPaths=Signal()
-	pwdImgPaths=Property('QVariantList',_getPwdImgPaths,_setPwdImgPaths, notify=on_pwdImgPaths)
-
-	on_showUserFormMessage=Signal()
-	showUserFormMessage=Property('QVariantList',_getShowUserFormMessage,_setShowUserFormMessage, notify=on_showUserFormMessage)
-
-	on_userCurrentOption=Signal()
-	userCurrentOption=Property(int,_getUserCurrentOption,_setUserCurrentOption, notify=on_userCurrentOption)
-
-	on_showChangesInUserDialog=Signal()
-	showChangesInUserDialog=Property(bool,_getShowChangesInUserDialog,_setShowChangesInUserDialog,notify=on_showChangesInUserDialog)
-
-	on_changesInUser=Signal()
-	changesInUser=Property(bool,_getChangesInUser,_setChangesInUser,notify=on_changesInUser)
-
-	on_actionType=Signal()
-	actionType=Property(str,_getActionType,_setActionType,notify=on_actionType)
 
 #class Bridge
 

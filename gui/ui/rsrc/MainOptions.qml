@@ -16,9 +16,7 @@ RowLayout {
 
         ColumnLayout {
             id: menuLayout
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
             spacing: 0
 
             MenuOptionBtn {

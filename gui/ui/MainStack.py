@@ -1,11 +1,7 @@
-from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,Qt,QModelIndex,QUrl
+from PySide6.QtCore import QObject, Signal, Slot, QThread, Property, QUrl
 from PySide6.QtGui import QDesktopServices
-import os 
 import sys
-import threading
 import time
-import copy
-
 import signal
 import Core
 
@@ -13,18 +9,20 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class GatherInfo(QThread):
 
+	infoGathered=Signal(dict)
+
 	def __init__(self,manager):
 		
-		QThread.__init__(self)
+		super().__init__()
 		self.easyManager=manager
-		self.ret={}
 
 	#def __init__
 
 	def run(self,*args):
 		
 		time.sleep(1)
-		self.ret=self.easyManager.loadConfig()
+		ret=self.easyManager.loadConfig()
+		self.infoGathered.emit(ret)
 
 	#def run
 
@@ -32,118 +30,147 @@ class GatherInfo(QThread):
 
 class Bridge(QObject):
 
+	on_currentStack=Signal()
+	on_mainCurrentOption=Signal()
+	on_showLoadErrorMessage=Signal()
+	on_systemLocale=Signal()
+	on_closePopUp=Signal()
+	on_closeGui=Signal()
+
 	def __init__(self):
 
-		QObject.__init__(self)
+		super().__init__()
 		self.core=Core.Core.get_core()
 		self.easyManager=self.core.easyLoginManager
 		self._currentStack=0
 		self._mainCurrentOption=0
 		self._closePopUp=[True,""]
-		self.moveToStack=""
+		self.moveToStack=0
 		self._closeGui=True
 		self._showLoadErrorMessage=[False,""]
+		self._systemLocale="es"
 		self.easyManager.createN4dClient(sys.argv[1])
 
 	#def __init__
+
+	@Property(int,notify=on_currentStack)
+	def currentStack(self):
+
+		return self._currentStack
+
+	#def _getCurrentStack	
+
+	@currentStack.setter
+	def currentStack(self,currentStack):
+		
+		if self._currentStack!=currentStack:
+			self._currentStack=currentStack
+			self.on_currentStack.emit()
+
+	#def currentStack
+
+	@Property(int,notify=on_mainCurrentOption)
+	def mainCurrentOption(self):
+
+		return self._mainCurrentOption
+
+	#def _mainCurrentOption
+
+	@mainCurrentOption.setter
+	def mainCurrentOption(self,mainCurrentOption):
+		
+		if self._mainCurrentOption!=mainCurrentOption:
+			self._mainCurrentOption=mainCurrentOption
+			self.on_mainCurrentOption.emit()
+	
+	#def mainCurrentOption
+
+	@Property('QVariantList',notify=on_showLoadErrorMessage)
+	def showLoadErrorMessage(self):
+
+		return self._showLoadErrorMessage
+
+	#def showLoadErrorMessage
+
+	@showLoadErrorMessage.setter
+	def showLoadErrorMessage(self,showLoadErrorMessage):
+
+		if self._showLoadErrorMessage!=showLoadErrorMessage:
+			self._showLoadErrorMessage=showLoadErrorMessage
+			self.on_showLoadErrorMessage.emit()
+
+	#def showLoadErrorMessage
+
+	@Property('QVariantList',notify=on_closePopUp)
+	def closePopUp(self):
+
+		return self._closePopUp
+
+	#def _closePopUp
+
+	@closePopUp.setter
+	def closePopUp(self,closePopUp):
+
+		if self._closePopUp!=closePopUp:
+			self._closePopUp=closePopUp
+			self.on_closePopUp.emit()
+
+	#def closePopUp
+	
+	@Property(bool,notify=on_closeGui)
+	def closeGui(self):
+
+		return self._closeGui
+
+	#def closeGui
+
+	@closeGui.setter	
+	def closeGui(self,closeGui):
+		
+		if self._closeGui!=closeGui:
+			self._closeGui=closeGui
+			self.on_closeGui.emit()
+
+	#def closeGui
+
+	@Property(str,notify=on_systemLocale)
+	def systemLocale(self):
+
+		return self._systemLocale
+
+	#def systemLocale
+
+	@systemLocale.setter
+	def systemLocale(self,systemLocale):
+
+		if self._systemLocale!=systemLocale:
+			self._systemLocale=systemLocale
+			self.on_systemLocale.emit()
+
+	#def systemLocale
 
 	def initBridge(self):
 
 		self.currentStack=0
 		self.closeGui=False
 		self.gatherInfoT=GatherInfo(self.easyManager)
+		self.gatherInfoT.infoGathered.connect(self._loadConfig)
+		self.gatherInfoT.finished.connect(self.gatherInfoT.deleteLater)
 		self.gatherInfoT.start()
-		self.gatherInfoT.finished.connect(self._loadConfig)
 	
 	#def initBridge
-	
-	def _loadConfig(self):
+	@Slot(dict)
+	def _loadConfig(self,ret):
 
 		self.closeGui=True
-		if self.gatherInfoT.ret.get("status"):
+		if ret.get("status"):
 			self.core.usersOptionsStack.loadConfig()
 			self._systemLocale=self.easyManager.systemLocale
 			self.currentStack=1
 		else:
-			self.showLoadErrorMessage=[True,self.gatherInfoT.ret.get("code")]
+			self.showLoadErrorMessage=[True,ret.get("code")]
 	
 	#def _loadConfig
-
-	def _getSystemLocale(self):
-
-		return self._systemLocale
-
-	#def _getSystemLocale
-
-	def _getCurrentStack(self):
-
-		return self._currentStack
-
-	#def _getCurrentStack	
-
-	def _setCurrentStack(self,currentStack):
-		
-		if self._currentStack!=currentStack:
-			self._currentStack=currentStack
-			self.on_currentStack.emit()
-
-	#def _setCurentStack
-
-	def _getMainCurrentOption(self):
-
-		return self._mainCurrentOption
-
-	#def _getMainCurrentOption	
-
-	def _setMainCurrentOption(self,mainCurrentOption):
-		
-		if self._mainCurrentOption!=mainCurrentOption:
-			self._mainCurrentOption=mainCurrentOption
-			self.on_mainCurrentOption.emit()
-
-	#def _setMainCurrentOption
-
-	def _getClosePopUp(self):
-
-		return self._closePopUp
-
-	#def _getClosePopUp
-
-	def _setClosePopUp(self,closePopUp):
-
-		if self._closePopUp!=closePopUp:
-			self._closePopUp=closePopUp
-			self.on_closePopUp.emit()
-
-	#def _setClosePopUp
-
-	def _getShowLoadErrorMessage(self):
-
-		return self._showLoadErrorMessage
-
-	#def _getShowLoadErrorMessage
-
-	def _setShowLoadErrorMessage(self,showLoadErrorMessage):
-
-		if self._showLoadErrorMessage!=showLoadErrorMessage:
-			self._showLoadErrorMessage=showLoadErrorMessage
-			self.on_showLoadErrorMessage.emit()
-
-	#def _setShowLoadErrorMessage
-
-	def _getCloseGui(self):
-
-		return self._closeGui
-
-	#def _getCloseGui	
-
-	def _setCloseGui(self,closeGui):
-		
-		if self._closeGui!=closeGui:
-			self._closeGui=closeGui
-			self.on_closeGui.emit()
-
-	#def _setCloseGui
 
 	@Slot(int)
 	def moveToMainOptions(self,stack):
@@ -158,10 +185,10 @@ class Bridge(QObject):
 
 	def manageGoToStack(self):
 
-		if self.moveToStack!="":
+		if self.moveToStack!=0:
 			self.currentStack=self.moveToStack
 			self.mainCurrentOption=0
-			self.moveToStack=""
+			self.moveToStack=0
 
 	#def _manageGoToStack
 
@@ -186,23 +213,6 @@ class Bridge(QObject):
 
 	#def closeEasyLogin
 	
-	on_currentStack=Signal()
-	currentStack=Property(int,_getCurrentStack,_setCurrentStack, notify=on_currentStack)
-
-	on_mainCurrentOption=Signal()
-	mainCurrentOption=Property(int,_getMainCurrentOption,_setMainCurrentOption, notify=on_mainCurrentOption)
-
-	on_showLoadErrorMessage=Signal()
-	showLoadErrorMessage=Property('QVariantList',_getShowLoadErrorMessage,_setShowLoadErrorMessage, notify=on_showLoadErrorMessage)
-
-	on_closePopUp=Signal()
-	closePopUp=Property('QVariantList',_getClosePopUp,_setClosePopUp, notify=on_closePopUp)
-
-	on_closeGui=Signal()
-	closeGui=Property(bool,_getCloseGui,_setCloseGui, notify=on_closeGui)
-
-	systemLocale=Property(str,_getSystemLocale,constant=True)
-
 #class Bridge
 
 
