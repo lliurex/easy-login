@@ -30,12 +30,12 @@ class GatherInfo(QThread):
 
 class Bridge(QObject):
 
-	on_currentStack=Signal()
-	on_mainCurrentOption=Signal()
-	on_showLoadErrorMessage=Signal()
-	on_systemLocale=Signal()
-	on_closePopUp=Signal()
-	on_closeGui=Signal()
+	currentStackChanged=Signal()
+	mainCurrentOptionChanged=Signal()
+	showLoadErrorMessageChanged=Signal()
+	systemLocaleChanged=Signal()
+	closePopUpChanged=Signal()
+	closeGuiChanged=Signal()
 
 	def __init__(self):
 
@@ -53,7 +53,7 @@ class Bridge(QObject):
 
 	#def __init__
 
-	@Property(int,notify=on_currentStack)
+	@Property(int,notify=currentStackChanged)
 	def currentStack(self):
 
 		return self._currentStack
@@ -65,11 +65,11 @@ class Bridge(QObject):
 		
 		if self._currentStack!=currentStack:
 			self._currentStack=currentStack
-			self.on_currentStack.emit()
+			self.currentStackChanged.emit()
 
 	#def currentStack
 
-	@Property(int,notify=on_mainCurrentOption)
+	@Property(int,notify=mainCurrentOptionChanged)
 	def mainCurrentOption(self):
 
 		return self._mainCurrentOption
@@ -81,11 +81,11 @@ class Bridge(QObject):
 		
 		if self._mainCurrentOption!=mainCurrentOption:
 			self._mainCurrentOption=mainCurrentOption
-			self.on_mainCurrentOption.emit()
+			self.mainCurrentOptionChanged.emit()
 	
 	#def mainCurrentOption
 
-	@Property('QVariantList',notify=on_showLoadErrorMessage)
+	@Property('QVariantList',notify=showLoadErrorMessageChanged)
 	def showLoadErrorMessage(self):
 
 		return self._showLoadErrorMessage
@@ -97,11 +97,11 @@ class Bridge(QObject):
 
 		if self._showLoadErrorMessage!=showLoadErrorMessage:
 			self._showLoadErrorMessage=showLoadErrorMessage
-			self.on_showLoadErrorMessage.emit()
+			self.showLoadErrorMessageChanged.emit()
 
 	#def showLoadErrorMessage
 
-	@Property('QVariantList',notify=on_closePopUp)
+	@Property('QVariantList',notify=closePopUpChanged)
 	def closePopUp(self):
 
 		return self._closePopUp
@@ -113,11 +113,11 @@ class Bridge(QObject):
 
 		if self._closePopUp!=closePopUp:
 			self._closePopUp=closePopUp
-			self.on_closePopUp.emit()
+			self.closePopUpChanged.emit()
 
 	#def closePopUp
 	
-	@Property(bool,notify=on_closeGui)
+	@Property(bool,notify=closeGuiChanged)
 	def closeGui(self):
 
 		return self._closeGui
@@ -129,11 +129,11 @@ class Bridge(QObject):
 		
 		if self._closeGui!=closeGui:
 			self._closeGui=closeGui
-			self.on_closeGui.emit()
+			self.closeGuiChanged.emit()
 
 	#def closeGui
 
-	@Property(str,notify=on_systemLocale)
+	@Property(str,notify=systemLocaleChanged)
 	def systemLocale(self):
 
 		return self._systemLocale
@@ -145,7 +145,7 @@ class Bridge(QObject):
 
 		if self._systemLocale!=systemLocale:
 			self._systemLocale=systemLocale
-			self.on_systemLocale.emit()
+			self.systemLocaleChanged.emit()
 
 	#def systemLocale
 

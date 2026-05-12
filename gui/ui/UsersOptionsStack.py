@@ -85,10 +85,10 @@ class GeneratePdf(QThread):
 
 class Bridge(QObject):
 
-	on_easyLoginEnabled=Signal()
-	on_showMainMessage=Signal()
-	on_showRemoveUserDialog=Signal()
-	on_enableGlobalOptions=Signal()
+	easyLoginEnabledChanged=Signal()
+	showMainMessageChanged=Signal()
+	showRemoveUserDialogChanged=Signal()
+	enableGlobalOptionsChanged=Signal()
 
 	def __init__(self):
 
@@ -103,7 +103,7 @@ class Bridge(QObject):
 
 	#def __init__
 	
-	@Property(bool,notify=on_easyLoginEnabled)
+	@Property(bool,notify=easyLoginEnabledChanged)
 	def easyLoginEnabled(self):
 
 		return self._easyLoginEnabled
@@ -115,11 +115,11 @@ class Bridge(QObject):
 
 		if self._easyLoginEnabled!=easyLoginEnabled:
 			self._easyLoginEnabled=easyLoginEnabled
-			self.on_easyLoginEnabled.emit()
+			self.easyLoginEnabledChanged.emit()
 
 	#def easyLoginEnabled
 
-	@Property('QVariantList',notify=on_showMainMessage)
+	@Property('QVariantList',notify=showMainMessageChanged)
 	def showMainMessage(self):
 
 		return self._showMainMessage
@@ -131,11 +131,11 @@ class Bridge(QObject):
 
 		if self._showMainMessage!=showMainMessage:
 			self._showMainMessage=showMainMessage
-			self.on_showMainMessage.emit()
+			self.showMainMessageChanged.emit()
 
 	#def showMainMessage
 
-	@Property('QVariantList',notify=on_showRemoveUserDialog)
+	@Property('QVariantList',notify=showRemoveUserDialogChanged)
 	def showRemoveUserDialog(self):
 
 		return self._showRemoveUserDialog
@@ -147,11 +147,11 @@ class Bridge(QObject):
 
 		if self._showRemoveUserDialog!=showRemoveUserDialog:
 			self._showRemoveUserDialog=showRemoveUserDialog
-			self.on_showRemoveUserDialog.emit()
+			self.showRemoveUserDialogChanged.emit()
 
 	#def showRemoveUserDialog
 
-	@Property(bool,notify=on_enableGlobalOptions)
+	@Property(bool,notify=enableGlobalOptionsChanged)
 	def enableGlobalOptions(self):
 
 		return self._enableGlobalOptions
@@ -163,7 +163,7 @@ class Bridge(QObject):
 
 		if self._enableGlobalOptions!=enableGlobalOptions:
 			self._enableGlobalOptions=enableGlobalOptions
-			self.on_enableGlobalOptions.emit()
+			self.enableGlobalOptionsChanged.emit()
 
 	#def enableGlobalOptions
 
@@ -205,7 +205,7 @@ class Bridge(QObject):
 		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
 		self.enableLoginT=EnableLogin(self.easyManager,value)
 		self.enableLoginT.loginEnabled.connect(self._enableLoginRet)
-		self.enableLoginT.finished.connect(self._enableLoginRet.deleteLater)
+		self.enableLoginT.finished.connect(self.enableLoginT.deleteLater)
 		self.enableLoginT.start()
 
 	#def enableEasyLogin

@@ -2,43 +2,54 @@ import QtQuick
 import QtQml.Models
 
 DelegateModel {
-	id:filterModel
-	property string role
-	property string search
-	onRoleChanged:Qt.callLater(update)
-	onSearchChanged:Qt.callLater(update)
-	property var visibleElements:[]
+    id: filterModel
 
-	groups: [
-		DelegateModelGroup{
-			id:allItems
-			name:"all"
-			includeByDefault:true
-			onCountChanged:Qt.callLater(update)
-		},
-		DelegateModelGroup{
-			id:visibleItems
-			name:"visible"
-		}
-	]
+    property var externalTimer: null
+    property string role: ""
+    property string search: ""
+    property var visibleElements: []
 
-	filterOnGroup:"visible"
+    filterOnGroup: "visible"
 
-	function update(){
-		visibleElements=[]
-		if (allItems.count>0){
-			allItems.setGroups(0,allItems.count,[ "all"]);
-			for (let index = 0; index < allItems.count; index++) {
-	            let item = allItems.get(index).model;
-	            let visible = item[role].toLowerCase().includes(search.toLowerCase());
-	            if (!visible) continue;
-	            allItems.setGroups(index, 1, [ "all", "visible" ]);
-	            visibleElements.push(index);
+    groups: [
+        DelegateModelGroup {
+            id: allItems
+            name: "all"
+            includeByDefault: true
+        },
+        DelegateModelGroup {
+            id: visibleItems
+            name: "visible"
+            includeByDefault: true
+        }
+    ]
 
-	        }
-	   }
+    function update() {
+        if (!items || items.count <= 0) return;
 
-	}
-	Component.onCompleted: Qt.callLater(update)
+        let searchLower = search.toLowerCase();
+        let tempVisibleIndices = [];
 
+        for (let i = 0; i < items.count; i++) {
+
+            let itemHandle = items.get(i);
+            let itemData = itemHandle.model;
+            
+            let val = itemData[role];
+            let matches = (searchLower === "") || 
+                          (val !== undefined && val !== null && 
+                           val.toString().toLowerCase().includes(searchLower));
+
+            itemHandle.inVisible = matches;
+
+            if (matches) {
+                tempVisibleIndices.push(i);
+            }
+        }
+        visibleElements = tempVisibleIndices;
+    }
+
+    onSearchChanged: if (externalTimer) externalTimer.restart()
+    onRoleChanged: if (externalTimer) externalTimer.restart()
+    Component.onCompleted: if (externalTimer) externalTimer.restart()
 }

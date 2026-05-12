@@ -24,7 +24,6 @@ Rectangle {
                 placeholderText: i18nd("easy-login", "Search...")
                 Layout.preferredWidth: 150
                 enabled: usersView.count > 0 || text.length > 0
-                onTextChanged: filterModel.update()
             }
         }
 
@@ -41,11 +40,21 @@ Rectangle {
                 
                 ListView {
                     id: usersView
+
+                    Timer {
+                        id: searchTimer
+                        interval: 150
+                        repeat: false
+                        onTriggered: filterModel.update()
+                    }
+                    
                     model: FilterDelegateModel {
                         id: filterModel
                         model: usersModel
                         role: "metaInfo"
                         search: userSearchEntry.text.trim()
+
+                        externalTimer: searchTimer 
 
                         delegate: ListDelegateUserItem {
                             width: usersView.width

@@ -29,8 +29,8 @@ ItemDelegate {
             hoverEnabled: true
             propagateComposedEvents: true
             onEntered: {
-                if (!optionsMenu.activeFocus) {
-                    usersView.currentIndex = filterModel.visibleElements.indexOf(index)
+                if (!optionsMenu.opened) {
+                    usersView.currentIndex = index 
                 }
             }
         }

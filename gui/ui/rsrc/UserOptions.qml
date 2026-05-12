@@ -3,42 +3,40 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 
-GridLayout{
-    id: bellGrid
-    columns: 2
-    flow: GridLayout.LeftToRight
-    columnSpacing:10
+RowLayout{
+    id: usersGrid
+    spacing: 10
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
-    GridLayout{
-        rows:2
-        flow: GridLayout.TopToBottom
+    ColumnLayout{
+        Layout.fillHeight:true
+        spacing: 5
 
         MenuOptionBtn {
             id:goBackBtn
             optionText:i18nd("easy-login","Users")
             optionIcon:"go-previous.svg"
             optionPointSize:14
-            Connections{
-                function onMenuOptionClicked(){
-                    userStackBridge.goHome();
-                }
-            }
+            onMenuOptionClicked:userStackBridge.goHome()
         }  
         Rectangle{
-            width:125
-            Layout.fillHeight:true
-            border.color: "#d3d3d3"
-            GridLayout{
-                id: menuGrid
-                rows:1 
-                flow: GridLayout.TopToBottom
-                rowSpacing:0
+            width: 125
+            Layout.fillHeight: true
+            border.color: palette.mid
+            ColumnLayout{
+                anchors.fill:parent
+                spacing:0
 
                 MenuOptionBtn {
                     id:infoItem
                     optionText:i18nd("easy-login","User")
                     optionIcon:"user.svg"
-                 }
+                }
+                Item {
+                    Layout.fillHeight:true
+
+                }
 
             }
         }
@@ -55,8 +53,10 @@ GridLayout{
             switch(currentOption){
                 case 0:
                     manageView.replace(emptyView)
+                    break;
                 case 1:
                     manageView.replace(userView)
+                    break;
             }
 
         }

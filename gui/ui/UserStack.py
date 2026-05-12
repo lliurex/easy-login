@@ -107,17 +107,17 @@ class SaveData(QThread):
 
 class Bridge(QObject):
 
-	on_username=Signal()
-	on_name=Signal()
-	on_surname=Signal()
-	on_login=Signal()
-	on_enableLoginEdition=Signal()
-	on_pwdImgPaths=Signal()
-	on_showUserFormMessage=Signal()
-	on_userCurrentOption=Signal()
-	on_showChangesInUserDialog=Signal()
-	on_changesInUser=Signal()
-	on_actionType=Signal()
+	usernameChanged=Signal()
+	nameChanged=Signal()
+	surnameChanged=Signal()
+	loginChanged=Signal()
+	enableLoginEditionChanged=Signal()
+	pwImgPathsChanged=Signal()
+	showUserFormMessageChanged=Signal()
+	userCurrentOptionChanged=Signal()
+	showChangesInUserDialogChanged=Signal()
+	changesInUserChanged=Signal()
+	actionTypeChanged=Signal()
 	
 	def __init__(self):
 
@@ -138,7 +138,7 @@ class Bridge(QObject):
 
 	#def _init__
 
-	@Property(str,notify=on_username)
+	@Property(str,notify=usernameChanged)
 	def username(self):
 
 		return self._username
@@ -150,11 +150,11 @@ class Bridge(QObject):
 
 		if self._username!=username:
 			self._username=username
-			self.on_username.emit()
+			self.usernameChanged.emit()
 
 	#def username
 
-	@Property(str,notify=on_name)
+	@Property(str,notify=nameChanged)
 	def name(self):
 
 		return self._name
@@ -166,11 +166,11 @@ class Bridge(QObject):
 
 		if self._name!=name:
 			self._name=name
-			self.on_name.emit()
+			self.nameChanged.emit()
 
 	#def name
 
-	@Property(str,notify=on_surname)
+	@Property(str,notify=surnameChanged)
 	def surname(self):
 
 		return self._surname
@@ -182,11 +182,11 @@ class Bridge(QObject):
 
 		if self._surname!=surname:
 			self._surname=surname
-			self.on_surname.emit()
+			self.surnameChanged.emit()
 
 	#def surname
 
-	@Property(str,notify=on_login)
+	@Property(str,notify=loginChanged)
 	def login(self):
 
 		return self._login
@@ -198,11 +198,11 @@ class Bridge(QObject):
 
 		if self._login!=login:
 			self._login=login
-			self.on_login.emit()
+			self.loginChanged.emit()
 
 	#def login
 
-	@Property(bool,notify=on_enableLoginEdition)
+	@Property(bool,notify=enableLoginEditionChanged)
 	def enableLoginEdition(self):
 
 		return self._enableLoginEdition
@@ -214,11 +214,11 @@ class Bridge(QObject):
 
 		if self._enableLoginEdition!=enableLoginEdition:
 			self._enableLoginEdition=enableLoginEdition
-			self.on_enableLoginEdition.emit()
+			self.enableLoginEditionChanged.emit()
 
 	#def enableLoginEdition
 
-	@Property('QVariantList',notify=on_pwdImgPaths)
+	@Property('QVariantList',notify=pwImgPathsChanged)
 	def pwdImgPaths(self):
 
 		return self._pwdImgPaths
@@ -230,11 +230,11 @@ class Bridge(QObject):
 
 		if self._pwdImgPaths!=pwdImgPaths:
 			self._pwdImgPaths=pwdImgPaths
-			self.on_pwdImgPaths.emit()
+			self.pwImgPathsChanged.emit()
 
 	#def pwdImgPaths
 
-	@Property('QVariantList',notify=on_showUserFormMessage)
+	@Property('QVariantList',notify=showUserFormMessageChanged)
 	def showUserFormMessage(self):
 
 		return self._showUserFormMessage
@@ -246,11 +246,11 @@ class Bridge(QObject):
 
 		if self._showUserFormMessage!=showUserFormMessage:
 			self._showUserFormMessage=showUserFormMessage
-			self.on_showUserFormMessage.emit()
+			self.showUserFormMessageChanged.emit()
 
 	#def showUserFormMessage
 
-	@Property(int,notify=on_userCurrentOption)
+	@Property(int,notify=userCurrentOptionChanged)
 	def userCurrentOption(self):
 
 		return self._userCurrentOption
@@ -262,11 +262,11 @@ class Bridge(QObject):
 		
 		if self._userCurrentOption!=userCurrentOption:
 			self._userCurrentOption=userCurrentOption
-			self.on_userCurrentOption.emit()
+			self.userCurrentOptionChanged.emit()
 
 	#def userCurrentOption
 
-	@Property(bool,notify=on_showChangesInUserDialog)
+	@Property(bool,notify=showChangesInUserDialogChanged)
 	def showChangesInUserDialog(self):
 
 		return self._showChangesInUserDialog
@@ -278,11 +278,11 @@ class Bridge(QObject):
 
 		if self._showChangesInUserDialog!=showChangesInUserDialog:
 			self._showChangesInUserDialog=showChangesInUserDialog
-			self.on_showChangesInUserDialog.emit()
+			self.showChangesInUserDialogChanged.emit()
 
 	#def showChangesInUserDialog
 
-	@Property(bool,notify=on_changesInUser)
+	@Property(bool,notify=changesInUserChanged)
 	def changesInUser(self):
 
 		return self._changesInUser
@@ -294,11 +294,11 @@ class Bridge(QObject):
 
 		if self._changesInUser!=changesInUser:
 			self._changesInUser=changesInUser
-			self.on_changesInUser.emit()
+			self.changesInUserChanged.emit()
 
 	#def changesInUser
 
-	@Property(str,notify=on_actionType)
+	@Property(str,notify=actionTypeChanged)
 	def actionType(self):
 
 		return self._actionType
@@ -310,7 +310,7 @@ class Bridge(QObject):
 
 		if self._actionType!=actionType:
 			self._actionType=actionType
-			self.on_actionType.emit()
+			self.actionTypeChanged.emit()
 
 	#def actionType
 

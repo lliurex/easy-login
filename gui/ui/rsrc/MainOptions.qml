@@ -10,13 +10,13 @@ RowLayout {
 
     Rectangle {
         id: sideBar
-        width: 120
+        width: 125
         Layout.fillHeight: true
         border.color: palette.mid
 
         ColumnLayout {
             id: menuLayout
-            Layout.fillWidth: true
+            anchors.fill:parent
             spacing: 0
 
             MenuOptionBtn {
@@ -34,6 +34,11 @@ RowLayout {
                 optionIcon: "help-contents"
                 onMenuOptionClicked: mainStackBridge.openHelp()
             }
+
+            Item {
+                    Layout.fillHeight:true
+
+            }
         }
     }
 
@@ -46,8 +51,10 @@ RowLayout {
         initialItem: usersView
 
         onCurrentIndexChanged: {
-            if (currentIndex === 0) {
-                optionsView.replace(usersView)
+            switch(currentIndex){
+                case 0:
+                    optionsView.replace(usersView)
+                    break;
             }
         }
 

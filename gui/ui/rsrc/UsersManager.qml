@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import QtQml
 
 Rectangle {
     id: rectLayout
@@ -71,9 +72,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin:5
-        anchors.rightMargin:15
-        anchors.topMargin: 15
-        anchors.bottomMargin:15
+        anchors.margins:15
         height: 50
         spacing: 10
 
@@ -144,7 +143,7 @@ Rectangle {
         currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
         nameFilters: ["PDF files (*.pdf)"]
         onAccepted: {
-            let path = selectedFile.toString().replace(/^(file:\/{2})/, "")
+            let path = selectedFile.toString().replace("file://", "")
             usersOptionsStackBridge.generateList(path)
         }
     }

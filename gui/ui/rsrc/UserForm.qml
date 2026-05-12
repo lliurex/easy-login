@@ -6,22 +6,25 @@ import org.kde.kirigami as Kirigami
 Item {
     id: root
 
+    Timer{
+        id:debounceTimer
+        interval:500
+        repeat:false
+        property var callback
+        onTriggered: if (callback) callback()
+
+    }
+
     ColumnLayout {
         anchors.fill: parent
-        anchors.top: parent.top
-        anchors.left: parent.left
         anchors.rightMargin:15
         anchors.bottomMargin:25
         spacing:10
         
         Text{ 
-            text: {
-                if (userStackBridge.actionType == "add"){
-                    i18nd("easy-login", "New User")
-                }else{
-                    i18nd("easy-login", "Edit User")
-                }
-            }
+            text: userStackBridge.actionType == "add"
+                ?i18nd("easy-login", "New User")
+                :i18nd("easy-login", "Edit User")
             font.pointSize: 16
         }
 
@@ -49,7 +52,12 @@ Item {
                 focus: true
                 text: userStackBridge.name
                 Layout.preferredWidth: 400
-                onTextChanged: userStackBridge.updateNameValue(text)
+                onTextChanged: {
+                    if (activeFocus){
+                        debounceTimer.callback= ()=>userStackBridge.updateNameValue(text)
+                        debounceTimer.restart()
+                    }
+                }
             }
 
             Text {
@@ -60,13 +68,20 @@ Item {
                 id: surnameEntry
                 text: userStackBridge.surname
                 Layout.preferredWidth: 400
-                onTextChanged: userStackBridge.updateSurnameValue(text)
+                onTextChanged: {
+                    if (activeFocus){
+                        debounceTimer.callback= ()=>userStackBridge.updateSurnameValue(text)
+                        debounceTimer.restart()
+                    }
+                }
+
             }
 
             Text {
                 text: i18nd("easy-login", "Login:")
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             }
+            
             RowLayout {
                 spacing: 10
                 TextField {
@@ -74,19 +89,28 @@ Item {
                     text: userStackBridge.login
                     readOnly: !userStackBridge.enableLoginEdition
                     Layout.preferredWidth: 320
-                    onTextChanged: userStackBridge.updateLoginValue(text)
+                    onTextChanged: {
+                        debounceTimer.callback= ()=>userStackBridge.updateLoginValue(text)
+                        debounceTimer.restart()
+                    }   
                 }
                 Button {
                     icon.name: "document-edit"
                     enabled: !userStackBridge.enableLoginEdition
                     onClicked: userStackBridge.forceLoginEdition()
                     ToolTip.text: i18nd("easy-login", "Click to edit login")
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 3000
+                    ToolTip.visible: hovered
                 }
                 Button {
                     icon.name: "edit-reset"
                     enabled: userStackBridge.enableLoginEdition
                     onClicked: userStackBridge.restoreDefaultLogin()
                     ToolTip.text: i18nd("easy-login", "Click to restore login")
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 3000
+                    ToolTip.visible: hovered
                 }
             }
 
@@ -119,6 +143,9 @@ Item {
                     icon.name: "view-refresh"
                     onClicked: userStackBridge.generateUsername()
                     ToolTip.text: i18nd("easy-login", "Click to get a new password")
+                    ToolTip.delay: 1000
+                    ToolTip.timeout: 3000
+                    ToolTip.visible: hovered
                 }
             }
         }
@@ -187,12 +214,9 @@ Item {
                 return i18nd("easy-login","You must indicate a surnanme for the user");
             case -6:
                 return i18nd("easy-login","You must indicate a login for the user");
-                break;
             default:
                 return ""
-                break
         }
-        return msg    
 
     }
 }
