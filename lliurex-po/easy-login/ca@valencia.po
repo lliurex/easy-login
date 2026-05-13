@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EASY-LOGIN 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 10:05+0200\n"
-"PO-Revision-Date: 2026-05-11 10:06+0200\n"
+"POT-Creation-Date: 2026-05-13 09:23+0200\n"
+"PO-Revision-Date: 2026-05-13 09:26+0200\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca_ES@valencia\n"
@@ -74,60 +74,60 @@ msgstr "S'esta carregant. Espereu un moment..."
 msgid "Unable to load configuration"
 msgstr "No és possible carregar la configuració"
 
-#: ../gui/ui/rsrc/MainOptions.qml:27 ../gui/ui/rsrc/UserOptions.qml:18
+#: ../gui/ui/rsrc/MainOptions.qml:25 ../gui/ui/rsrc/UserOptions.qml:18
 msgid "Users"
 msgstr "Usuaris"
 
-#: ../gui/ui/rsrc/MainOptions.qml:35
+#: ../gui/ui/rsrc/MainOptions.qml:33
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../gui/ui/rsrc/UserForm.qml:20
+#: ../gui/ui/rsrc/UserForm.qml:26
 msgid "New User"
 msgstr "Nou usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:22
+#: ../gui/ui/rsrc/UserForm.qml:27
 msgid "Edit User"
 msgstr "Edita l'usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:44
+#: ../gui/ui/rsrc/UserForm.qml:47
 msgid "Name:"
 msgstr "Nom:"
 
-#: ../gui/ui/rsrc/UserForm.qml:56
+#: ../gui/ui/rsrc/UserForm.qml:64
 msgid "Surname:"
 msgstr "Cognoms:"
 
-#: ../gui/ui/rsrc/UserForm.qml:67
+#: ../gui/ui/rsrc/UserForm.qml:81
 msgid "Login:"
 msgstr "Usuari:"
 
-#: ../gui/ui/rsrc/UserForm.qml:83
+#: ../gui/ui/rsrc/UserForm.qml:101
 msgid "Click to edit login"
 msgstr "Feu clic per a editar l'usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:89
+#: ../gui/ui/rsrc/UserForm.qml:110
 msgid "Click to restore login"
 msgstr "Feu clic per a restaurar l'usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:94
+#: ../gui/ui/rsrc/UserForm.qml:118
 msgid "Password:"
 msgstr "Contrasenya:"
 
-#: ../gui/ui/rsrc/UserForm.qml:121
+#: ../gui/ui/rsrc/UserForm.qml:145
 msgid "Click to get a new password"
 msgstr "Feu clic per a obtindre una nova contrasenya"
 
-#: ../gui/ui/rsrc/UserForm.qml:133 ../gui/ui/rsrc/UserForm.qml:159
+#: ../gui/ui/rsrc/UserForm.qml:160 ../gui/ui/rsrc/UserForm.qml:186
 msgid "Apply"
 msgstr "Aplica"
 
-#: ../gui/ui/rsrc/UserForm.qml:142 ../gui/ui/rsrc/UserForm.qml:163
-#: ../gui/ui/rsrc/UsersManager.qml:130
+#: ../gui/ui/rsrc/UserForm.qml:169 ../gui/ui/rsrc/UserForm.qml:190
+#: ../gui/ui/rsrc/UsersManager.qml:129
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: ../gui/ui/rsrc/UserForm.qml:156
+#: ../gui/ui/rsrc/UserForm.qml:183
 msgid ""
 "The are pending changes to save.\n"
 "Do you want save the changes or discard them?"
@@ -135,23 +135,23 @@ msgstr ""
 "Hi ha canvis pendents de guardar\n"
 "Voleu guardar els canvis o descartar-los?"
 
-#: ../gui/ui/rsrc/UserForm.qml:160
+#: ../gui/ui/rsrc/UserForm.qml:187
 msgid "Discard"
 msgstr "Descarta"
 
-#: ../gui/ui/rsrc/UserForm.qml:185
+#: ../gui/ui/rsrc/UserForm.qml:212
 msgid "You must indicate a name for the user"
 msgstr "Indiqueu el nom per a l'usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:187
+#: ../gui/ui/rsrc/UserForm.qml:214
 msgid "You must indicate a surnanme for the user"
 msgstr "Indiqueu els cognoms per a l'usuari"
 
-#: ../gui/ui/rsrc/UserForm.qml:189
+#: ../gui/ui/rsrc/UserForm.qml:216
 msgid "You must indicate a login for the user"
 msgstr "Indiqueu un usuari"
 
-#: ../gui/ui/rsrc/UserOptions.qml:39
+#: ../gui/ui/rsrc/UserOptions.qml:33
 msgid "User"
 msgstr "Usuari"
 
@@ -159,39 +159,39 @@ msgstr "Usuari"
 msgid "Search..."
 msgstr "Busca..."
 
-#: ../gui/ui/rsrc/UsersList.qml:78
+#: ../gui/ui/rsrc/UsersList.qml:87
 msgid "There are no users configured"
 msgstr "No hi ha usuaris configurats"
 
-#: ../gui/ui/rsrc/UsersList.qml:79
+#: ../gui/ui/rsrc/UsersList.qml:88
 msgid "No users where found"
 msgstr "No s'han trobat usuaris"
 
-#: ../gui/ui/rsrc/UsersManager.qml:14
+#: ../gui/ui/rsrc/UsersManager.qml:15
 msgid "Configuration"
 msgstr "Configuració"
 
-#: ../gui/ui/rsrc/UsersManager.qml:45
+#: ../gui/ui/rsrc/UsersManager.qml:46
 msgid "Activate Easy-Login:"
 msgstr "Activa Easy-Login:"
 
-#: ../gui/ui/rsrc/UsersManager.qml:84
+#: ../gui/ui/rsrc/UsersManager.qml:83
 msgid "Global Options"
 msgstr "Opcions globals"
 
-#: ../gui/ui/rsrc/UsersManager.qml:94
+#: ../gui/ui/rsrc/UsersManager.qml:93
 msgid "Generate PDF list"
 msgstr "Genera llistat PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:99
+#: ../gui/ui/rsrc/UsersManager.qml:98
 msgid "Delete all users"
 msgstr "Borra tots els usuaris"
 
-#: ../gui/ui/rsrc/UsersManager.qml:113
+#: ../gui/ui/rsrc/UsersManager.qml:112
 msgid "New user"
 msgstr "Nou usuari"
 
-#: ../gui/ui/rsrc/UsersManager.qml:122
+#: ../gui/ui/rsrc/UsersManager.qml:121
 msgid ""
 "All users will be deleted.\n"
 "Do you want to continue?"
@@ -199,7 +199,7 @@ msgstr ""
 "S'esborraran tots els usuaris\n"
 "Voleu continuar?"
 
-#: ../gui/ui/rsrc/UsersManager.qml:123
+#: ../gui/ui/rsrc/UsersManager.qml:122
 msgid ""
 "The user will be deleted.\n"
 "Do you want to continue?"
@@ -207,62 +207,66 @@ msgstr ""
 "S'esborrarà l'usuari.\n"
 "Voleu continuar?"
 
-#: ../gui/ui/rsrc/UsersManager.qml:127
+#: ../gui/ui/rsrc/UsersManager.qml:126
 msgid "Accept"
 msgstr "Accepta"
 
-#: ../gui/ui/rsrc/UsersManager.qml:142
+#: ../gui/ui/rsrc/UsersManager.qml:141
 msgid "Please choose a file to save pdf list"
 msgstr "Trie un arxiu per a desar el fitxer PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:155
+#: ../gui/ui/rsrc/UsersManager.qml:154
 msgid "Unable to add user"
 msgstr "No és possible afegir l'usuari"
 
-#: ../gui/ui/rsrc/UsersManager.qml:157
+#: ../gui/ui/rsrc/UsersManager.qml:156
 msgid "Unable to save the changes"
 msgstr "No és possible guardar els canvis"
 
-#: ../gui/ui/rsrc/UsersManager.qml:159
+#: ../gui/ui/rsrc/UsersManager.qml:158
 msgid "Unable to remove user"
 msgstr "No és possible esborrar l'usuari"
 
-#: ../gui/ui/rsrc/UsersManager.qml:161
+#: ../gui/ui/rsrc/UsersManager.qml:160
 msgid "Unable to remove all users"
 msgstr "No és possible esborrar tots els usuaris"
 
-#: ../gui/ui/rsrc/UsersManager.qml:163
+#: ../gui/ui/rsrc/UsersManager.qml:162
 msgid "Unable to generate PDF list"
 msgstr "No és possible generar el llistat PDF"
 
-#: ../gui/ui/rsrc/UsersManager.qml:165
+#: ../gui/ui/rsrc/UsersManager.qml:164
 msgid "Unable to load user info"
 msgstr "No és possible carregar la informació de l'usuari"
 
-#: ../gui/ui/rsrc/UsersManager.qml:167
+#: ../gui/ui/rsrc/UsersManager.qml:166
 msgid "Changes saved successfully"
 msgstr "Els canvis s'han guardat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:169
+#: ../gui/ui/rsrc/UsersManager.qml:168
 msgid "User removed successfully"
 msgstr "L'usuari s'ha esborrat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:171
+#: ../gui/ui/rsrc/UsersManager.qml:170
 msgid "The state change has been performed successfully"
 msgstr "El canvi d'estat s'ha realitzat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:173
+#: ../gui/ui/rsrc/UsersManager.qml:172
 msgid "Users removed successfully"
 msgstr "Els usuaris s'han esborrat correctament"
 
-#: ../gui/ui/EasyLoginManager.py:324
+#: ../gui/ui/rsrc/UsersManager.qml:174
+msgid "PDF list generated successfully"
+msgstr "El llistat PDF s'ha generat correctament"
+
+#: ../gui/ui/EasyLoginManager.py:325
 msgid "LOGIN"
 msgstr "USUARI"
 
-#: ../gui/ui/EasyLoginManager.py:324
+#: ../gui/ui/EasyLoginManager.py:325
 msgid "STUDENT"
 msgstr "ALUMNE/A"
 
-#: ../gui/ui/EasyLoginManager.py:324
+#: ../gui/ui/EasyLoginManager.py:325
 msgid "PASSWORD"
 msgstr "CONTRASENYA"

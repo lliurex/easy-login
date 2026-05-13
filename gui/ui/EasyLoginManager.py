@@ -37,6 +37,7 @@ class EasyLoginManager(object):
 	REMOVE_USER_SUCCESSFULLY=2
 	CHANGE_SERVICE_SUCCESSFULLY=3
 	REMOVE_ALL_USERS_SUCCESSFULLY=4
+	GENERATE_PDF_SUCCESSFULLY=5
 
 	
 	def __init__(self):
@@ -369,7 +370,7 @@ class EasyLoginManager(object):
 		try:
 			doc.build(story)
 			subprocess.run(["xdg-open",pdfFile])
-			return {"status":True,"code":"","type":"Ok"}
+			return {"status":True,"code":EasyLoginManager.GENERATE_PDF_SUCCESSFULLY,"type":"Ok"}
 		except Exception as e:
 			self._debug("generatePdf",f"Error generating pdf: {e}")
 			return {"status":False,"code":EasyLoginManager.GENERATING_PDF_ERROR,"type":"Error"}

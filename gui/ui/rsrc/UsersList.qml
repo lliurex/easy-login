@@ -6,7 +6,7 @@ import org.kde.plasma.components as PC
 import org.kde.kirigami as Kirigami
 
 Rectangle {
-    id: root
+    id: usersListContainer
     property alias usersModel: filterModel.model
     property alias listCount: usersView.count
     color: "transparent"

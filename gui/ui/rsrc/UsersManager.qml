@@ -170,6 +170,8 @@ Rectangle {
                 return i18nd("easy-login", "The state change has been performed successfully")
             case 4:
                 return i18nd("easy-login", "Users removed successfully")
+            case 5:
+                return i18nd("easy-login", "PDF list generated successfully")
             default:
                 return ""
         }

@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject,Signal,Slot,QThread,Property,QTimer,Qt,QModelIndex
+from PySide6.QtCore import QObject,Signal,Slot,QThread,Property
 import os 
 import sys
 import threading
@@ -255,8 +255,7 @@ class Bridge(QObject):
 		self.core.mainStack.closePopUp=[True,""]
 		self.core.mainStack.closeGui=True
 
-		if not ret.get("status"):
-			self.showMainMessage=[True,ret.get("code"),ret.get("type")]
+		self.showMainMessage=[True,ret.get("code"),ret.get("type")]
 	
 	#def _generatePdfRet
 
