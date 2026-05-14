@@ -34,7 +34,7 @@ class Bridge(QObject):
 	mainCurrentOptionChanged=Signal()
 	showLoadErrorMessageChanged=Signal()
 	systemLocaleChanged=Signal()
-	closePopUpChanged=Signal()
+	showPopUpChanged=Signal()
 	closeGuiChanged=Signal()
 
 	def __init__(self):
@@ -44,10 +44,10 @@ class Bridge(QObject):
 		self.easyManager=self.core.easyLoginManager
 		self._currentStack=0
 		self._mainCurrentOption=0
-		self._closePopUp=[True,""]
+		self._showPopUp={"show":False,"msgCode":''}
 		self.moveToStack=0
 		self._closeGui=True
-		self._showLoadErrorMessage=[False,""]
+		self._showLoadErrorMessage={"show":False,"msgCode":''}
 		self._systemLocale="es"
 		self.easyManager.createN4dClient(sys.argv[1])
 
@@ -85,7 +85,7 @@ class Bridge(QObject):
 	
 	#def mainCurrentOption
 
-	@Property('QVariantList',notify=showLoadErrorMessageChanged)
+	@Property(dict,notify=showLoadErrorMessageChanged)
 	def showLoadErrorMessage(self):
 
 		return self._showLoadErrorMessage
@@ -101,21 +101,21 @@ class Bridge(QObject):
 
 	#def showLoadErrorMessage
 
-	@Property('QVariantList',notify=closePopUpChanged)
-	def closePopUp(self):
+	@Property(dict,notify=showPopUpChanged)
+	def showPopUp(self):
 
-		return self._closePopUp
+		return self._showPopUp
 
-	#def _closePopUp
+	#def _showPopUp
 
-	@closePopUp.setter
-	def closePopUp(self,closePopUp):
+	@showPopUp.setter
+	def showPopUp(self,showPopUp):
 
-		if self._closePopUp!=closePopUp:
-			self._closePopUp=closePopUp
-			self.closePopUpChanged.emit()
+		if self._showPopUp!=showPopUp:
+			self._showPopUp=showPopUp
+			self.showPopUpChanged.emit()
 
-	#def closePopUp
+	#def showPopUp
 	
 	@Property(bool,notify=closeGuiChanged)
 	def closeGui(self):
@@ -168,7 +168,7 @@ class Bridge(QObject):
 			self._systemLocale=self.easyManager.systemLocale
 			self.currentStack=1
 		else:
-			self.showLoadErrorMessage=[True,ret.get("code")]
+			self.showLoadErrorMessage={"show":True,"msgCode":ret.get("code")}
 	
 	#def _loadConfig
 
@@ -179,7 +179,7 @@ class Bridge(QObject):
 			if stack==0:
 				self.mainCurrentOption=stack
 			else:
-				self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+				self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
 
 	#def moveToMainOptions	
 

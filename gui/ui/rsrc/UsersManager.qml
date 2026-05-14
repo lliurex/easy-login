@@ -33,9 +33,9 @@ Rectangle {
         Kirigami.InlineMessage {
             id: messageLabel
             Layout.fillWidth: true
-            visible: usersOptionsStackBridge.showMainMessage[0]
-            text: getTextMessage(usersOptionsStackBridge.showMainMessage[1])
-            type: getTypeMessage(usersOptionsStackBridge.showMainMessage[2])
+            visible: usersOptionsStackBridge.showMainMessage.show
+            text: getTextMessage(usersOptionsStackBridge.showMainMessage.msgCode)
+            type: getTypeMessage(usersOptionsStackBridge.showMainMessage.type)
         }
 
         RowLayout {
@@ -117,10 +117,10 @@ Rectangle {
     ChangesDialog {
         id: removeUserDialog
         dialogIcon: "dialog-warning"
-        dialogMsg: usersOptionsStackBridge.showRemoveUserDialog[1] 
+        dialogMsg: usersOptionsStackBridge.showRemoveUserDialog.allUsers 
                    ? i18nd("easy-login", "All users will be deleted.\nDo you want to continue?") 
                    : i18nd("easy-login", "The user will be deleted.\nDo you want to continue?")
-        dialogVisible: usersOptionsStackBridge.showRemoveUserDialog[0]
+        dialogVisible: usersOptionsStackBridge.showRemoveUserDialog.show
         dialogWidth: 400
         btnAcceptVisible: false
         btnDiscardText: i18nd("easy-login", "Accept")

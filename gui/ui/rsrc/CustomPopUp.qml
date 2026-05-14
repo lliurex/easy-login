@@ -9,7 +9,7 @@ Popup {
     anchors.centerIn: Overlay.overlay
     modal: true
     focus: true
-    visible: !mainStackBridge.closePopUp[0]
+    visible: mainStackBridge.showPopUp.show
     closePolicy: Popup.NoAutoClose
 
     background: Rectangle {
@@ -42,7 +42,7 @@ Popup {
     }
 
     function getTextMessage() {
-        let code = mainStackBridge.closePopUp[1];
+        let code = mainStackBridge.showPopUp.msgCode;
         
         switch (code) {
             case 20: 

@@ -30,7 +30,7 @@ Item {
 
         Kirigami.InlineMessage {
             id: messageLabel
-            visible: userStackBridge.showUserFormMessage[0]
+            visible: userStackBridge.showUserFormMessage.show
             text: getMessageText()
             type: Kirigami.MessageType.Error
             Layout.fillWidth: true
@@ -207,7 +207,7 @@ Item {
 
    function getMessageText(){
 
-         switch (userStackBridge.showUserFormMessage[1]){
+         switch (userStackBridge.showUserFormMessage.msgCode){
             case -4:
                 return i18nd("easy-login","You must indicate a name for the user");
             case -5:

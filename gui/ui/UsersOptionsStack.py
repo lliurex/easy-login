@@ -97,8 +97,8 @@ class Bridge(QObject):
 		self.easyManager=self.core.easyLoginManager
 		self._usersModel=UsersModel.UsersModel()
 		self._easyLoginEnabled=False
-		self._showMainMessage=[False,"","Ok"]
-		self._showRemoveUserDialog=[False,False]
+		self._showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self._showRemoveUserDialog={"show":False,"allUsers":False}
 		self._enableGlobalOptions=False
 
 	#def __init__
@@ -119,7 +119,7 @@ class Bridge(QObject):
 
 	#def easyLoginEnabled
 
-	@Property('QVariantList',notify=showMainMessageChanged)
+	@Property(dict,notify=showMainMessageChanged)
 	def showMainMessage(self):
 
 		return self._showMainMessage
@@ -135,7 +135,7 @@ class Bridge(QObject):
 
 	#def showMainMessage
 
-	@Property('QVariantList',notify=showRemoveUserDialogChanged)
+	@Property(dict,notify=showRemoveUserDialogChanged)
 	def showRemoveUserDialog(self):
 
 		return self._showRemoveUserDialog
@@ -200,9 +200,9 @@ class Bridge(QObject):
 	@Slot(bool)
 	def enableEasyLogin(self,value):
 
-		self.core.mainStack.closePopUp=[False,CHANGE_SERVICE_WAITING]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":CHANGE_SERVICE_WAITING}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self.enableLoginT=EnableLogin(self.easyManager,value)
 		self.enableLoginT.loginEnabled.connect(self._enableLoginRet)
 		self.enableLoginT.finished.connect(self.enableLoginT.deleteLater)
@@ -215,16 +215,16 @@ class Bridge(QObject):
 
 		self.easyLoginEnabled=self.easyManager.easyLoginEnabled
 
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
-		self.showMainMessage=[True,ret.get("code"),ret.get("type")]
+		self.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
 	#def _enableLoginRet
 
 	@Slot('QVariantList')
 	def removeUser(self,data):
 
-		self.showMainMessage=[False,"","Ok"]
+		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self.removeAllUsers=data[0]
 		
 		if self.removeAllUsers:
@@ -232,16 +232,16 @@ class Bridge(QObject):
 		else:
 			self.userToRemove=data[1]
 
-		self.showRemoveUserDialog=[True,self.removeAllUsers]
+		self.showRemoveUserDialog={"show":True,"allUsers":self.removeAllUsers}
 
 	#def removeUser
 
 	@Slot(str)
 	def generateList(self,exportPath):
 
-		self.core.mainStack.closePopUp=[False,GENERATING_PDF_WAITING]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":GENERATING_PDF_WAITING}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self.generatePdfT=GeneratePdf(self.easyManager,exportPath)
 		self.generatePdfT.pdfGenerated.connect(self._generatePdfRet)
 		self.generatePdfT.finished.connect(self.generatePdfT.deleteLater)
@@ -252,17 +252,17 @@ class Bridge(QObject):
 	@Slot(dict)
 	def _generatePdfRet(self,ret):
 
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
 
-		self.showMainMessage=[True,ret.get("code"),ret.get("type")]
+		self.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 	
 	#def _generatePdfRet
 
 	@Slot(str)
 	def manageRemoveUserDialog(self,response):
 
-		self.showRemoveUserDialog=[False,False]
+		self.showRemoveUserDialog={"show":False,"allUsers":False}
 		if response=="Accept":
 			self._launchRemoveUserProcess()
 
@@ -272,9 +272,9 @@ class Bridge(QObject):
 
 		self.core.mainStack.closeGui=False
 		if self.removeAllUsers:
-			self.core.mainStack.closePopUp=[False,REMOVING_ALL_USERS]
+			self.core.mainStack.showPopUp={"show":True,"msgCode":REMOVING_ALL_USERS}
 		else:
-			self.core.mainStack.closePopUp=[False,REMOVING_USER]
+			self.core.mainStack.showPopUp={"show":True,"msgCode":REMOVING_USER}
 
 		self.removeUserT=RemoveUser(self.easyManager,self.removeAllUsers,self.userToRemove)
 		self.removeUserT.userRemoved.connect(self._removeUserRet)
@@ -288,9 +288,9 @@ class Bridge(QObject):
 
 		self._updateUsersModel()
 		self._manageOptions()
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
-		self.showMainMessage=[True,ret.get("code"),ret.get("type")]
+		self.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
 	#def _removeUserRet
 

@@ -131,7 +131,7 @@ class Bridge(QObject):
 		self._pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
 		self._enableLoginEdition=False
 		self._userCurrentOption=0
-		self._showUserFormMessage=[False,"","Ok"]
+		self._showUserFormMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self._showChangesInUserDialog=False
 		self._changesInUser=False
 		self._actionType="add"
@@ -234,7 +234,7 @@ class Bridge(QObject):
 
 	#def pwdImgPaths
 
-	@Property('QVariantList',notify=showUserFormMessageChanged)
+	@Property(dict,notify=showUserFormMessageChanged)
 	def showUserFormMessage(self):
 
 		return self._showUserFormMessage
@@ -318,9 +318,9 @@ class Bridge(QObject):
 	def addNewUser(self):
 
 		actionType="add"
-		self.core.mainStack.closePopUp=[False,NEW_USER_CONFIG]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":NEW_USER_CONFIG}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":"Ok"}
 		self.newUserT=LoadUser(self.easyManager,True,"")
 		self.newUserT.userLoaded.connect(self._addNewUserRet)
 		self.newUserT.finished.connect(self.newUserT.deleteLater)
@@ -337,9 +337,9 @@ class Bridge(QObject):
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
 		else:
-			self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
+			self.core.usersOptionsStack.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
 
 	#def _addNewUserRet
@@ -351,7 +351,7 @@ class Bridge(QObject):
 		self.name=self.easyManager.currentUserConfig["name"]
 		self.surname=self.easyManager.currentUserConfig["surname"]
 		self.pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
-		self.showUserFormMessage=[False,"","Ok"]
+		self.showUserFormMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self.changesInUser=False
 		self.enableLoginEdition=False
 		self.previousLogin=self.login
@@ -375,9 +375,9 @@ class Bridge(QObject):
 	@Slot('QVariantList')
 	def loadUser(self,userToLoad):
 
-		self.core.mainStack.closePopUp=[False,LOAD_USER_CONFIG]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":LOAD_USER_CONFIG}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage=[False,"","Ok"]
+		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
 		self.actionType="edit"
 		self.editUserT=LoadUser(self.easyManager,False,userToLoad)
 		self.editUserT.userLoaded.connect(self._loadUserRet)
@@ -395,9 +395,9 @@ class Bridge(QObject):
 			self.core.mainStack.currentStack=2
 			self.userCurrentOption=1
 		else:
-			self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
+			self.core.usersOptionsStack.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
 
 	#def _loadUserRet
@@ -464,7 +464,7 @@ class Bridge(QObject):
 	@Slot()
 	def generateUsername(self):
 
-		self.core.mainStack.closePopUp=[False,NEW_PASSWORD]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":NEW_PASSWORD}
 		self.core.mainStack.closeGui=False
 		self.getNewPasswordT=GetNewPassword(self.easyManager)
 		self.getNewPasswordT.newPasswordGetted.connect(self._getNewPasswordRet)
@@ -484,7 +484,7 @@ class Bridge(QObject):
 
 		self._checkIfChanged()
 
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
 
 	#def _getNewPasswordRet
@@ -521,7 +521,7 @@ class Bridge(QObject):
 
 	def _applyUserChanges(self):
 
-		self.core.mainStack.closePopUp=[False,CHECK_DATA]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":CHECK_DATA}
 		self.core.mainStack.closeGui=False
 		self.checkDataT=CheckData(self.easyManager,self.currentUserConfig)
 		self.checkDataT.dataChecked.connect(self._checkDataRet)
@@ -536,14 +536,14 @@ class Bridge(QObject):
 		if ret.get("status"):
 			self.saveDataChanges()
 		else:
-			self.core.mainStack.closePopUp=[True,""]
-			self.showUserFormMessage=[True,ret.get("code"),ret.get("type")]
+			self.core.mainStack.showPopUp={"show":False,"msgCode":''}
+			self.showUserFormMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
 	#def _checkDataRet
 
 	def saveDataChanges(self):
 
-		self.core.mainStack.closePopUp=[False,SAVE_DATA]
+		self.core.mainStack.showPopUp={"show":True,"msgCode":SAVE_DATA}
 		self.saveDataT=SaveData(self.easyManager,self.currentUserConfig)
 		self.saveDataT.dataSaved.connect(self._saveDataRet)
 		self.saveDataT.finished.connect(self.saveDataT.deleteLater)
@@ -555,13 +555,13 @@ class Bridge(QObject):
 	def _saveDataRet(self,ret):
 
 		self.core.usersOptionsStack._updateUsersModel()
-		self.core.usersOptionsStack.showMainMessage=[True,ret.get("code"),ret.get("type")]
+		self.core.usersOptionsStack.showMainMessage={"show":True,"msgCode":ret.get("code"),"type":ret.get("type")}
 
 		self.core.usersOptionsStack.enableGlobalOptions=self.easyManager.checkGlobalOptionStatus()
 		self.changesInUser=False
 		self.core.mainStack.moveToStack=1
 		self.core.mainStack.manageGoToStack()
-		self.core.mainStack.closePopUp=[True,""]
+		self.core.mainStack.showPopUp={"show":False,"msgCode":''}
 		self.core.mainStack.closeGui=True
 
 	#def _saveDataRet

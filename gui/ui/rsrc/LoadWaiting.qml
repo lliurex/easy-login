@@ -16,7 +16,7 @@ Rectangle {
 
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
-            visible: !mainStackBridge.showLoadErrorMessage[0]
+            visible: !mainStackBridge.showLoadErrorMessage.show
             spacing: 10
 
             AnimatedImage {
@@ -39,8 +39,8 @@ Rectangle {
 
         Kirigami.InlineMessage {
             id: errorLabel
-            visible: mainStackBridge.showLoadErrorMessage[0]
-            text: getMsgText(mainStackBridge.showLoadErrorMessage[1])
+            visible: mainStackBridge.showLoadErrorMessage.show
+            text: getMsgText(mainStackBridge.showLoadErrorMessage.msgCode)
             type: Kirigami.MessageType.Error
             Layout.fillWidth: true
 

@@ -24,7 +24,7 @@ Rectangle {
                 placeholderText: i18nd("easy-login", "Search...")
                 Layout.preferredWidth: 150
                 enabled: usersView.count > 0 || text.length > 0
-            }
+           }
         }
 
         Rectangle {
