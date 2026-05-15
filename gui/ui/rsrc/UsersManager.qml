@@ -179,15 +179,15 @@ Rectangle {
 
     function getTypeMessage(msgType) {
         switch (msgType) {
-            case "Information":
-                return Kirigami.MessageType.Information
-            case "Ok":
+            case 0:
                 return Kirigami.MessageType.Positive
-            case "Error":
+            case 1:
                 return Kirigami.MessageType.Error
-            case "Warning":
+            case 2:
                 return Kirigami.MessageType.Warning
-            default:
+            case 3:
+                return Kirigami.MessageType.Information
+           default:
                 return Kirigami.MessageType.Information
         }
     }

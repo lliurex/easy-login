@@ -179,7 +179,7 @@ class Bridge(QObject):
 			if stack==0:
 				self.mainCurrentOption=stack
 			else:
-				self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+				self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":''}
 
 	#def moveToMainOptions	
 

@@ -39,6 +39,11 @@ class EasyLoginManager(object):
 	REMOVE_ALL_USERS_SUCCESSFULLY=4
 	GENERATE_PDF_SUCCESSFULLY=5
 
+	KIRIGAMI_MSG_OK=0
+	KIRIGAMI_MSG_ERROR=1
+	KIRIGAMI_MSG_WARNING=2
+	KIRIGAMI_MSG_INFO=3
+
 	
 	def __init__(self):
 
@@ -106,7 +111,7 @@ class EasyLoginManager(object):
 			return self._getUsersInfo()
 		except Exception as e:
 			self._debug("loadConfig",f"Error loading config: {e}")
-			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		
 	#def readConf
 
@@ -116,11 +121,11 @@ class EasyLoginManager(object):
 			tmpConfig=self.client.EasyLogin.get_user_list()
 			self.usersConfig=dict(sorted(tmpConfig.items(), key=lambda item:item[1]['login']))
 			self._getUsersData()
-			return {"status":True,"code":"","type":"Ok"}
+			return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 
 		except Exception as e:
 			self._debug("_getUsersInfo",f"Error getting users info: {e}")
-			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.LOAD_CONFIG_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def _getUsersInfo	
 
@@ -173,7 +178,7 @@ class EasyLoginManager(object):
 		username="".join(str(random.randint(0,8)) for _ in range(0,4))
 		tmpImgPath=self._getImgFromUsername(username)
 	
-		return {"status":True,"code":"","type":"Ok","data":{"username":username,"pwdImgPaths":tmpImgPath}}
+		return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK,"data":{"username":username,"pwdImgPaths":tmpImgPath}}
 
 	#def generateUsername
 
@@ -184,9 +189,9 @@ class EasyLoginManager(object):
 			if getUsername.get("status"):
 				self.currentUserConfig["username"]=getUsername.get("data").get("username")
 				self.currentUserConfig["pwdImgPaths"]=getUsername.get("data").get("pwdImgPaths")
-				return {"status":True,"code":"","type":"Ok"}
+				return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 			else:
-				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":"Error"}
+				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		else:
 			username=infoToLoad[0]
 			self.currentUserConfig=self.usersConfig.get(username,{})
@@ -195,9 +200,9 @@ class EasyLoginManager(object):
 				self.currentUserConfig["username"]=username
 				self.currentUserConfig["pwdImgPaths"]=[]
 				self.currentUserConfig["pwdImgPaths"]=infoToLoad[1]
-				return {"status":True,"code":"","type":"Ok"}
+				return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		
-			return {"status":False,"code":EasyLoginManager.LOAD_USER_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.LOAD_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def loadUserConfig
 
@@ -212,10 +217,10 @@ class EasyLoginManager(object):
 			else:
 				self.easyLoginEnabled:False
 			
-			return {"status":True,"code":EasyLoginManager.CHANGE_SERVICE_SUCCESSFULLY,"type":"Ok"}
+			return {"status":True,"code":EasyLoginManager.CHANGE_SERVICE_SUCCESSFULLY,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		except Exception as e:
 			self._debug("enableEasyLogin",f"Error changing status: {e}")
-			return {"status":False,"code":EasyLoginManager.CHANGE_SERVICE_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.CHANGE_SERVICE_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def enableEasyLogin
 
@@ -226,16 +231,16 @@ class EasyLoginManager(object):
 		login=dataToCheck.get("login","")
 
 		if name!="" and surname!="" and login !="":
-			return {"status":True,"code":"","type":"Ok"}
+			return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 
 		if name=="":
-			return {"status":False,"code":EasyLoginManager.NAME_EMPTY_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.NAME_EMPTY_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		
 		if surname=="":
-			return {"status":False,"code":EasyLoginManager.SURNAME_EMPTY_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.SURNAME_EMPTY_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 		if login=="":
-			return {"status":False,"code":EasyLoginManager.LOGIN_EMPTY_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.LOGIN_EMPTY_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def checkData
 
@@ -252,12 +257,12 @@ class EasyLoginManager(object):
 			if ret:
 				retInfo=self._getUsersInfo()
 				if retInfo.get("status"):
-					return {"status":True,"code":EasyLoginManager.ADD_USER_SUCCESSFULLY,"type":"Ok"}
+					return {"status":True,"code":EasyLoginManager.ADD_USER_SUCCESSFULLY,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 				else:
 					return retInfo
 		except Exception as e:
 			self._debug("saveData",f"Error saving data: {e}")
-			return {"status":False,"code":EasyLoginManager.SAVE_USER_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.SAVE_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def saveData
 
@@ -269,19 +274,19 @@ class EasyLoginManager(object):
 				ret=self.client.EasyLogin.wipe_db()
 			except n4d.client.CallFailedError as e:
 				self._debug("removeUser",f"Error removing all users: {e}")
-				return {"status":False,"code":EasyLoginManager.REMOVE_ALL_USERS_ERROR,"type":"Error"}
+				return {"status":False,"code":EasyLoginManager.REMOVE_ALL_USERS_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		else:
 			msgOk=EasyLoginManager.REMOVE_USER_SUCCESSFULLY
 			try:
 				ret=self.client.EasyLogin.remove_entry(userToRemove)
 			except n4d.client.CallFailedError as e:
 				self._debug("removeUser",f"Error removing user: {e}")
-				return {"status":False,"code":EasyLoginManager.REMOVE_USER_ERROR,"type":"Error"}
+				return {"status":False,"code":EasyLoginManager.REMOVE_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		
 		retInfo=self._getUsersInfo()
 		
 		if retInfo.get("status"):
-			return {"status":True,"code":msgOk,"type":"Ok"}
+			return {"status":True,"code":msgOk,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 	
 		return retInfo
 
@@ -370,10 +375,10 @@ class EasyLoginManager(object):
 		try:
 			doc.build(story)
 			subprocess.run(["xdg-open",pdfFile])
-			return {"status":True,"code":EasyLoginManager.GENERATE_PDF_SUCCESSFULLY,"type":"Ok"}
+			return {"status":True,"code":EasyLoginManager.GENERATE_PDF_SUCCESSFULLY,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		except Exception as e:
 			self._debug("generatePdf",f"Error generating pdf: {e}")
-			return {"status":False,"code":EasyLoginManager.GENERATING_PDF_ERROR,"type":"Error"}
+			return {"status":False,"code":EasyLoginManager.GENERATING_PDF_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def generatePdf
 

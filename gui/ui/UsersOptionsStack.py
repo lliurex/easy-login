@@ -97,7 +97,7 @@ class Bridge(QObject):
 		self.easyManager=self.core.easyLoginManager
 		self._usersModel=UsersModel.UsersModel()
 		self._easyLoginEnabled=False
-		self._showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self._showMainMessage={"show":False,"msgCode":'',"type":""}
 		self._showRemoveUserDialog={"show":False,"allUsers":False}
 		self._enableGlobalOptions=False
 
@@ -202,7 +202,7 @@ class Bridge(QObject):
 
 		self.core.mainStack.showPopUp={"show":True,"msgCode":CHANGE_SERVICE_WAITING}
 		self.core.mainStack.closeGui=False
-		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self.showMainMessage={"show":False,"msgCode":'',"type":''}
 		self.enableLoginT=EnableLogin(self.easyManager,value)
 		self.enableLoginT.loginEnabled.connect(self._enableLoginRet)
 		self.enableLoginT.finished.connect(self.enableLoginT.deleteLater)
@@ -224,7 +224,7 @@ class Bridge(QObject):
 	@Slot('QVariantList')
 	def removeUser(self,data):
 
-		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self.showMainMessage={"show":False,"msgCode":'',"type":''}
 		self.removeAllUsers=data[0]
 		
 		if self.removeAllUsers:
@@ -241,7 +241,7 @@ class Bridge(QObject):
 
 		self.core.mainStack.showPopUp={"show":True,"msgCode":GENERATING_PDF_WAITING}
 		self.core.mainStack.closeGui=False
-		self.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self.showMainMessage={"show":False,"msgCode":'',"type":''}
 		self.generatePdfT=GeneratePdf(self.easyManager,exportPath)
 		self.generatePdfT.pdfGenerated.connect(self._generatePdfRet)
 		self.generatePdfT.finished.connect(self.generatePdfT.deleteLater)

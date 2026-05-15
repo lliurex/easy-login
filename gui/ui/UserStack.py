@@ -131,7 +131,7 @@ class Bridge(QObject):
 		self._pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
 		self._enableLoginEdition=False
 		self._userCurrentOption=0
-		self._showUserFormMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self._showUserFormMessage={"show":False,"msgCode":'',"type":''}
 		self._showChangesInUserDialog=False
 		self._changesInUser=False
 		self._actionType="add"
@@ -320,7 +320,7 @@ class Bridge(QObject):
 		actionType="add"
 		self.core.mainStack.showPopUp={"show":True,"msgCode":NEW_USER_CONFIG}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":"Ok"}
+		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":''}
 		self.newUserT=LoadUser(self.easyManager,True,"")
 		self.newUserT.userLoaded.connect(self._addNewUserRet)
 		self.newUserT.finished.connect(self.newUserT.deleteLater)
@@ -351,7 +351,7 @@ class Bridge(QObject):
 		self.name=self.easyManager.currentUserConfig["name"]
 		self.surname=self.easyManager.currentUserConfig["surname"]
 		self.pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
-		self.showUserFormMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self.showUserFormMessage={"show":False,"msgCode":'',"type":''}
 		self.changesInUser=False
 		self.enableLoginEdition=False
 		self.previousLogin=self.login
@@ -377,7 +377,7 @@ class Bridge(QObject):
 
 		self.core.mainStack.showPopUp={"show":True,"msgCode":LOAD_USER_CONFIG}
 		self.core.mainStack.closeGui=False
-		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":'Ok'}
+		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":''}
 		self.actionType="edit"
 		self.editUserT=LoadUser(self.easyManager,False,userToLoad)
 		self.editUserT.userLoaded.connect(self._loadUserRet)
