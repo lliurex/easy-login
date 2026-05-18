@@ -145,7 +145,7 @@ class EasyLogin:
             user["login"] = aux + user["login"].lower()
         user["home"] = user["home"] + user["login"]
         
-        if "uid" in user.keys() and user["uid"] != "":
+        if "uid" in info.keys() and info["uid"] != "":
             user["uid"] = info["uid"]
         else:
             user["uid"] = self.get_next_uid()
