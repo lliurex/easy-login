@@ -21,19 +21,21 @@ class EasyLogin:
         self.core = Core.get_core()
         theme_path = Path(self.config['theme']['path'])
         if theme_path.exists():
-            sorted_index = sorted(list(map(lambda a: int(a.stem),theme_path.glob("*"))))
-            self.min_index = sorted_index[0]
-            self.max_index = sorted_index[-1]
+            self.sorted_index_keys   = sorted(list(map(lambda a: int(a.stem),theme_path.glob("*"))))
         else:
             self.min_index = 0
             self.max_index = 8
 
     def load_default_paths(self):
-        self.config_path = Path("/etc/easylogin/config.yaml")
-        self.db_path = Path("/var/lib/easylogin/shadow.db")
+        self.config_path = Path("/etc/easy-login/config.yaml")
+        self.db_path = Path("/var/lib/easy-login/shadow.db")
+
+    
+    def get_config(self) -> Path:
+        return n4d.build_successful_call_response(self.config)
 
     def load_config(self) -> None:
-        self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000 }
+        self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000, "password_lenght": 4, "theme": {"path": "/usr/share/easy-login/themes/animals"} }
 
     def set_status_service(self, status) -> bool:
         self.core.set_variable("EASYLOGIN_STATUS", status)
@@ -58,25 +60,49 @@ class EasyLogin:
             cache = bson.decode(fd.read())
         excluded = [ int(x)for x in cache.keys() ]
         
-        start = self.min_index
-        end = int(str(self.max_index) * self.config["password_lenght"])
-        total = end - start + 1
-        excl_sorted = sorted(set(e for e in excluded if start <= e <= end))
-        n_available = total - len(excl_sorted)
-        
+        d = len(self.sorted_index_keys)
+        total = d ** self.config["password_lenght"]
+        n_available = total - len(excluded)
         if n_available <= 0:
             return n4d.responses.build_failed_call_response("database full")
 
         pick = randint(0, n_available - 1)
 
-        result = start + pick
-        for excl in excl_sorted:
-            if excl <= result:
-                result += 1
+        locked_indices = sorted(
+                index for s in excluded
+                if len(s) == self.config["password_lenght"] and all(c in self.sorted_index_keys for c in s)
+                if (index := self._string_to_index(s, self.sorted_index_keys)) is not None
+                )
+        
+        for idx in locked_indices:
+            if idx <= pick:
+                pick += 1
             else:
                 break
-        return n4d.responses.build_successful_call_response( 
-                str(result).rjust( int( self.config["password_lenght"] ), str( self.min_index ) ) )
+        result = self._index_to_string(pick, self.sorted_index_keys, self.config["password_lenght"])
+        return n4d.responses.build_successful_call_response(result)
+        #return n4d.responses.build_successful_call_response( 
+        #           str(result).rjust( int( self.config["password_lenght"] ), str( self.min_index ) ) )
+
+
+    def _string_to_index(self, s: str, allowed: list[str]) -> int | None:
+        allowed = sorted(allowed)
+        d = len(allowed)
+        idx = 0
+        for c in s:
+            if c not in allowed:
+                return None
+            idx = idx * d + allowed.index(c)
+        return idx
+
+    def _index_to_string(self, idx: int, allowed: list[str], length: int) -> str:
+        allowed = sorted(allowed)
+        d = len(allowed)
+        digits = []
+        for _ in range(length):
+            digits.append(allowed[idx % d])
+            idx //= d
+        return "".join(reversed(digits))
 
     def validate_easy_user(self, username, password) -> n4d.responses:
         status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
@@ -119,8 +145,11 @@ class EasyLogin:
                 aux = ''.join([chr(randrange(97, 123)) for i in range(6)])
             user["login"] = aux + user["login"].lower()
         user["home"] = user["home"] + user["login"]
-
-        user["uid"] = self.get_next_uid()
+        
+        if "uid" in user.keys() and user["uid"] != "":
+            user["uid"] = info["uid"]
+        else:
+            user["uid"] = self.get_next_uid()
 
         if user is not None:
             user_info = {}
@@ -160,14 +189,20 @@ class EasyLogin:
         except Exception:
             return n4d.responses.build_failed_call_response(EasyLogin.GENERIC_ERROR)
 
-
-    def load_user(self, username) -> dict:
+    def _load_user(self, username) -> dict:
         self.exists_or_build_db()
         with self.db_path.open("br") as fd:
             cache = bson.decode(fd.read())
         if username in cache:
             return cache[username]
         return None
+
+    def load_user(self, username) -> dict:
+        result = self._load_user(username) 
+        if result is not None:
+            result.pop("hash", None)
+            return n4d.responses.build_successful_call_response(result["info"])
+        return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_IN_CACHE)
 
     def get_next_uid(self) -> int:
         self.exists_or_build_db()

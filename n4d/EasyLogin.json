@@ -32,6 +32,21 @@
         "teachers"
       ]
     },
+    "load_user": {
+      "allowed_groups": [
+        "sudo",
+        "admins",
+        "teachers"
+      ]
+    },
+
+    "get_config": {
+      "allowed_groups": [
+	"anonymous",
+	"*"
+      ]
+    },
+
     "validate_easy_user": {
       "allowed_groups": [
         "anonymous"
@@ -45,13 +60,6 @@
       ]
     },
     "remove_entry": {
-      "allowed_groups": [
-        "sudo",
-        "admins",
-        "teachers"
-      ]
-    },
-    "get_next_uid": {
       "allowed_groups": [
         "sudo",
         "admins",
