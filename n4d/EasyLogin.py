@@ -177,7 +177,7 @@ class EasyLogin:
         except Exception:
             users_db = {}
         if len(users_db) == 0:
-            return self.onfig["initial_uid"]
+            return self.config["initial_uid"]
 
         max_uid = max([user["info"]["uid"] for user in users_db.values()])
         return max_uid + 1
