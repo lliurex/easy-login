@@ -1,0 +1,4 @@
+theme:
+  path: "/usr/share/easy-login/themes/animals"
+initial_uid: 70000
+password_lenght: 4

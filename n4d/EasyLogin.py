@@ -1,10 +1,8 @@
-import bcrypt
 import bson
 from pathlib import Path
 from yaml import safe_load
 import n4d.responses
-from time import time
-from random import randrange
+from random import randrange, randint
 from n4d.server.core import Core
 
 
@@ -21,6 +19,14 @@ class EasyLogin:
         self.load_default_paths()
         self.load_config()
         self.core = Core.get_core()
+        theme_path = Path(self.config['theme']['path'])
+        if theme_path.exists():
+            sorted_index = sorted(list(map(lambda a: int(a.stem),theme_path.glob("*"))))
+            self.min_index = sorted_index[0]
+            self.max_index = sorted_index[-1]
+        else:
+            self.min_index = 0
+            self.max_index = 8
 
     def load_default_paths(self):
         self.config_path = Path("/etc/easylogin/config.yaml")
@@ -47,7 +53,30 @@ class EasyLogin:
             return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_IN_CACHE)
 
     def get_valid_username(self):
-        pass
+        self.exists_or_build_db()
+        with self.db_path.open("br") as fd:
+            cache = bson.decode(fd.read())
+        excluded = [ int(x)for x in cache.keys() ]
+        
+        start = self.min_index
+        end = int(str(self.max_index) * self.config["password_lenght"])
+        total = end - start + 1
+        excl_sorted = sorted(set(e for e in excluded if start <= e <= end))
+        n_available = total - len(excl_sorted)
+        
+        if n_available <= 0:
+            return n4d.responses.build_failed_call_response("database full")
+
+        pick = randint(0, n_available - 1)
+
+        result = start + pick
+        for excl in excl_sorted:
+            if excl <= result:
+                result += 1
+            else:
+                break
+        return n4d.responses.build_successful_call_response( 
+                str(result).rjust( int( self.config["password_lenght"] ), str( self.min_index ) ) )
 
     def validate_easy_user(self, username, password) -> n4d.responses:
         status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
@@ -87,7 +116,6 @@ class EasyLogin:
             if "surname" in info:
                 aux = aux + info["surname"][0:3]
             if aux == "":
-                from random import randrange
                 aux = ''.join([chr(randrange(97, 123)) for i in range(6)])
             user["login"] = aux + user["login"].lower()
         user["home"] = user["home"] + user["login"]
@@ -149,7 +177,7 @@ class EasyLogin:
         except Exception:
             users_db = {}
         if len(users_db) == 0:
-            return self.config["initial_uid"]
+            return self.onfig["initial_uid"]
 
         max_uid = max([user["info"]["uid"] for user in users_db.values()])
         return max_uid + 1

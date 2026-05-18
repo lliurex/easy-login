@@ -1,12 +1,19 @@
 from n4d.client import Client
 from n4d.client import CallFailedError
-from llxfederation.user import User, Group
 
-class EasyLogin:
+from llxgvagate.user import User, Group
+from llxgvagate.base_plugin import BasePlugin
+from llxgvagate.error import GvaGateError
+
+class Easy(BasePlugin):
     def __init__(self):
         pass
 
-    def auth_easy(self, username, password):
+    @property
+    def name(self):
+        return "easy"
+
+    def authenticate(self, username, password, callback):
         server = "server"
         if server is not None:
             n4d_remote = Client("https://"+server+":9779")
@@ -14,14 +21,16 @@ class EasyLogin:
                 result = n4d_remote.EasyLogin.validate_easy_user(username, password)
             except CallFailedError as e:
                 if e.code == -1: 
-                    return None, "invalid_user"
+                    return None, GvaGateError.UserNotFound
                 if e.code == -2:
-                    return None, "invalid_password"
+                    return None, GvaGateError.InvalidPassword
+                if e.code == -10:
+                    return None, GvaGateError.ServerNotFound
             except Exception:
                 # Adi not found
-                return None, "invalid_response"
+                return None, GvaGateError.Error
         else:
-            return None, "temporary_unavailable"
+            return None, GvaGateError.ServerNotFound
         user = User(result['login'])
         user.name = result['name']
         user.surname = result['surname']
@@ -30,4 +39,4 @@ class EasyLogin:
         user.uid = result['uid']
         user.groups.append(Group(result['group'],70000))
         user.populate_user()
-        return user, None
+        return user, GvaGateError.Allowed
