@@ -54,7 +54,11 @@ class RemoveUser(QThread):
 	def run(self):
 
 		time.sleep(0.5)
-		ret=self.easyManager.removeUser(self.allUsers,self.userToRemove)
+		if self.allUsers:
+			ret=self.easyManager.removeAllUsers()
+		else:
+			ret=self.easyManager.removeSingleUser(self.userToRemove)
+			
 		self.userRemoved.emit(ret)
 
 	#def run
