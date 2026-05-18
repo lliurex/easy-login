@@ -21,9 +21,9 @@ class EasyLogin:
         self.core = Core.get_core()
         theme_path = Path(self.config['theme']['path'])
         if theme_path.exists():
-            self.sorted_index_keys   = sorted(list(map(lambda a: int(a.stem),theme_path.glob("*"))))
+            self.sorted_index_keys   = sorted(list(map(lambda a: a.stem,theme_path.glob("*"))))
         else:
-            self.sorted_index_keys = [0,1,2,3,4,5,6,7,8]
+            self.sorted_index_keys = ["0","1","2","3","4","5","6","7","8"]
 
     def load_default_paths(self):
         self.config_path = Path("/etc/easy-login/config.yaml")
