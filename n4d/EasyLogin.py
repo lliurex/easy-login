@@ -31,7 +31,7 @@ class EasyLogin:
 
     
     def get_config(self) -> Path:
-        return n4d.build_successful_call_response(self.config)
+        return n4d.responses.build_successful_call_response(self.config)
 
     def load_config(self) -> None:
         self.config = safe_load(self.config_path.read_text()) if self.config_path.exists() else { "initial_uid": 70000, "password_lenght": 4, "theme": {"path": "/usr/share/easy-login/themes/animals"} }
