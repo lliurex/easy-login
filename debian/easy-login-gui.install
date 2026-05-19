@@ -1,0 +1,2 @@
+gui/launcher/* /usr/sbin/
+gui/ui/* /usr/share/easy-login/gui/
