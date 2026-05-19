@@ -57,7 +57,7 @@ class EasyLogin:
         self.exists_or_build_db()
         with self.db_path.open("br") as fd:
             cache = bson.decode(fd.read())
-        excluded = [ int(x)for x in cache.keys() ]
+        excluded = [ str(x)for x in cache.keys() ]
         
         d = len(self.sorted_index_keys)
         total = d ** self.config["password_lenght"]
