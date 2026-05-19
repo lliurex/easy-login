@@ -1,0 +1,21 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Easy-Login
+Name[es]=Easy-Login
+Name[ca@valencia]=Easy-Login
+Name[ca]=Easy-Login
+Name[ca_ES@valencia]=Easy-Login
+Comment=It allows you to manage access to the equipment using Easy-Login
+Name[es]=Permite gestionar el acceso a los equipos mediante Easy-Login
+Name[ca@valencia]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Name[ca]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Name[ca_ES@valencia]=Permet gestionar l'accés als equips mitjançant Easy-Login
+Exec=/usr/sbin/easy-login
+Terminal=false
+Icon=easy-login
+Type=Application
+Categories=LliureX-Administration
+GenericName=easy-login
+NoDisplay=true
+
