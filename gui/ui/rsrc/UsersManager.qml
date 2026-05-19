@@ -153,7 +153,7 @@ Rectangle {
             case -2:
                 return i18nd("easy-login", "Unable to add user")
             case -3:
-                return i18nd("easy-login", "Unable to save the changes")
+                return i18nd("easy-login", "Unable to save new user")
             case -7:
                 return i18nd("easy-login", "Unable to remove user")
             case -8:
@@ -162,8 +162,14 @@ Rectangle {
                 return i18nd("easy-login", "Unable to generate PDF list")
             case -11:
                 return i18nd("easy-login", "Unable to load user info")
+            case -13:
+                return i18nd("easy-login","Unable to edit the user")
+            case -14:
+                return i18nd("easy-login","Unable to delete old user info. The user may be duplicate")
+            case -15:
+                return i18nd("easy-login","Unable to load user info. Close and reopen the application")
             case 0:
-                return i18nd("easy-login", "Changes saved successfully")
+                return i18nd("easy-login", "User added successfully")
             case 2:
                 return i18nd("easy-login", "User removed successfully")
             case 3:
@@ -172,6 +178,8 @@ Rectangle {
                 return i18nd("easy-login", "Users removed successfully")
             case 5:
                 return i18nd("easy-login", "PDF list generated successfully")
+            case 6:
+                return i18nd("easy-login", "User edited successfully")
             default:
                 return ""
         }

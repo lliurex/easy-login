@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EASY-LOGIN 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 09:23+0200\n"
-"PO-Revision-Date: 2026-05-13 09:26+0200\n"
+"POT-Creation-Date: 2026-05-19 10:34+0200\n"
+"PO-Revision-Date: 2026-05-19 10:40+0200\n"
 "Last-Translator: lliurex <lliurex@gva.es>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca_ES@valencia\n"
@@ -151,6 +151,10 @@ msgstr "Indiqueu els cognoms per a l'usuari"
 msgid "You must indicate a login for the user"
 msgstr "Indiqueu un usuari"
 
+#: ../gui/ui/rsrc/UserForm.qml:218
+msgid "Unable to generate new password"
+msgstr "No és possible generar una nova contrasenya"
+
 #: ../gui/ui/rsrc/UserOptions.qml:33
 msgid "User"
 msgstr "Usuari"
@@ -220,8 +224,8 @@ msgid "Unable to add user"
 msgstr "No és possible afegir l'usuari"
 
 #: ../gui/ui/rsrc/UsersManager.qml:156
-msgid "Unable to save the changes"
-msgstr "No és possible guardar els canvis"
+msgid "Unable to save new user"
+msgstr "No és possible afegir l'usuari"
 
 #: ../gui/ui/rsrc/UsersManager.qml:158
 msgid "Unable to remove user"
@@ -240,33 +244,55 @@ msgid "Unable to load user info"
 msgstr "No és possible carregar la informació de l'usuari"
 
 #: ../gui/ui/rsrc/UsersManager.qml:166
-msgid "Changes saved successfully"
-msgstr "Els canvis s'han guardat correctament"
+msgid "Unable to edit the user"
+msgstr "No és possible editar l'usuari"
 
 #: ../gui/ui/rsrc/UsersManager.qml:168
+msgid "Unable to delete old user info. The user may be duplicate"
+msgstr "No és possible esborrar la informació antiga de l'usuari. Pot ser que l'usuari este duplicat"
+
+#: ../gui/ui/rsrc/UsersManager.qml:170
+msgid "Unable to load user info. Close and reopen the application"
+msgstr "No és possible carregar la informació de l'usuari. Tanqueu i torneu a entrar en l'aplicació"
+
+#: ../gui/ui/rsrc/UsersManager.qml:172
+msgid "User added successfully"
+msgstr "L'usuari s'ha creat correctament"
+
+#: ../gui/ui/rsrc/UsersManager.qml:174
 msgid "User removed successfully"
 msgstr "L'usuari s'ha esborrat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:170
+#: ../gui/ui/rsrc/UsersManager.qml:176
 msgid "The state change has been performed successfully"
 msgstr "El canvi d'estat s'ha realitzat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:172
+#: ../gui/ui/rsrc/UsersManager.qml:178
 msgid "Users removed successfully"
 msgstr "Els usuaris s'han esborrat correctament"
 
-#: ../gui/ui/rsrc/UsersManager.qml:174
+#: ../gui/ui/rsrc/UsersManager.qml:180
 msgid "PDF list generated successfully"
 msgstr "El llistat PDF s'ha generat correctament"
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/rsrc/UsersManager.qml:182
+msgid "User edited successfully"
+msgstr "L'usuari s'ha editat correctament"
+
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "LOGIN"
 msgstr "USUARI"
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "STUDENT"
 msgstr "ALUMNE/A"
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "PASSWORD"
 msgstr "CONTRASENYA"
+
+#~ msgid "Unable to save the changes"
+#~ msgstr "No és possible guardar els canvis"
+
+#~ msgid "Changes saved successfully"
+#~ msgstr "Els canvis s'han guardat correctament"

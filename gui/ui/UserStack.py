@@ -20,11 +20,11 @@ class LoadUser(QThread):
 
 	userLoaded=Signal(dict)
 
-	def __init__(self,manager,newUser,userInfo):
+	def __init__(self,manager,isNewUser,userInfo):
 
 		super().__init__()
 		self.easyManager=manager
-		self.newUser=newUser
+		self.newUser=isNewUser
 		self.userInfo=userInfo
 
 	#def __init__
@@ -87,10 +87,11 @@ class SaveData(QThread):
 
 	dataSaved=Signal(dict)
 
-	def __init__(self,manager,datoToSave):
+	def __init__(self,manager,isNewUser,datoToSave):
 
 		super().__init__()
 		self.easyManager=manager
+		self.newUser=isNewUser
 		self.dataToSave=datoToSave
 
 	#def __init__
@@ -98,7 +99,10 @@ class SaveData(QThread):
 	def run(self):
 
 		time.sleep(0.5)
-		ret=self.easyManager.saveData(self.dataToSave)
+		if self.newUser:
+			ret=self.easyManager.saveNewUser(self.dataToSave)
+		else:
+			ret=self.easyManager.saveEditData(self.dataToSave)
 		self.dataSaved.emit(ret)
 
 	#def run
@@ -117,7 +121,7 @@ class Bridge(QObject):
 	userCurrentOptionChanged=Signal()
 	showChangesInUserDialogChanged=Signal()
 	changesInUserChanged=Signal()
-	actionTypeChanged=Signal()
+	isNewUserChanged=Signal()
 	
 	def __init__(self):
 
@@ -134,7 +138,7 @@ class Bridge(QObject):
 		self._showUserFormMessage={"show":False,"msgCode":'',"type":''}
 		self._showChangesInUserDialog=False
 		self._changesInUser=False
-		self._actionType="add"
+		self._isNewUser=True
 
 	#def _init__
 
@@ -298,30 +302,30 @@ class Bridge(QObject):
 
 	#def changesInUser
 
-	@Property(str,notify=actionTypeChanged)
-	def actionType(self):
+	@Property(bool,notify=isNewUserChanged)
+	def isNewUser(self):
 
-		return self._actionType
+		return self._isNewUser
 
-	#def actionType
+	#def isNewUser
 
-	@actionType.setter
-	def actionType(self,actionType):
+	@isNewUser.setter
+	def isNewUser(self,isNewUser):
 
-		if self._actionType!=actionType:
-			self._actionType=actionType
-			self.actionTypeChanged.emit()
+		if self._isNewUser!=isNewUser:
+			self._isNewUser=isNewUser
+			self.isNewUserChanged.emit()
 
-	#def actionType
+	#def isNewUser
 
 	@Slot()
 	def addNewUser(self):
 
-		actionType="add"
+		self.isNewUser=True
 		self.core.mainStack.showPopUp={"show":True,"msgCode":NEW_USER_CONFIG}
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":''}
-		self.newUserT=LoadUser(self.easyManager,True,"")
+		self.newUserT=LoadUser(self.easyManager,self.isNewUser,"")
 		self.newUserT.userLoaded.connect(self._addNewUserRet)
 		self.newUserT.finished.connect(self.newUserT.deleteLater)
 		self.newUserT.start()
@@ -378,8 +382,8 @@ class Bridge(QObject):
 		self.core.mainStack.showPopUp={"show":True,"msgCode":LOAD_USER_CONFIG}
 		self.core.mainStack.closeGui=False
 		self.core.usersOptionsStack.showMainMessage={"show":False,"msgCode":'',"type":''}
-		self.actionType="edit"
-		self.editUserT=LoadUser(self.easyManager,False,userToLoad)
+		self.isNewUser=False
+		self.editUserT=LoadUser(self.easyManager,self.isNewUser,userToLoad)
 		self.editUserT.userLoaded.connect(self._loadUserRet)
 		self.editUserT.finished.connect(self.editUserT.deleteLater)
 		self.editUserT.start()
@@ -544,7 +548,7 @@ class Bridge(QObject):
 	def saveDataChanges(self):
 
 		self.core.mainStack.showPopUp={"show":True,"msgCode":SAVE_DATA}
-		self.saveDataT=SaveData(self.easyManager,self.currentUserConfig)
+		self.saveDataT=SaveData(self.easyManager,self.isNewUser,self.currentUserConfig)
 		self.saveDataT.dataSaved.connect(self._saveDataRet)
 		self.saveDataT.finished.connect(self.saveDataT.deleteLater)
 		self.saveDataT.start()

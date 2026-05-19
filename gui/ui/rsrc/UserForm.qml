@@ -22,7 +22,7 @@ Item {
         spacing:10
         
         Text{ 
-            text: userStackBridge.actionType == "add"
+            text: userStackBridge.isNewUser
                 ?i18nd("easy-login", "New User")
                 :i18nd("easy-login", "Edit User")
             font.pointSize: 16
@@ -214,6 +214,8 @@ Item {
                 return i18nd("easy-login","You must indicate a surnanme for the user");
             case -6:
                 return i18nd("easy-login","You must indicate a login for the user");
+            case -12:
+                return i18nd("easy-login","Unable to generate new password");
             default:
                 return ""
         }

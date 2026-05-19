@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 09:23+0200\n"
+"POT-Creation-Date: 2026-05-19 10:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,6 +148,10 @@ msgstr ""
 msgid "You must indicate a login for the user"
 msgstr ""
 
+#: ../gui/ui/rsrc/UserForm.qml:218
+msgid "Unable to generate new password"
+msgstr ""
+
 #: ../gui/ui/rsrc/UserOptions.qml:33
 msgid "User"
 msgstr ""
@@ -213,7 +217,7 @@ msgid "Unable to add user"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:156
-msgid "Unable to save the changes"
+msgid "Unable to save new user"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:158
@@ -233,33 +237,49 @@ msgid "Unable to load user info"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:166
-msgid "Changes saved successfully"
+msgid "Unable to edit the user"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:168
-msgid "User removed successfully"
+msgid "Unable to delete old user info. The user may be duplicate"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:170
-msgid "The state change has been performed successfully"
+msgid "Unable to load user info. Close and reopen the application"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:172
-msgid "Users removed successfully"
+msgid "User added successfully"
 msgstr ""
 
 #: ../gui/ui/rsrc/UsersManager.qml:174
+msgid "User removed successfully"
+msgstr ""
+
+#: ../gui/ui/rsrc/UsersManager.qml:176
+msgid "The state change has been performed successfully"
+msgstr ""
+
+#: ../gui/ui/rsrc/UsersManager.qml:178
+msgid "Users removed successfully"
+msgstr ""
+
+#: ../gui/ui/rsrc/UsersManager.qml:180
 msgid "PDF list generated successfully"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/rsrc/UsersManager.qml:182
+msgid "User edited successfully"
+msgstr ""
+
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "LOGIN"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "STUDENT"
 msgstr ""
 
-#: ../gui/ui/EasyLoginManager.py:325
+#: ../gui/ui/EasyLoginManager.py:397
 msgid "PASSWORD"
 msgstr ""

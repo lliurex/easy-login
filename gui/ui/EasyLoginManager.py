@@ -22,7 +22,7 @@ class EasyLoginManager(object):
 	
 	LOAD_CONFIG_ERROR=-1
 	ADD_NEW_USER_ERROR=-2
-	SAVE_USER_ERROR=-3
+	SAVE_NEW_USER_ERROR=-3
 	NAME_EMPTY_ERROR=-4
 	SURNAME_EMPTY_ERROR=-5
 	LOGIN_EMPTY_ERROR=-6
@@ -32,12 +32,16 @@ class EasyLoginManager(object):
 	GENERATING_PDF_ERROR=-10
 	LOAD_USER_ERROR=-11
 	GENERATING_NEW_PWD_ERROR=-12
+	EDIT_USER_ERROR=-13
+	REMOVE_OLD_USERNAME_ERROR=-14
+	ERROR_UPDATING_USER_DATA=-15
 
 	ADD_USER_SUCCESSFULLY=0
 	REMOVE_USER_SUCCESSFULLY=2
 	CHANGE_SERVICE_SUCCESSFULLY=3
 	REMOVE_ALL_USERS_SUCCESSFULLY=4
 	GENERATE_PDF_SUCCESSFULLY=5
+	EDIT_USER_SUCCESSFULLY=6
 
 	KIRIGAMI_MSG_OK=0
 	KIRIGAMI_MSG_ERROR=1
@@ -54,7 +58,6 @@ class EasyLoginManager(object):
 		self.server='localhost'
 		self.usersConfigData=[]
 		self.easyLoginEnabled=False
-		self.pwdImgFolder="/usr/share/easy-login/themes/animals"
 		self.missingImgPath="file:///usr/share/easy-login/gui/rsrc/missingImg.png"
 		self.pdfName="Easy-Login_Report.pdf"
 		self._getSystemLocale()
@@ -99,8 +102,8 @@ class EasyLoginManager(object):
 		self.currentUserConfig["name"]=""
 		self.currentUserConfig["surname"]=""
 		self.currentUserConfig["pwdImgPaths"]=self.pwdImgFolders
-		self.newUser=True
-
+		self.currentUserConfig["uid"]=""
+		
 	#def initValues	
 
 	def loadConfig(self):
@@ -109,6 +112,10 @@ class EasyLoginManager(object):
 			getStatus=self.client.EasyLogin.get_status_service()
 			if getStatus!="None":
 				self.easyLoginEnabled=getStatus
+			
+			configParams=self.client.EasyLogin.get_config()
+			self.pwdImgFolder=configParams.get("theme").get("path")
+
 			return self._getUsersInfo()
 		except Exception as e:
 			self._debug("loadConfig",f"Error loading config: {e}")
@@ -119,11 +126,13 @@ class EasyLoginManager(object):
 	def _getUsersInfo(self):
 
 		try:
-			tmpConfig=self.client.EasyLogin.get_user_list()
-			self.usersConfig=dict(sorted(tmpConfig.items(), key=lambda item:item[1]['login']))
+			self.usersConfig=self.client.EasyLogin.get_user_list()
 			self.usersConfigData=[]
+			
 			for username,info in self.usersConfig.items():
 				self._setUsersData(username,info)
+			
+			self.usersConfigData.sort(key=lambda x: x['login'].lower())
 			
 			return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 
@@ -142,7 +151,8 @@ class EasyLoginManager(object):
 		tmpData["surname"]=info["surname"]
 		tmpData["metaInfo"]=f"{tmpData['login']} {tmpData['name']} {tmpData['surname']}"
 		tmpData["pwdImgPaths"]=self._getImgFromUsername(username)
-		
+
+		self.usersConfigData=[item for item in self.usersConfigData if item.get("username")!=username]
 		self.usersConfigData.append(tmpData)
 
 	#def _setUsersData
@@ -177,17 +187,19 @@ class EasyLoginManager(object):
 
 	def generateUsername(self):
 
-		username="".join(str(random.randint(0,8)) for _ in range(0,4))
-		tmpImgPath=self._getImgFromUsername(username)
-	
-		return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK,"data":{"username":username,"pwdImgPaths":tmpImgPath}}
+		try:
+			username=self.client.EasyLogin.get_valid_username()
+			tmpImgPath=self._getImgFromUsername(username)
+			
+			return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK,"data":{"username":username,"pwdImgPaths":tmpImgPath}}
+		except:
+			return {"status":False,"code":EasyLoginManager.GENERATING_NEW_PWD_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR,"data":{}}
 
 	#def generateUsername
 
 	def loadUserConfig(self,newUser,infoToLoad):
 
 		if newUser:
-			self.newUser=True
 			getUsername=self.generateUsername()
 			if getUsername.get("status"):
 				self.currentUserConfig["username"]=getUsername.get("data").get("username")
@@ -196,10 +208,8 @@ class EasyLoginManager(object):
 			else:
 				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		else:
-			self.newUser=False
 			username=infoToLoad[0]
 			self.currentUserConfig=self.usersConfig.get(username,{})
-
 			if len(self.currentUserConfig)>0:
 				self.currentUserConfig["username"]=username
 				self.currentUserConfig["pwdImgPaths"]=[]
@@ -242,40 +252,80 @@ class EasyLoginManager(object):
 
 	#def checkData
 
-	def saveData(self, dataToSave):
+	def saveNewUser(self,dataToSave):
 
-		username=dataToSave.get("username","")
-		usernameOrig=""
-		updateUsername=False
+		username=dataToSave.get("username")
 		info={}
-		info["name"]=dataToSave.get("name","")
-		info["surname"]=dataToSave.get("surname","")
-		info["login"]=dataToSave.get("login","")
-
-		if not self.newUser:
-			usernameOrig=self.currentUserConfig["username"]
-			if username!=usernameOrig:
-				updateUsername=True
+		info["name"]=dataToSave.get("name")
+		info["surname"]=dataToSave.get("surname")
+		info["login"]=dataToSave.get("login")
+		info["uid"]=dataToSave.get("uid")
 
 		try:
 			ret=self.client.EasyLogin.store_id_user(username,info)
 			if ret:
-				if updateUsername:
-					ret=self.removeSingleUser(usernameOrig)
-				
-				retInfo=self._getUsersInfo()
-				
-				if retInfo.get("status"):
+				retUpdateData=self._updateUserData(username)
+				if retUpdateData.get("status"):				
 					return {"status":True,"code":EasyLoginManager.ADD_USER_SUCCESSFULLY,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 				else:
-					return retInfo
-		
+					return retUpdateData
 		except Exception as e:
-			self._debug("saveData",f"Error saving data: {e}")
-			return {"status":False,"code":EasyLoginManager.SAVE_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
+			self._debug("saveNewUser",f"Error saving data: {e}")
+			return {"status":False,"code":EasyLoginManager.SAVE_NEW_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
-	#def saveData
 
+	#def saveNewUser
+	
+	def saveEditData(self, dataToSave):
+
+		username=dataToSave.get("username")
+		usernameOrig=self.currentUserConfig.get("username")
+		updateUsername=False
+		info={}
+		info["name"]=dataToSave.get("name")
+		info["surname"]=dataToSave.get("surname")
+		info["login"]=dataToSave.get("login")
+		info["uid"]=dataToSave.get("uid")
+
+		if username!=usernameOrig:
+			updateUsername=True
+
+		try:
+			ret=self.client.EasyLogin.store_id_user(username,info)
+			if ret:
+				retUpdateData=self._updateUserData(username)
+				if retUpdateData.get("status"):	
+					if updateUsername:			
+						retRemove=self.removeSingleUser(usernameOrig)
+					
+						if not retRemove.get("status"):
+							return {"status":False,"code":EasyLoginManager.REMOVE_OLD_USERNAME_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
+
+					return {"status":True,"code":EasyLoginManager.EDIT_USER_SUCCESSFULLY,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
+
+				else:
+					return retUpdateData
+		except Exception as e:
+			self._debug("saveEditData",f"Error saving data: {e}")
+			return {"status":False,"code":EasyLoginManager.EDIT_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
+
+	#def saveEditData
+
+	def _updateUserData(self,username):
+
+		try:
+			userData=self.client.EasyLogin.load_user(username)
+			self.usersConfig[username]=userData
+			self._setUsersData(username,userData)
+			self.usersConfigData.sort(key=lambda x: x['login'].lower())
+
+			return {"status":True,"code":'',"type":''}
+		except Exception as e:
+			self._debug("_updateUserData",f"Error updating user data:{e}")
+			return {"status":False,"code":EasyLoginManager.ERROR_UPDATING_USER_DATA,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
+
+	#def _updateUserData
+	
 	def removeSingleUser(self,userToRemove):
 
 		msgOk=EasyLoginManager.REMOVE_USER_SUCCESSFULLY
@@ -298,14 +348,14 @@ class EasyLoginManager(object):
 			self.usersConfigData=[]
 			return {"status":True,"code":msgOk,"type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		except n4d.client.CallFailedError as e:
-			self._debug("removeUser",f"Error removing all users: {e}")
+			self._debug("removeAllUsers",f"Error removing all users: {e}")
 			return {"status":False,"code":EasyLoginManager.REMOVE_ALL_USERS_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def removeAllUsers
 
 	def _popUserFromData(self,username):
 
-		self.usersConfig.pop(username,None)
+		self.usersConfig.pop(username)
 		self.usersConfigData=[item for item in self.usersConfigData if item.get("username")!=username]
 
 	#def _popUserFromData
