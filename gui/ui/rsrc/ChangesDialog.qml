@@ -23,9 +23,9 @@ Popup {
     property alias btnCancelText: dialogCancelBtn.text
     property alias btnCancelIcon: dialogCancelBtn.icon.name
 
-    signal dialogApplyClicked()
-    signal discardDialogClicked()
-    signal rejectDialogClicked()
+    signal dialogApplyClicked
+    signal discardDialogClicked
+    signal rejectDialogClicked
 
     modal: true
     anchors.centerIn: Overlay.overlay
@@ -75,23 +75,16 @@ Popup {
             Button {
                 id: dialogApplyBtn
                 icon.name: "dialog-ok"
-                text: btnAcceptText
-                visible: btnAcceptVisible
                 onClicked: dialogApplyClicked() 
             }
 
             Button {
                 id: dialogDiscardBtn
-                icon.name: btnDiscardIcon
-                text: btnDiscardText
-                visible: btnDiscardVisible
                 onClicked: discardDialogClicked()
             }
 
             Button {
                 id: dialogCancelBtn
-                icon.name: btnCancelIcon
-                text: btnCancelText
                 onClicked: rejectDialogClicked()
             }
         }
