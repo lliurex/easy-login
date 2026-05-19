@@ -74,7 +74,7 @@ class Tunnel(QObject):
 #class Tunnel
 
 app = QApplication(sys.argv)
-app.setDesktopFileName("easy-login")
+app.setDesktopFileName("easy-login-gui")
 tunnel = Tunnel()
 view = QQuickView()
 view.rootContext().setContextProperty("tunnel", tunnel)

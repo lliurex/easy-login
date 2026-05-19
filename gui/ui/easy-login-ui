@@ -11,7 +11,7 @@ import Core
 c=Core.Core.get_core()
 
 app = QApplication(sys.argv)
-app.setDesktopFileName("easy-login")
+app.setDesktopFileName("easy-login-gui")
 engine = QQmlApplicationEngine()
 engine.clearComponentCache()
 context=engine.rootContext()
