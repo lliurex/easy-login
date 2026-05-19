@@ -1,0 +1,2 @@
+n4d/EasyLogin.json /etc/n4d/conf.d/
+n4d/EasyLogin.py /usr/share/n4d/python-plugins/

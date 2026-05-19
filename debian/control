@@ -31,8 +31,41 @@ Depends:
  python3-pyside6.qtwidgets,
  python3-pyside6.qtquickwidgets,
  python3-pyside6.qtsvg
-Description: Easy-Login utility
- <Provides utiliy to manage easy-long>
+Description: Easy-Login graphical utility
+ This package provides a graphical utility to manage easy-login users. 
+
+Package: easy-login-common
+Architecture: all
+Multi-Arch: foreign
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Easy-login common files
+ This package provides common files for easy-login.
+
+Package: n4d-easy-login
+Architecture: all
+Multi-Arch: foreign
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ python3,
+ n4d
+Description: Easy-login plugin for n4d
+ Logic to manage easy-login from n4d
+
+Package: gva-gate-easy
+Architecture: all
+Multi-Arch: foreign
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ python3-llxgvagate
+Description: GVA-Gate plugin for easy-login
+ This plugin allow login users with simple password based into pictogram. 
+
+
+
 
 Package: easy-login
 Architecture: all
@@ -42,3 +75,5 @@ Depends:
  ${misc:Depends},
 Description: <insert up to 60 chars description>
  <Insert long description, indented with spaces.>
+
+
