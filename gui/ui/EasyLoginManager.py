@@ -258,7 +258,7 @@ class EasyLoginManager(object):
 		info={}
 		info["name"]=dataToSave.get("name")
 		info["surname"]=dataToSave.get("surname")
-		info["login"]=dataToSave.get("login")
+		info["login"]=dataToSave.get("login").replace(".easy",'')
 		info["uid"]=dataToSave.get("uid")
 
 		try:
