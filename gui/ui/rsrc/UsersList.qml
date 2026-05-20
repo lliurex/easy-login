@@ -86,7 +86,7 @@ Rectangle {
                         text: userSearchEntry.text.length === 0
                               ? i18nd("easy-login", "There are no users configured")
                               : i18nd("easy-login", "No users where found")
-                        icon.name:"group"
+                        icon.name:"easy-login"
                     }
                 } 
             }
