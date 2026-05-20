@@ -57,7 +57,7 @@ ApplicationWindow {
             Image {
                 id: banner
                 source: "/usr/share/easy-login/gui/rsrc/easy-login_banner.png"
-                asynchronous: true
+                asynchronous: false
                 anchors.centerIn: parent
                 fillMode: Image.PreserveAspectFit
             }
