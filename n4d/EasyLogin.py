@@ -107,7 +107,7 @@ class EasyLogin:
         status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
         if not status:
             return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_IN_CACHE)
-        user = self.load_user(username.split("@")[0])
+        user = self._load_user(username.split("@")[0])
         if user is None:
             return n4d.responses.build_failed_call_response(EasyLogin.USER_NOT_FOUND)
         result = True 
