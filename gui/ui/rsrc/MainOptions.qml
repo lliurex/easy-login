@@ -5,8 +5,6 @@ import QtQuick.Layouts
 RowLayout {
     id: mainGrid
     spacing: 10
-    Layout.fillWidth: true
-    Layout.fillHeight: true
 
     Rectangle {
         id: sideBar

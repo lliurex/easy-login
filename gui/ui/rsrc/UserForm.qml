@@ -17,6 +17,7 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
+        anchors.leftMargin:5
         anchors.rightMargin:15
         anchors.bottomMargin:25
         spacing:10

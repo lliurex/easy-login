@@ -10,25 +10,23 @@ Rectangle {
     id: rectLayout
     color: "transparent"
 
-    Text {
-        id: titleText
-        text: i18nd("easy-login", "Configuration")
-        font.pointSize: 16
-        anchors.top: parent.top
-        anchors.left: parent.left
-    }
-
     ColumnLayout {
         id: mainContent
-        anchors.top: titleText.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: btnBox.top
-        anchors.leftMargin: 5
+        anchors.top:parent.top
+        anchors.left:parent.left
+        anchors.right:parent.right
+        anchors.bottom:btnBox.top
+
+        anchors.leftMargin:5
         anchors.rightMargin:15
-        anchors.topMargin:10
         anchors.bottomMargin:25
         spacing: 10
+
+        Text {
+            id: titleText
+            text: i18nd("easy-login", "Configuration")
+            font.pointSize: 16
+        }
 
         Kirigami.InlineMessage {
             id: messageLabel

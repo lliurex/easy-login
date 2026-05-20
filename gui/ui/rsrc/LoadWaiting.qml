@@ -7,7 +7,7 @@ Rectangle {
     id: loadRoot
     visible: true
     color: "transparent"
-
+    
     ColumnLayout {
         id: mainLoaderLayout
         anchors.centerIn: parent

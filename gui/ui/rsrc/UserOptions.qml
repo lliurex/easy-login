@@ -6,8 +6,6 @@ import QtQuick.Layouts
 RowLayout{
     id: usersGrid
     spacing: 10
-    Layout.fillWidth: true
-    Layout.fillHeight: true
 
     ColumnLayout{
         Layout.fillHeight:true
