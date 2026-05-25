@@ -3,9 +3,15 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 
-Item {
+FocusScope {
     id: root
 
+    StackView.onStatusChanged:{
+        if (root.StackView.status==StackView.Activating){
+            root.forceActiveFocus()
+        }
+    }
+ 
     Timer{
         id:debounceTimer
         interval:500
