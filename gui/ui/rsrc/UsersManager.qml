@@ -108,7 +108,7 @@ Rectangle {
             display: AbstractButton.TextBesideIcon
             icon.name: "list-add"
             text: i18nd("easy-login", "New user")
-            onClicked: userStackBridge.addNewUser() 
+            onClicked: userStackBridge.addNewUser()
         }
     }
 
