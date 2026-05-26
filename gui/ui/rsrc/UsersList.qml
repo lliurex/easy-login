@@ -78,7 +78,7 @@ Rectangle {
 
                     highlight: Item{
                         width:usersView.width
-                        height:usersView.currentItem?usersView.currentItem.height:70
+                        height:usersView.currentItem?usersView.currentItem.height:60
                         Rectangle {
                             x:5
                             y:5
