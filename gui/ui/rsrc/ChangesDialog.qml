@@ -47,7 +47,6 @@ Popup {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: 10
             spacing: 15
 
             Kirigami.Icon {
