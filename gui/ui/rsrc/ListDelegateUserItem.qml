@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+
 
 ItemDelegate {
     id: listUserItem
@@ -20,25 +22,22 @@ ItemDelegate {
     leftPadding:15
     rightPadding:15
 
-    background:Rectangle{
-        color:"transparent"
-    }
+    background:Rectangle {
+        x:5
+        y:5
+        width:parent.width-10
+        height:parent.height-5 
+        color: (listUserItem.hovered || listUserItem.ListView.isCurrentItem)
+                ?Qt.alpha(Kirigami.Theme.highlightColor,0.15)
+                :"transparent"
+        radius:6
+        border.width:1
+        border.color:(listUserItem.hovered || listUserItem.ListView.isCurrentItem)
+                      ?Kirigami.Theme.highlightColor
+                      :"transparent"
 
-    onHoveredChanged:{
-        if (hovered){
-            if (typeof filterModel!="undefined" && typeof usersView!="undefined" && !optionsMenu.opened){
-                let targetIndex=filterModel.visibleElements.indexOf(model.index)
-                if (targetIndex!=-1 ){
-                    usersView.currentIndex=targetIndex
-                }
-            }
-        }else{
-            if (typeof usersView != "undefined" && usersView.currentIndex===model.index && !optionsMenu.opened){
-                usersView.currentIndex=-1
-            }
-        }
     }
-
+    
     contentItem:RowLayout {
 
        spacing: 20

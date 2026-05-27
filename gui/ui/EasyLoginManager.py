@@ -103,6 +103,7 @@ class EasyLoginManager(object):
 		self.currentUserConfig["surname"]=""
 		self.currentUserConfig["pwdImgPaths"]=self.pwdImgFolders
 		self.currentUserConfig["uid"]=""
+		self.currentUserConfig["customLogin"]=False
 		
 	#def initValues	
 
@@ -214,11 +215,24 @@ class EasyLoginManager(object):
 				self.currentUserConfig["username"]=username
 				self.currentUserConfig["pwdImgPaths"]=[]
 				self.currentUserConfig["pwdImgPaths"]=infoToLoad[1]
+				self.currentUserConfig["customLogin"]=self._lookingForCustomLogin()
 				return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		
 			return {"status":False,"code":EasyLoginManager.LOAD_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 
 	#def loadUserConfig
+
+	def _lookingForCustomLogin(self):
+
+		defaultLogin=self.getFormattedLogin(self.currentUserConfig["name"],self.currentUserConfig["surname"])
+		login=self.currentUserConfig["login"].replace(".easy","")
+
+		if defaultLogin!=login:
+			return True
+
+		return False
+
+	#def _lookingForCustomLogin
 
 	def enableEasyLogin(self, enableLogin):
 

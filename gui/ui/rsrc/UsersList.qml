@@ -47,7 +47,7 @@ Rectangle {
                         repeat: false
                         onTriggered: filterModel.update()
                     }
-                    
+
                     model: FilterDelegateModel {
                         id: filterModel
                         model: usersModel
@@ -75,22 +75,6 @@ Rectangle {
                     highlightFollowsCurrentItem:true
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
-
-                    highlight: Item{
-                        width:usersView.width
-                        height:usersView.currentItem?usersView.currentItem.height:60
-                        Rectangle {
-                            x:5
-                            y:5
-                            width:parent.width-10
-                            height:parent.height-5 
-                            color: Qt.alpha(Kirigami.Theme.highlightColor,0.15)
-                            radius:6
-                            border.width:1
-                            border.color:Kirigami.Theme.highlightColor
-
-                        }
-                    }
 
                     Kirigami.PlaceholderMessage { 
                         anchors.centerIn: parent
