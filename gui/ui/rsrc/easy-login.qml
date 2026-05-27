@@ -46,7 +46,7 @@ ApplicationWindow {
         id: mainLayout
         anchors.fill: parent
         Layout.minimumWidth:800
-        Layout.minimumHeight:675
+        Layout.minimumHeight:625
 
         Rectangle {
             id: bannerBox
@@ -67,7 +67,7 @@ ApplicationWindow {
             id: mainView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumHeight:550
+            Layout.minimumHeight:500
 
             property int currentIndex: mainStackBridge.currentStack
 

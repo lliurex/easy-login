@@ -357,7 +357,7 @@ class Bridge(QObject):
 		self.pwdImgPaths=self.easyManager.currentUserConfig["pwdImgPaths"]
 		self.showUserFormMessage={"show":False,"msgCode":'',"type":''}
 		self.changesInUser=False
-		self.enableLoginEdition=False
+		self.enableLoginEdition=self.easyManager.currentUserConfig["customLogin"]
 		self.previousLogin=self.login
 
 	#def _initializeVars
@@ -447,7 +447,7 @@ class Bridge(QObject):
 	def restoreDefaultLogin(self):
 
 		self.enableLoginEdition=False
-		self.login=self.previousLogin
+		self.login=self.easyManager.getFormattedLogin(self.name,self.surname)
 		self.currentUserConfig["login"]=self.login
 
 		self._checkIfChanged()

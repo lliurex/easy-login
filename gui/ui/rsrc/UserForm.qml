@@ -9,7 +9,22 @@ FocusScope {
     StackView.onStatusChanged:{
         if (root.StackView.status==StackView.Activating){
             root.forceActiveFocus()
+            nameEntry.forceActiveFocus()
         }
+    }
+
+    Timer{
+        id:focusTimer
+        interval:1
+        running:false
+        repeat:false
+        onTriggered:{
+            nameEntry.forceActiveFocus()
+        }
+    }
+
+    Component.onCompleted:{
+        focusTimer.start()
     }
  
     Timer{
@@ -105,16 +120,16 @@ FocusScope {
                     icon.name: "document-edit"
                     enabled: !userStackBridge.enableLoginEdition
                     onClicked: userStackBridge.forceLoginEdition()
-                    ToolTip.text: i18nd("easy-login", "Click to edit login")
+                    ToolTip.text: i18nd("easy-login", "Click to customize login")
                     ToolTip.delay: 1000
                     ToolTip.timeout: 3000
                     ToolTip.visible: hovered
                 }
                 Button {
-                    icon.name: "edit-reset"
+                    icon.name: "view-refresh"
                     enabled: userStackBridge.enableLoginEdition
                     onClicked: userStackBridge.restoreDefaultLogin()
-                    ToolTip.text: i18nd("easy-login", "Click to restore login")
+                    ToolTip.text: i18nd("easy-login", "Click to generate default login")
                     ToolTip.delay: 1000
                     ToolTip.timeout: 3000
                     ToolTip.visible: hovered

@@ -196,9 +196,9 @@ class Bridge(QObject):
 	def openHelp(self):
 		
 		if 'valencia' in self._systemLocale:
-			helpUrl='https://wiki.edu.gva.es/lliurex/'
+			helpUrl='https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Easy-Login.'
 		else:
-			helpUrl='https://wiki.edu.gva.es/lliurex/'
+			helpUrl='https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Easy-Login'
 
 		QDesktopServices.openUrl(QUrl(helpUrl))
 
