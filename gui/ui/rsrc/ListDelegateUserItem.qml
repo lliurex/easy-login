@@ -128,12 +128,12 @@ ItemDelegate {
                 MenuItem {
                     text: i18nd("easy-login","Edit user")
                     icon.name: "document-edit.svg"
-                    onClicked: userStackBridge.loadUser([username,pwdImgPaths])
+                    onClicked: userStackBridge.loadUser({"username":username,"pwdImgPaths":pwdImgPaths})
                 }
                 MenuItem {
                     text: i18nd("easy-login","Delete this user")
                     icon.name: "delete.svg"
-                    onClicked: usersOptionsStackBridge.removeUser([false, username])
+                    onClicked: usersOptionsStackBridge.removeUser({"deleteAll":false, "username":username})
                 }
             }
         }

@@ -376,7 +376,7 @@ class Bridge(QObject):
 
 	#def goHome
 
-	@Slot('QVariantList')
+	@Slot(dict)
 	def loadUser(self,userToLoad):
 
 		self.core.mainStack.showPopUp={"show":True,"msgCode":LOAD_USER_CONFIG}
