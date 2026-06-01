@@ -40,7 +40,7 @@ FocusScope {
         anchors.fill: parent
         anchors.leftMargin:5
         anchors.rightMargin:15
-        anchors.bottomMargin:25
+        anchors.bottomMargin:15
         spacing:10
         
         Text{ 

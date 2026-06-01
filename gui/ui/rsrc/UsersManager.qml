@@ -71,7 +71,6 @@ Rectangle {
         anchors.right: parent.right
         anchors.leftMargin:5
         anchors.margins:15
-        height: 50
         spacing: 10
 
         Button {
