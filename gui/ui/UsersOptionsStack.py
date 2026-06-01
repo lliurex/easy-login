@@ -225,16 +225,16 @@ class Bridge(QObject):
 
 	#def _enableLoginRet
 
-	@Slot('QVariantList')
+	@Slot(dict)
 	def removeUser(self,data):
 
 		self.showMainMessage={"show":False,"msgCode":'',"type":''}
-		self.removeAllUsers=data[0]
+		self.removeAllUsers=data.get("deleteAll")
 		
 		if self.removeAllUsers:
 			self.userToRemove=None
 		else:
-			self.userToRemove=data[1]
+			self.userToRemove=data.get("username")
 
 		self.showRemoveUserDialog={"show":True,"allUsers":self.removeAllUsers}
 

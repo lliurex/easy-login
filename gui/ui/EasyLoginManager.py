@@ -209,12 +209,12 @@ class EasyLoginManager(object):
 			else:
 				return {"status":False,"code":EasyLoginManager.ADD_NEW_USER_ERROR,"type":EasyLoginManager.KIRIGAMI_MSG_ERROR}
 		else:
-			username=infoToLoad[0]
+			username=infoToLoad.get("username")
 			self.currentUserConfig=self.usersConfig.get(username,{})
 			if len(self.currentUserConfig)>0:
 				self.currentUserConfig["username"]=username
 				self.currentUserConfig["pwdImgPaths"]=[]
-				self.currentUserConfig["pwdImgPaths"]=infoToLoad[1]
+				self.currentUserConfig["pwdImgPaths"]=infoToLoad.get("pwdImgPaths")
 				self.currentUserConfig["customLogin"]=self._lookingForCustomLogin()
 				return {"status":True,"code":"","type":EasyLoginManager.KIRIGAMI_MSG_OK}
 		

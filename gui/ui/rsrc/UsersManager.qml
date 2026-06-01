@@ -93,7 +93,7 @@ Rectangle {
                 MenuItem {
                     icon.name: "delete"
                     text: i18nd("easy-login", "Delete all users")
-                    onClicked: usersOptionsStackBridge.removeUser([true])
+                    onClicked: usersOptionsStackBridge.removeUser({"deleteAll":true,"username":""})
                 }
             }
         }
