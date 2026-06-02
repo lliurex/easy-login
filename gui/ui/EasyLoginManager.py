@@ -95,15 +95,16 @@ class EasyLoginManager(object):
 	def initValues(self):
 
 		self.userToLoad=""
-		self.currentUserConfig={}
 		self.pwdImgFolders=[self.missingImgPath,self.missingImgPath,self.missingImgPath,self.missingImgPath]
-		self.currentUserConfig["username"]=""
-		self.currentUserConfig["login"]=""
-		self.currentUserConfig["name"]=""
-		self.currentUserConfig["surname"]=""
-		self.currentUserConfig["pwdImgPaths"]=self.pwdImgFolders
-		self.currentUserConfig["uid"]=""
-		self.currentUserConfig["customLogin"]=False
+		self.currentUserConfig={
+			"username":"",
+			"login":"",
+			"name":"",
+			"surname":"",
+			"pwdImgPaths":self.pwdImgFolders,
+			"uid":"",
+			"customLogin":False
+		}
 		
 	#def initValues	
 
@@ -145,13 +146,14 @@ class EasyLoginManager(object):
 
 	def _setUsersData(self,username,info):
 
-		tmpData={}
-		tmpData["username"]=username
-		tmpData["login"]=info["login"]
-		tmpData["name"]=info["name"]
-		tmpData["surname"]=info["surname"]
-		tmpData["metaInfo"]=f"{tmpData['login']} {tmpData['name']} {tmpData['surname']}"
-		tmpData["pwdImgPaths"]=self._getImgFromUsername(username)
+		tmpData={
+			"username":username,
+			"login":info["login"],
+			"name":info["name"],
+			"surname":info["surname"],
+			"metaInfo":f"{info['login']} {info['name']} {info['surname']}",
+			"pwdImgPaths":self._getImgFromUsername(username)
+		}
 
 		self.usersConfigData=[item for item in self.usersConfigData if item.get("username")!=username]
 		self.usersConfigData.append(tmpData)
