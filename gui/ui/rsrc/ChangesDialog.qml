@@ -51,8 +51,8 @@ Popup {
 
             Kirigami.Icon {
                 id: iconInternal
-                Layout.preferredWidth: 64
-                Layout.preferredHeight: 64
+                Layout.preferredWidth: Kirigami.Units.iconSizes.huge
+                Layout.preferredHeight: Kirigami.Units.iconSizes.huge
             }
             
             Text {
