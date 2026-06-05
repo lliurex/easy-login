@@ -22,7 +22,7 @@ class Tunnel(QObject):
 		self.home=os.path.expanduser("~")
 		versionFile=os.path.join(self.home,".config/easy-login-gui.conf")
 		cachePath=os.path.join(self.home,".cache/easy-login-gui")
-		installedVersion=self.getPackageVersion()
+		installedVersion=self._getPackageVersion()
 
 		if not os.path.exists(versionFile):
 			with open(versionFile,'w') as fd:
@@ -45,19 +45,18 @@ class Tunnel(QObject):
 
 	#def clearCache
 
-	def getPackageVersion(self):
+	def _getPackageVersion(self):
 
-		try:
-			command = "LANG=C LANGUAGE=en apt-cache policy easy-login-gui"
-			output = subprocess.check_output(command, shell=True, text=True)
-			for line in output.splitlines():
-				if "Installed:" in line:
-					return line.replace("Installed:", "").strip()
-		except Exception as e:
-			print(f"Error getting versión: {e}")
-
-		return None
+		packageVersionFile="/var/lib/easy-login-gui/version"
+		pkgVersion=""
 		
+		if os.path.exists(packageVersionFile):
+			with open(packageVersionFile,'r') as fd:
+				pkgVersion=fd.readline().strip()
+
+		return pkgVersion
+
+	
 	#def getPackageVersion
 
 	@Slot(str)
