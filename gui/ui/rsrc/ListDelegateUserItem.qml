@@ -19,6 +19,18 @@ ItemDelegate {
     width: parent ? parent.width-10 : 0
     hoverEnabled:true
 
+    onHoveredChanged:{
+        if (hovered){
+            if (listUserItem.ListView.view && !optionsMenu.opened){
+                listUserItem.ListView.view.currentIndex=index
+            }
+        }else{
+            if (!optionsMenu.opened && listUserItem.ListView.view){
+                listUserItem.ListView.view.currentIndex=-1
+            }
+        }
+    }
+
     leftPadding:15
     rightPadding:15
 
@@ -27,12 +39,12 @@ ItemDelegate {
         y:5
         width:parent.width-10
         height:parent.height-5 
-        color: (listUserItem.hovered || listUserItem.ListView.isCurrentItem)
-                ?Qt.alpha(Kirigami.Theme.highlightColor,0.15)
-                :"transparent"
+        color: (listUserItem.hovered || listUserItem.ListView.isCurrentItem || optionsMenu.opened)
+               ?Qt.alpha(Kirigami.Theme.highlightColor,0.15)
+               :"transparent"
         radius:6
         border.width:1
-        border.color:(listUserItem.hovered || listUserItem.ListView.isCurrentItem)
+        border.color:(listUserItem.hovered || listUserItem.ListView.isCurrentItem || optionsMenu.opened)
                       ?Kirigami.Theme.highlightColor
                       :"transparent"
 
@@ -110,6 +122,7 @@ ItemDelegate {
             ToolTip.text: i18nd("easy-login","Click to manage this user")
             
             onClicked: optionsMenu.open()
+            
             Connections{
                 target:usersView
                 function onCurrentIndexChanged(){
