@@ -11,12 +11,12 @@ ItemDelegate {
     property string login
     property string name
     property string surname
-    property list<string> pwdImgPaths
+    property var pwdImgPaths:[]
     property string metaInfo
 
     enabled: true
     height: 60
-    width: parent ? parent.width-10 : 0
+    width: listUserItem.ListView.view?listUserItem.ListView.view.width -10 : 0
     hoverEnabled:true
 
     onHoveredChanged:{
@@ -126,7 +126,7 @@ ItemDelegate {
             Connections{
                 target:usersView
                 function onCurrentIndexChanged(){
-                    if (!listUserItem.ListView.isCurretItem && optionsMenu.opened){
+                    if (!listUserItem.ListView.isCurrentItem && optionsMenu.opened){
                         optionsMenu.close()
                     }
 
