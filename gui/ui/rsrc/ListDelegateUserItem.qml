@@ -20,14 +20,12 @@ ItemDelegate {
     hoverEnabled:true
 
     onHoveredChanged:{
-        if (hovered){
-            if (listUserItem.ListView.view && !optionsMenu.opened){
+        if (listUserItem.ListView.view){
+            if (hovered && !optionsMenu.opened){
                 listUserItem.ListView.view.currentIndex=index
             }
-        }else{
-            if (!optionsMenu.opened && listUserItem.ListView.view){
-                listUserItem.ListView.view.currentIndex=-1
-            }
+        }else if (!hovered && !optionsMenu.opened && listUserItem.ListView.view===index){
+            listUserItem.ListView.view.currentIndex=-1
         }
     }
 
@@ -39,12 +37,12 @@ ItemDelegate {
         y:5
         width:parent.width-10
         height:parent.height-5 
-        color: (listUserItem.hovered || listUserItem.ListView.isCurrentItem || optionsMenu.opened)
+        color: (listUserItem.hovered || optionsMenu.opened)
                ?Qt.alpha(Kirigami.Theme.highlightColor,0.15)
                :"transparent"
         radius:6
         border.width:1
-        border.color:(listUserItem.hovered || listUserItem.ListView.isCurrentItem || optionsMenu.opened)
+        border.color:(listUserItem.hovered || optionsMenu.opened)
                       ?Kirigami.Theme.highlightColor
                       :"transparent"
 
@@ -111,7 +109,7 @@ ItemDelegate {
             id: manageUserBtn
             display: AbstractButton.IconOnly
             icon.name: "configure.svg"
-            visible: listUserItem.ListView.isCurrentItem || listUserItem.hovered || optionsMenu.opened
+            visible: listUserItem.hovered || optionsMenu.opened
             
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: visible ? implicitWidth : 0
