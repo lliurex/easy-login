@@ -14,8 +14,8 @@ ApplicationWindow {
 
     width: mainLayout.implicitWidth + 2 * margin
     height: mainLayout.implicitHeight + 2 * margin
-    minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
-    minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
+    minimumWidth: 800 + 2 * margin
+    minimumHeight: 625 + 2 * margin
     Component.onCompleted: {
         x = Screen.width / 2  - minimumWidth/2
         y = Screen.height / 2 - minimumHeight/2
@@ -45,8 +45,6 @@ ApplicationWindow {
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
-        Layout.minimumWidth:800
-        Layout.minimumHeight:625
 
         Rectangle {
             id: bannerBox
