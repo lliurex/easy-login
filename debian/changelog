@@ -1,3 +1,9 @@
+easy-login (0.2.2) noble; urgency=medium
+
+  * Add dependencies with natfree to be stable
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 21 Jul 2026 10:41:30 +0200
+
 easy-login (0.2.1) noble; urgency=medium
 
   * Change default theme path
