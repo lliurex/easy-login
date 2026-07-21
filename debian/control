@@ -50,7 +50,8 @@ Depends:
  ${shlibs:Depends},
  ${misc:Depends},
  python3,
- n4d
+ n4d,
+ natfree-adi
 Description: Easy-login plugin for n4d
  Logic to manage easy-login from n4d
 
@@ -60,12 +61,10 @@ Multi-Arch: foreign
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
- python3-llxgvagate
+ python3-llxgvagate,
+ natfree-tie
 Description: GVA-Gate plugin for easy-login
  This plugin allow login users with simple password based into pictogram. 
-
-
-
 
 Package: easy-login
 Architecture: all
