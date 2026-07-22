@@ -30,7 +30,8 @@ Depends:
  python3-pyside6.qtgui,
  python3-pyside6.qtwidgets,
  python3-pyside6.qtquickwidgets,
- python3-pyside6.qtsvg
+ python3-pyside6.qtsvg,
+ easy-login-common
 Description: Easy-Login graphical utility
  This package provides a graphical utility to manage easy-login users. 
 
@@ -65,14 +66,3 @@ Depends:
  natfree-tie
 Description: GVA-Gate plugin for easy-login
  This plugin allow login users with simple password based into pictogram. 
-
-Package: easy-login
-Architecture: all
-Multi-Arch: foreign
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: <insert up to 60 chars description>
- <Insert long description, indented with spaces.>
-
-
