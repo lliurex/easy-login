@@ -1,3 +1,10 @@
+easy-login (0.2.3) noble; urgency=medium
+
+  * Enable n4d modules without restart
+  * Add dependency with common on gui package
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 22 Jul 2026 16:00:17 +0200
+
 easy-login (0.2.2) noble; urgency=medium
 
   * Add dependencies with natfree to be stable
