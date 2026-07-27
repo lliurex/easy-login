@@ -59,6 +59,13 @@
         "teachers"
       ]
     },
+    "disable": {
+      "allowed_groups": [
+	"sudo",
+	"admins",
+	"teachers"
+      ]
+    },
     "remove_entry": {
       "allowed_groups": [
         "sudo",
