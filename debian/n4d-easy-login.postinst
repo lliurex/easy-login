@@ -21,6 +21,7 @@ set -e
 case "$1" in
     configure)
 	    n4d-modules load-plugin /etc/n4d/conf.d/EasyLogin.json || true
+            systemctl --global enable disableEasyLogin.service || true
          ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
