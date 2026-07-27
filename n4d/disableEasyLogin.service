@@ -1,0 +1,11 @@
+[Unit]
+Description=Disable Easy Login service
+
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/bin/true
+ExecStop=/usr/bin/n4d-client call EasyLogin.disable
+
+[Install]
+WantedBy=default.target
