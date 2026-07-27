@@ -1,3 +1,9 @@
+easy-login (0.2.4) noble; urgency=medium
+
+  * Add bson dependency on n4d plugin
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Mon, 27 Jul 2026 13:04:45 +0200
+
 easy-login (0.2.3) noble; urgency=medium
 
   * Enable n4d modules without restart
