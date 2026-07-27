@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/bin/n4d-client call create_ticket "['$USER']"
+/usr/bin/n4d-client -t call EasyLogin.disable

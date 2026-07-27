@@ -103,6 +103,10 @@ class EasyLogin:
             idx //= d
         return "".join(reversed(digits))
 
+    def disable(self) -> n4d.responses:
+        self.set_status_service(False)
+        return n4d.responses.build_successful_call_response(True)
+
     def validate_easy_user(self, username, password) -> n4d.responses:
         status = self.core.get_variable("EASYLOGIN_STATUS").get('return',True)
         if not status:
