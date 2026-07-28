@@ -1,3 +1,9 @@
+easy-login (0.3.1) noble; urgency=medium
+
+  * Prevent sddm and other system users run disable service
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 28 Jul 2026 12:21:16 +0200
+
 easy-login (0.3) noble; urgency=medium
 
   * Disable easy login when user logout
