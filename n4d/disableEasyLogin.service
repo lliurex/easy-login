@@ -1,0 +1,11 @@
+[Unit]
+Description=Disable Easy Login service
+ConditionUser=!@system
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/bin/true
+ExecStop=/usr/bin/disableEasyLoginService
+
+[Install]
+WantedBy=default.target
