@@ -1,6 +1,6 @@
 [Unit]
 Description=Disable Easy Login service
-
+ConditionUser=!@system
 [Service]
 Type=simple
 RemainAfterExit=true
